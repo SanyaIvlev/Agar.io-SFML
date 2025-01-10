@@ -1,4 +1,2 @@
-﻿static void Main(params string[] args)
-{
-    
-}
+﻿using Agar.io_SFML;
+new GameLoop().Start();
