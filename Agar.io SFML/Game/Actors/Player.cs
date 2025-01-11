@@ -6,6 +6,8 @@ namespace Agar.io_SFML;
 
 public class Player : Actor
 {
+    public Action<uint> OnBountyChanged;
+    
     private Vector2f _targetPosition;
     
     private float _speed;
@@ -61,6 +63,7 @@ public class Player : Actor
         shape.Radius += actor.Bounty / 2f;
         
         OnDestroy?.Invoke(actor);
+        OnBountyChanged?.Invoke(Bounty);
     }
 
     private void MoveToTarget(Vector2f newPosition)

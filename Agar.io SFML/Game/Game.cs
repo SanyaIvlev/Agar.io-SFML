@@ -14,9 +14,13 @@ public class Game
     
     private uint _playersOnStart;
     private uint _foodOnStart;
+
+    private Player _mainPlayer;
     
     private List<Player> _players;
     private List<Food> _food;
+
+    private Score _score;
     
     private InputHandler _inputHandler;
     
@@ -51,9 +55,10 @@ public class Game
         _currentRemovingActors = new();
         
         _random = new Random();
+        
 
-        Player mainPlayer = SpawnPlayer(true, Color.Blue);
-        _players.Add(mainPlayer);
+        _mainPlayer = SpawnPlayer(true, Color.Blue);
+        _players.Add(_mainPlayer);
         
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
         {
@@ -66,6 +71,8 @@ public class Game
             Player bot = SpawnPlayer(false, Color.Red);
             _players.Add(bot);
         }
+        
+        _score = CreateScore(_mainPlayer);
     }
     
     private Food SpawnFood()
@@ -129,6 +136,20 @@ public class Game
         return newPlayer;
     }
 
+    private Score CreateScore(Player mainPlayer)
+    {
+        string fontName = "Obelix Pro.ttf";
+        Font font = new (GetFontLocation(fontName));
+        Score score = new(font, mainPlayer);
+        
+        OnDrawableSpawned?.Invoke(score);
+
+        return score;
+    }
+
+    private string GetFontLocation(string fontName)
+        => Path.GetFullPath("..\\..\\..\\..\\Resources\\Fonts\\" + fontName);
+
     public void Update()
     {
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
@@ -142,7 +163,8 @@ public class Game
             _passedFoodTime = 0;
         }
         
-        if(_passedPlayerTime >= _playerRespawnDelay) {
+        if(_passedPlayerTime >= _playerRespawnDelay)
+        {
             Player newPlayer = SpawnPlayer(false, Color.Red);
             _players.Add(newPlayer);
             
@@ -156,7 +178,6 @@ public class Game
     {
         foreach (Player currentPlayer in _players)
         {
-            
             foreach(Player anotherPlayer in _players)
             {
                 if (currentPlayer != anotherPlayer)
