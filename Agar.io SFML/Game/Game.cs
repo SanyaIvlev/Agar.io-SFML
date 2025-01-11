@@ -6,6 +6,8 @@ namespace Agar.io_SFML;
 
 public class Game
 {
+    public bool IsGameEnded;
+    
     public Action<IUpdatable> OnUpdatableSpawned;
     public Action<IDrawable> OnDrawableSpawned;
     
@@ -15,12 +17,12 @@ public class Game
     private uint _playersOnStart;
     private uint _foodOnStart;
 
+    private Text _endText;
+
     private Player _mainPlayer;
     
     private List<Player> _players;
     private List<Food> _food;
-
-    private Score _score;
     
     private InputHandler _inputHandler;
     
@@ -72,9 +74,10 @@ public class Game
             _players.Add(bot);
         }
         
-        _score = CreateScore(_mainPlayer);
+        CreateScore(_mainPlayer);
+        _endText = CreateEndText();
     }
-    
+
     private Food SpawnFood()
     {
         Vector2f initialPosition = GetRandomPosition();
@@ -136,15 +139,24 @@ public class Game
         return newPlayer;
     }
 
-    private Score CreateScore(Player mainPlayer)
+    private void CreateScore(Player mainPlayer)
     {
         string fontName = "Obelix Pro.ttf";
         Font font = new (GetFontLocation(fontName));
-        Score score = new(font, mainPlayer);
+        Score score = new(font, 25, Color.Black, Color.White, 3, new(0,0), mainPlayer);
         
         OnDrawableSpawned?.Invoke(score);
+    }
+    
+    private Text CreateEndText()
+    {
+        string fontName = "Obelix Pro.ttf";
+        Font font = new (GetFontLocation(fontName));
+        Text endText = new(font, 50, Color.Black, Color.White, 3, new(GameLoop.WINDOW_WIDTH / 2f, GameLoop.WINDOW_HEIGHT / 2f));
+        
+        OnDrawableSpawned?.Invoke(endText);
 
-        return score;
+        return endText;
     }
 
     private string GetFontLocation(string fontName)
@@ -165,6 +177,13 @@ public class Game
         
         if(_passedPlayerTime >= _playerRespawnDelay)
         {
+            if (_players.Count == 1 && _players[0] == _mainPlayer)
+            {
+                _endText.Update("You Win!");
+                IsGameEnded = true;
+                return;
+            }
+            
             Player newPlayer = SpawnPlayer(false, Color.Red);
             _players.Add(newPlayer);
             
@@ -210,6 +229,11 @@ public class Game
     
     private void RemoveActor(Actor actor)
     {
+        if (actor == _mainPlayer)
+        {
+            _endText.Update("You lose!");
+            IsGameEnded = true;
+        }
         if (_players.Contains(actor))
         {
             _players.Remove(actor as Player);

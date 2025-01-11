@@ -59,7 +59,7 @@ public class Player : Actor
     private void Eat(Actor actor)
     {
         Bounty += actor.Bounty;
-        _speed /= 1 + 0.05f/actor.Bounty;
+        _speed /= 1 + 0.005f/actor.Bounty;
         shape.Radius += actor.Bounty / 2f;
         
         OnDestroy?.Invoke(actor);

@@ -102,10 +102,12 @@ public class GameLoop
                 Render();
             }
         }
+
+        WaitBeforeEnd();
     }
 
     private bool IsGameLoopEnded()
-        => !_window.IsOpen;
+        => _game.IsGameEnded || !_window.IsOpen;
     
     
     private void ProcessInput()
@@ -140,6 +142,13 @@ public class GameLoop
         
         _window.Display();
     }
+    
+    
+    private void WaitBeforeEnd()
+    {
+        Thread.Sleep(3000);
+    }
+
     
     private void WindowClosed(object? sender, EventArgs e)
     {
