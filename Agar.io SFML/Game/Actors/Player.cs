@@ -40,6 +40,9 @@ public class Player : Actor
             OutlineThickness = 2,
         };
         
+        
+        shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
+        
         _targetPosition = startPosition;
     }
 
@@ -60,7 +63,9 @@ public class Player : Actor
     {
         Bounty += actor.Bounty;
         _speed /= 1 + 0.005f/actor.Bounty;
+        
         shape.Radius += actor.Bounty / 2f;
+        shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
         OnDestroy?.Invoke(actor);
         OnBountyChanged?.Invoke(Bounty);
