@@ -23,7 +23,7 @@ public class Actor: IUpdatable, IDrawable
     {
         Position = startPosition;
         
-        _fieldSize = (Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
+        _fieldSize = (GameLoop.WINDOW_WIDTH, GameLoop.WINDOW_HEIGHT);
         
         _random = new ();
     }

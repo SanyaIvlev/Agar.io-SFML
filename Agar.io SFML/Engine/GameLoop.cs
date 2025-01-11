@@ -9,8 +9,8 @@ public class GameLoop
     public const int SECOND_TO_MICROSECONDS = 1000000;
     public const long TIME_BEFORE_NEXT_FRAME = SECOND_TO_MICROSECONDS / TARGET_FPS;
     
-    private const uint WINDOW_WIDTH = 800;
-    private const uint WINDOW_HEIGHT = 600;
+    public const uint WINDOW_WIDTH = 1600;
+    public const uint WINDOW_HEIGHT = 800;
     
     private string WINDOW_NAME = "Agar.io";
     private RenderWindow _window;

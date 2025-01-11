@@ -6,9 +6,6 @@ namespace Agar.io_SFML;
 
 public class Game
 {
-    public const uint FIELD_WIDTH = 800;
-    public const uint FIELD_HEIGHT = 600;
-    
     public Action<IUpdatable> OnUpdatableSpawned;
     public Action<IDrawable> OnDrawableSpawned;
     
@@ -16,7 +13,7 @@ public class Game
     public Action<IDrawable> OnDrawableDestroyed;
     
     private uint _playersOnStart;
-    private uint _foodOnStart = 50;
+    private uint _foodOnStart;
     
     private List<Player> _players;
     private List<Food> _food;
@@ -26,22 +23,24 @@ public class Game
     private Random _random;
 
     private float _foodRespawnDelay;
-    private float _passedTime;
+    private float _playerRespawnDelay;
+    
+    private float _passedFoodTime;
+    private float _passedPlayerTime;
     
     private List<Actor> _currentRemovingActors;
 
     public Game(InputHandler inputHandler)
     {
         _inputHandler = inputHandler;
-        
-        _random = new Random();
-        
-        _players = new List<Player>();
 
-        _playersOnStart = 5;
+        _playersOnStart = 10;
+        _foodOnStart = 100;
         
-        _passedTime = 0;
-        _foodRespawnDelay = 3f;
+        _passedFoodTime = _passedPlayerTime = 0;
+        
+        _foodRespawnDelay = 0.5f;
+        _playerRespawnDelay = 10f;
     }
     
     
@@ -50,6 +49,8 @@ public class Game
         _players = new ();
         _food = new();
         _currentRemovingActors = new();
+        
+        _random = new Random();
 
         Player mainPlayer = SpawnPlayer(true, Color.Blue);
         _players.Add(mainPlayer);
@@ -82,8 +83,8 @@ public class Game
     
     private Vector2f GetRandomPosition()
     {
-        int x = _random.Next(0, (int)FIELD_WIDTH);
-        int y = _random.Next(0, (int)FIELD_HEIGHT);
+        int x = _random.Next(0, (int)GameLoop.WINDOW_WIDTH);
+        int y = _random.Next(0, (int)GameLoop.WINDOW_HEIGHT);
         
         return new (x, y);
     }
@@ -110,7 +111,7 @@ public class Game
         
         if (isHuman)
         {
-            startPosition = new (FIELD_WIDTH / 2f, FIELD_HEIGHT / 2f);
+            startPosition = new (GameLoop.WINDOW_WIDTH / 2f, GameLoop.WINDOW_HEIGHT / 2f);
         }
         else
         {
@@ -130,14 +131,22 @@ public class Game
 
     public void Update()
     {
-        _passedTime += Time.GetElapsedTimeAsSeconds();
+        _passedFoodTime += Time.GetElapsedTimeAsSeconds();
+        _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
         
-        if (_passedTime >= _foodRespawnDelay)
+        if (_passedFoodTime >= _foodRespawnDelay)
         {
             Food newFood = SpawnFood();
             _food.Add(newFood);
             
-            _passedTime = 0;
+            _passedFoodTime = 0;
+        }
+        
+        if(_passedPlayerTime >= _playerRespawnDelay) {
+            Player newPlayer = SpawnPlayer(false, Color.Red);
+            _players.Add(newPlayer);
+            
+            _passedPlayerTime = 0;
         }
 
         CheckPlayersIntersections();

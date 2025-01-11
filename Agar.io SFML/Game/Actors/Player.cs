@@ -17,13 +17,11 @@ public class Player : Actor
 
     private bool _isHuman;
 
-    private float _radius => shape.Radius;
-
-    private Vector2f _shapeCenter => new Vector2f(Position.X + _radius, Position.Y + _radius);
+    private float _squaredStopDistance = 0.25f;
     
     public Player(InputHandler inputHandler, bool isHuman, Vector2f startPosition, Color color) : base(startPosition)
     {
-        _speed = _defaultSpeed = 1.4f;
+        _speed = _defaultSpeed = 2f;
         Bounty = _initialBounty = 10;
         
         _inputHandler = inputHandler;
@@ -35,7 +33,9 @@ public class Player : Actor
         {
             Position = startPosition,
             Radius = 20,
-            FillColor = color
+            FillColor = color,
+            OutlineColor = Color.White,
+            OutlineThickness = 2,
         };
         
         _targetPosition = startPosition;
@@ -57,8 +57,8 @@ public class Player : Actor
     private void Eat(Actor actor)
     {
         Bounty += actor.Bounty;
-        _speed /= 1 + 0.1f/actor.Bounty;
-        shape.Radius += actor.Bounty;
+        _speed /= 1 + 0.05f/actor.Bounty;
+        shape.Radius += actor.Bounty / 2f;
         
         OnDestroy?.Invoke(actor);
     }
@@ -89,7 +89,7 @@ public class Player : Actor
     
     private void MoveToRandomPosition()
     {
-        if (Position == _targetPosition)
+        if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
         {
             _targetPosition = GetRandomPosition();
         }
