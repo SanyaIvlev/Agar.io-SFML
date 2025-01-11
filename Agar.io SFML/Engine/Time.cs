@@ -5,7 +5,11 @@ namespace Agar.io_SFML;
 
 public static class Time
 {
-    public static long ElapsedTime { get; private set; }
+    public static long ElapsedTime
+    {
+        get => timer.ElapsedTime.AsMilliseconds();
+        private set { }
+    }
     private static Clock timer = new();
 
     public static void Start()
@@ -22,4 +26,7 @@ public static class Time
     
     public static long GetElapsedTimeAsMicroseconds()
         => ElapsedTime * 1000;
+
+    public static float GetElapsedTimeAsSeconds()
+        => ElapsedTime / 1000f;
 }

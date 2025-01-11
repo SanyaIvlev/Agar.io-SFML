@@ -6,12 +6,12 @@ namespace Agar.io_SFML;
 
 public class InputHandler
 {
-    public Action<Vector2f> newPosition;
+    public Action<Vector2f> onPositionChanged;
     
     public void ProcessInput(RenderWindow window)
     {
         Vector2f mousePosition = (Vector2f)Mouse.GetPosition(window);
         
-        newPosition?.Invoke(mousePosition);
+        onPositionChanged?.Invoke(mousePosition);
     }
 }

@@ -12,24 +12,26 @@ public class Actor: IUpdatable, IDrawable
     
     protected Random _random;
     
-    private Shape _shape;
+    protected Shape _shape;
     
 
-    public Actor()
+    public Actor((uint width, uint height) fieldSize, Vector2f startPosition)
     {
+        _position = startPosition;
+        
+        _fieldSize = fieldSize;
+        
         _random = new ();
     }
     
     public void Update()
     {
-        
+        _shape.Position = _position;
     }
     
     public void Draw(RenderWindow window)
     {
         window.Draw(_shape);
     }
-
-    
     
 }

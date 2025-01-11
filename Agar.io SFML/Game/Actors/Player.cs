@@ -1,6 +1,8 @@
+using Agar.io_SFML.Extensions;
+using SFML.Graphics;
 using SFML.System;
 
-namespace Agar.io_SFML.Actors;
+namespace Agar.io_SFML;
 
 public class Player : Actor
 {
@@ -12,23 +14,32 @@ public class Player : Actor
 
     private bool _isHuman;
     
-    public Player((uint width, uint height) fieldSize, float speed, InputHandler inputHandler, bool isHuman)
+    public Player((uint width, uint height) fieldSize, InputHandler inputHandler, bool isHuman, Vector2f startPosition, Color color) : base(fieldSize, startPosition)
     {
-        _fieldSize = fieldSize;
-        
-        _speed = speed;
+        _speed = 0.4f;
         
         _inputHandler = inputHandler;
-        _inputHandler.newPosition += Move;
+        _inputHandler.onPositionChanged += MoveToTarget;
         
         _isHuman = isHuman;
+
+        _shape = new CircleShape()
+        {
+            Position = startPosition,
+            Radius = 20,
+            FillColor = color
+        };
+        
+        _targetPosition = startPosition;
     }
 
-    private void Move(Vector2f newPosition)
+    private void MoveToTarget(Vector2f newPosition)
     {
         if (_isHuman)
         {
-            MoveToGivenPosition(newPosition);
+            _targetPosition = newPosition;
+            
+            Move();
         }
         else
         {
@@ -36,28 +47,14 @@ public class Player : Actor
         }
     }
 
-    private void MoveToGivenPosition(Vector2f newPosition) //ПОТІМ ЗМІНИТИ
-    {
-        _targetPosition = newPosition;
-        
-        Move();
-    }
-
     private void Move()
     {
-        _velocity = new Vector2f(_targetPosition.X - _targetPosition.X, _targetPosition.Y - _targetPosition.Y);
-
-        float distance = (float)Math.Sqrt(_velocity.X * _velocity.X + _velocity.Y * _velocity.Y);
-
-        if (distance > 0)
-        {
-            _velocity /= distance;
-            float playerSpeed = _speed * (distance / 100);
-
-            playerSpeed = Math.Min(playerSpeed, _speed);
-            playerSpeed = Math.Max(playerSpeed, 10f);
-            _position += _velocity * playerSpeed * Time.ElapsedTime;
-        }
+        _velocity = new Vector2f(_targetPosition.X - _position.X, _targetPosition.Y - _position.Y);
+        
+        Vector2f normalizedVelocity = _velocity.Normalize();
+        
+        _position += normalizedVelocity * _speed * Time.GetElapsedTimeAsSeconds();
+        Console.WriteLine(_position);
     }
     
     private void MoveToRandomPosition()
@@ -70,7 +67,9 @@ public class Player : Actor
         Move();
     }
     
-    
+    private Vector2f Lerp(Vector2f firstVector, Vector2f secondVector, float by)
+        => firstVector + (secondVector - firstVector) * by;
+        
 
     private Vector2f GetRandomPosition()
     {

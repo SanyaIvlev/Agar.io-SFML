@@ -5,9 +5,9 @@ namespace Agar.io_SFML;
 
 public class GameLoop
 {
-    private const int TARGET_FPS = 120;
-    private const int SECOND_TO_MICROSECONDS = 1000000;
-    private const long TIME_BEFORE_NEXT_FRAME = SECOND_TO_MICROSECONDS / TARGET_FPS;
+    public const int TARGET_FPS = 60;
+    public const int SECOND_TO_MICROSECONDS = 1000000;
+    public const long TIME_BEFORE_NEXT_FRAME = SECOND_TO_MICROSECONDS / TARGET_FPS;
     
     private const uint WINDOW_WIDTH = 800;
     private const uint WINDOW_HEIGHT = 600;
@@ -21,10 +21,37 @@ public class GameLoop
     private List<IUpdatable> _updatables;
     
     private Game _game;
+
+    public void AddDrawable(IDrawable drawable)
+    {
+        if(!_drawables.Contains(drawable))
+            _drawables.Add(drawable);
+    }
+
+    public void AddUpdatable(IUpdatable updatable)
+    {
+        if(!_updatables.Contains(updatable))
+            _updatables.Add(updatable);
+    }
+    
     
     public void Start()
     {
         Time.Start();
+
+        _inputHandler = new();
+        
+        _updatables = new();
+        _drawables = new();
+        
+        _game = new(_inputHandler);
+
+        _game.OnUpdatableSpawned += AddUpdatable;
+        _game.OnDrawableSpawned += AddDrawable;
+        
+        _game.Start();
+
+
         
         CreateWindow();
 
@@ -63,7 +90,7 @@ public class GameLoop
     }
 
     private bool IsGameLoopEnded()
-        => false;
+        => !_window.IsOpen;
     
     
     private void ProcessInput()
