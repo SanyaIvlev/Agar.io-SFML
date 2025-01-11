@@ -10,7 +10,7 @@ public class InputHandler
     
     public void ProcessInput(RenderWindow window)
     {
-        Vector2f mousePosition = (Vector2f)Mouse.GetPosition(window);
+        var mousePosition = (Vector2f)Mouse.GetPosition(window);
         
         onPositionChanged?.Invoke(mousePosition);
     }
