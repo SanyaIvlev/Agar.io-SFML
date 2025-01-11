@@ -34,6 +34,18 @@ public class GameLoop
             _updatables.Add(updatable);
     }
     
+    public void RemoveUpdatable(IUpdatable actor)
+    {
+        if (_updatables.Contains(actor))
+            _updatables.Remove(actor);
+    }
+
+    public void RemoveDrawable(IDrawable drawable)
+    {
+        if (_drawables.Contains(drawable))
+            _drawables.Remove(drawable);
+    }
+    
     
     public void Start()
     {
@@ -47,7 +59,10 @@ public class GameLoop
         _game = new(_inputHandler);
 
         _game.OnUpdatableSpawned += AddUpdatable;
+        _game.OnUpdatableDestroyed += RemoveUpdatable;
+        
         _game.OnDrawableSpawned += AddDrawable;
+        _game.OnDrawableDestroyed += RemoveDrawable;
         
         _game.Start();
 
@@ -102,7 +117,6 @@ public class GameLoop
     {
         _window.DispatchEvents();
         
-        Time.Update();
 
         foreach (var updatable in _updatables)
         {
@@ -110,6 +124,8 @@ public class GameLoop
         }
         
         _game.Update();
+        
+        Time.Update();
         
     }
 

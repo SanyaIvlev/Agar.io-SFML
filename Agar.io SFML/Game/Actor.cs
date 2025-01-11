@@ -5,33 +5,37 @@ namespace Agar.io_SFML;
 
 public class Actor: IUpdatable, IDrawable
 {
-    protected (uint width, uint height) _fieldSize;
+    public CircleShape shape { get; protected set; }
+
+    public Action<Actor> OnDestroy;
+
+    public Vector2f Position { get; protected set; }
     
-    protected Vector2f _position;
+    public uint Bounty { get; protected set; }
+
     protected Vector2f _velocity;
+    
+    protected (uint width, uint height) _fieldSize;
     
     protected Random _random;
     
-    protected Shape _shape;
-    
-
-    public Actor((uint width, uint height) fieldSize, Vector2f startPosition)
+    public Actor(Vector2f startPosition)
     {
-        _position = startPosition;
+        Position = startPosition;
         
-        _fieldSize = fieldSize;
+        _fieldSize = (Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
         
         _random = new ();
     }
     
     public void Update()
     {
-        _shape.Position = _position;
+        shape.Position = Position;
     }
     
     public void Draw(RenderWindow window)
     {
-        window.Draw(_shape);
+        window.Draw(shape);
     }
     
 }
