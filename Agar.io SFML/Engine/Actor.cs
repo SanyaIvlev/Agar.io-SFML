@@ -13,7 +13,7 @@ public class Actor: IUpdatable, IDrawable
     
     public uint Bounty { get; protected set; }
 
-    protected Vector2f _velocity;
+    protected Vector2f _direction;
     
     protected (uint width, uint height) _fieldSize;
     

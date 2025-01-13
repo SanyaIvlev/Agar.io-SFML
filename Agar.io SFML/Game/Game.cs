@@ -221,9 +221,9 @@ public class Game
 
     private void CleanRemovingList()
     {
-        foreach (var actor in _currentRemovingActors)
+        for (int i = _currentRemovingActors.Count - 1; i >= 0; i--)
         {
-            RemoveActor(actor);
+            RemoveActor(_currentRemovingActors[i]);
         }
     }
     

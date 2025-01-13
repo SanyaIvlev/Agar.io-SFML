@@ -118,8 +118,7 @@ public class GameLoop
     private void Update()
     {
         _window.DispatchEvents();
-        
-
+         
         foreach (var updatable in _updatables)
         {
             updatable.Update();

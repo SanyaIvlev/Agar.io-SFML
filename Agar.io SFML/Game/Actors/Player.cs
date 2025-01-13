@@ -87,11 +87,11 @@ public class Player : Actor
 
     private void Move()
     {
-        _velocity = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
+        _direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
         
-        Vector2f normalizedVelocity = _velocity.Normalize();
+        Vector2f normalizedDirection = _direction.Normalize();
         
-        Position += normalizedVelocity * _speed * Time.GetElapsedTimeAsSeconds();
+        Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
         Console.WriteLine();
     }
     
