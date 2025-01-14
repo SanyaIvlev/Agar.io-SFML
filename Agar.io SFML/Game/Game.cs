@@ -1,3 +1,4 @@
+using Agar.io_SFML.Extensions;
 using Microsoft.VisualBasic.CompilerServices;
 using SFML.Graphics;
 using SFML.System;
@@ -63,8 +64,7 @@ public class Game
         
         _random = new Random();
         
-
-        _mainPlayer = SpawnPlayer(true, Color.Blue);
+        _mainPlayer = SpawnPlayer(true);
         _players.Add(_mainPlayer);
         
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
@@ -75,7 +75,7 @@ public class Game
         
         foreach(var _ in Enumerable.Range(0, (int)_playersOnStart))
         {
-            Player bot = SpawnPlayer(false, Color.Red);
+            Player bot = SpawnPlayer(false);
             _players.Add(bot);
         }
         
@@ -94,9 +94,10 @@ public class Game
     private Food SpawnFood()
     {
         Vector2f initialPosition = GetRandomPosition();
-        Color color = GetRandomColor();
+        Color foodColor = new();
+        foodColor = foodColor.GetRandomColor();
         
-        var newFood = new Food(initialPosition, color);
+        var newFood = new Food(initialPosition, foodColor);
         
         OnUpdatableSpawned?.Invoke(newFood);
         OnDrawableSpawned?.Invoke(newFood);
@@ -112,23 +113,7 @@ public class Game
         return new (x, y);
     }
 
-    private Color GetRandomColor()
-    {
-        int generatedColor = _random.Next(7);
-
-        return generatedColor switch
-        {
-            0 => Color.Red,
-            1 => Color.Blue,
-            2 => Color.Yellow,
-            3 => Color.Green,
-            4 => Color.Magenta,
-            5 => Color.Cyan,
-            6 => Color.White
-        };
-    }
-
-    private Player SpawnPlayer(bool isHuman, Color color)
+    private Player SpawnPlayer(bool isHuman)
     {
         Vector2f startPosition;
         IActionHandler actionHandler;
@@ -144,7 +129,10 @@ public class Game
             startPosition = GetRandomPosition();
         }
 
-        Player newPlayer = new(actionHandler, isHuman, startPosition, color, _window);
+        Color playerColor = new();
+        playerColor = playerColor.GetRandomColor();
+
+        Player newPlayer = new(actionHandler, isHuman, startPosition, playerColor, _window);
         
         OnUpdatableSpawned?.Invoke(newPlayer);
         OnDrawableSpawned?.Invoke(newPlayer);
@@ -199,7 +187,7 @@ public class Game
                 return;
             }
             
-            Player newPlayer = SpawnPlayer(false, Color.Red);
+            Player newPlayer = SpawnPlayer(false);
             _players.Add(newPlayer);
             
             _passedPlayerTime = 0;
