@@ -9,19 +9,23 @@ public class GameLoop
     public const int SECOND_TO_MICROSECONDS = 1000000;
     public const long TIME_BEFORE_NEXT_FRAME = SECOND_TO_MICROSECONDS / TARGET_FPS;
     
-    public const uint WINDOW_WIDTH = 1600;
-    public const uint WINDOW_HEIGHT = 800;
-    
     public Action OnInputProcessed;
-    
-    private string WINDOW_NAME = "Agar.io";
-    private RenderWindow _window;
+    public Action OnGameUpdateNeeded;
     
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
     
-    private Game _game;
+    private RenderWindow _window;
+    
+    private GameMode _gameMode;
 
+    public GameLoop(RenderWindow window, GameMode gameMode)
+    {
+        _window = window;
+        
+        _gameMode = gameMode;
+    }
+    
     public void AddDrawable(IDrawable drawable)
     {
         if(!_drawables.Contains(drawable))
@@ -45,34 +49,24 @@ public class GameLoop
         if (_drawables.Contains(drawable))
             _drawables.Remove(drawable);
     }
-    
-    
-    public void Start()
+
+    public void Initialize(Game game)
     {
         Time.Start();
         
-        CreateWindow();
-        
         _updatables = new();
         _drawables = new();
-        
-        _game = new(_window);
 
-        _game.OnUpdatableSpawned += AddUpdatable;
-        _game.OnUpdatableDestroyed += RemoveUpdatable;
+        game.OnUpdatableSpawned += AddUpdatable;
+        game.OnUpdatableDestroyed += RemoveUpdatable;
         
-        _game.OnDrawableSpawned += AddDrawable;
-        _game.OnDrawableDestroyed += RemoveDrawable;
-        
-        _game.Start(this);
-
-        Run();
+        game.OnDrawableSpawned += AddDrawable;
+        game.OnDrawableDestroyed += RemoveDrawable;
     }
-
-    private void CreateWindow()
+    
+    public void Start()
     {
-        _window = new(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_NAME);
-        _window.Closed += WindowClosed;
+        Run();
     }
     
     private void Run()
@@ -103,7 +97,7 @@ public class GameLoop
     }
 
     private bool IsGameLoopEnded()
-        => _game.IsGameEnded || !_window.IsOpen;
+        => _gameMode.IsGameEnded || !_window.IsOpen;
     
     
     private void ProcessInput()
@@ -119,10 +113,9 @@ public class GameLoop
             updatable.Update();
         }
         
-        _game.Update();
-        
+        OnGameUpdateNeeded?.Invoke();
+
         Time.Update();
-        
     }
 
     private void Render()
@@ -140,13 +133,6 @@ public class GameLoop
     
     private void WaitBeforeEnd()
     {
-        Thread.Sleep(3000);
-    }
-
-    
-    private void WindowClosed(object? sender, EventArgs e)
-    {
-        RenderWindow window = (RenderWindow)sender;
-        window.Close();
+        Thread.Sleep(1000);
     }
 }

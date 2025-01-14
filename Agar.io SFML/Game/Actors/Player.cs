@@ -69,7 +69,7 @@ public class Player : Actor
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
-        OnDestroy?.Invoke(actor);
+        OnDestroyed?.Invoke(actor);
         OnBountyChanged?.Invoke(Bounty);
     }
 
@@ -124,7 +124,4 @@ public class Player : Actor
 
         Move();
     }
-    
-    private Vector2f Lerp(Vector2f firstVector, Vector2f secondVector, float by)
-        => firstVector + (secondVector - firstVector) * by;
 }

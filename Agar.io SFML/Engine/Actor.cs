@@ -7,7 +7,7 @@ public class Actor: IUpdatable, IDrawable
 {
     public CircleShape shape { get; protected set; }
 
-    public Action<Actor> OnDestroy;
+    public Action<Actor> OnDestroyed;
 
     public Vector2f Position { get; protected set; }
     
@@ -23,7 +23,7 @@ public class Actor: IUpdatable, IDrawable
     {
         Position = startPosition;
         
-        _fieldSize = (GameLoop.WINDOW_WIDTH, GameLoop.WINDOW_HEIGHT);
+        _fieldSize = (Boot.WINDOW_WIDTH, Boot.WINDOW_HEIGHT);
         
         _random = new ();
     }

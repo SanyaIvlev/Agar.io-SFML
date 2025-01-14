@@ -6,8 +6,6 @@ namespace Agar.io_SFML;
 
 public class Game
 {
-    public bool IsGameEnded;
-    
     public Action<IUpdatable> OnUpdatableSpawned;
     public Action<IDrawable> OnDrawableSpawned;
     
@@ -36,9 +34,13 @@ public class Game
 
     private RenderWindow _window;
 
-    public Game(RenderWindow window)
+    private GameMode _gameMode;
+
+    public Game(RenderWindow window, GameMode gameMode)
     {
         _window = window;
+        
+        _gameMode = gameMode;
 
         _playersOnStart = 10;
         _foodOnStart = 100;
@@ -53,6 +55,7 @@ public class Game
     public void Start(GameLoop gameLoop)
     {
         gameLoop.OnInputProcessed += ProcessAction;
+        gameLoop.OnGameUpdateNeeded += Update;
         
         _players = new ();
         _food = new();
@@ -103,8 +106,8 @@ public class Game
     
     private Vector2f GetRandomPosition()
     {
-        int x = _random.Next(0, (int)GameLoop.WINDOW_WIDTH);
-        int y = _random.Next(0, (int)GameLoop.WINDOW_HEIGHT);
+        int x = _random.Next(0, (int)Boot.WINDOW_WIDTH);
+        int y = _random.Next(0, (int)Boot.WINDOW_HEIGHT);
         
         return new (x, y);
     }
@@ -133,7 +136,7 @@ public class Game
         if (isHuman)
         {
             actionHandler = new HumanActionHandler(_window);
-            startPosition = new (GameLoop.WINDOW_WIDTH / 2f, GameLoop.WINDOW_HEIGHT / 2f);
+            startPosition = new (Boot.WINDOW_WIDTH / 2f, Boot.WINDOW_HEIGHT / 2f);
         }
         else
         {
@@ -146,7 +149,7 @@ public class Game
         OnUpdatableSpawned?.Invoke(newPlayer);
         OnDrawableSpawned?.Invoke(newPlayer);
 
-        newPlayer.OnDestroy += UpdateRemovingList;
+        newPlayer.OnDestroyed += UpdateRemovingList;
         
         return newPlayer;
     }
@@ -164,7 +167,7 @@ public class Game
     {
         string fontName = "Obelix Pro.ttf";
         Font font = new (GetFontLocation(fontName));
-        Text endText = new(font, 50, Color.Black, Color.White, 3, new(GameLoop.WINDOW_WIDTH / 2f, GameLoop.WINDOW_HEIGHT / 2f));
+        Text endText = new(font, 50, Color.Black, Color.White, 3, new(Boot.WINDOW_WIDTH / 2f, Boot.WINDOW_HEIGHT / 2f));
         
         OnDrawableSpawned?.Invoke(endText);
 
@@ -192,7 +195,7 @@ public class Game
             if (_players.Count == 1 && _players[0] == _mainPlayer)
             {
                 _endText.Update("You Win!");
-                IsGameEnded = true;
+                _gameMode.IsGameEnded = true;
                 return;
             }
             
@@ -203,6 +206,7 @@ public class Game
         }
 
         CheckPlayersIntersections();
+        CleanRemovingList();
     }
 
     private void CheckPlayersIntersections()
@@ -222,8 +226,6 @@ public class Game
                 currentPlayer.CheckIntersectionWith(food);
             }
         }
-        
-        CleanRemovingList();
     }
 
     private void UpdateRemovingList(Actor actor)
@@ -244,7 +246,7 @@ public class Game
         if (actor == _mainPlayer)
         {
             _endText.Update("You lose!");
-            IsGameEnded = true;
+            _gameMode.IsGameEnded = true;
         }
         if (_players.Contains(actor))
         {

@@ -1,4 +1,3 @@
-using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML;
