@@ -120,7 +120,7 @@ public class GameLoop
 
     private void Render()
     {
-        _window.Clear();
+        _window.Clear(new Color(122,122,122));
 
         foreach (var drawable in _drawables)
         {

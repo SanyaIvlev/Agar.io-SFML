@@ -37,7 +37,7 @@ public class Player : Actor
             Position = startPosition,
             Radius = 20,
             FillColor = color,
-            OutlineColor = Color.White,
+            OutlineColor = Color.Black,
             OutlineThickness = 2,
         };
         
@@ -64,7 +64,7 @@ public class Player : Actor
     private void Eat(Actor actor)
     {
         Bounty += actor.Bounty;
-        _speed /= 1 + 0.05f/actor.Bounty;
+        _speed /= 1 + 0.025f/actor.Bounty;
         
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
