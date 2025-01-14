@@ -13,21 +13,22 @@ public class Player : Actor
     private float _speed;
     private float _defaultSpeed;
     
-    private InputHandler _inputHandler;
+    private IActionHandler _actionHandler;
 
     private uint _initialBounty;
 
     private bool _isHuman;
 
-    private float _squaredStopDistance = 0.25f;
+    private float _squaredStopDistance = 3f;
     
-    public Player(InputHandler inputHandler, bool isHuman, Vector2f startPosition, Color color) : base(startPosition)
+    private RenderWindow _window;
+    
+    public Player(IActionHandler humanActionHandler, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
     {
-        _speed = _defaultSpeed = 2f;
+        _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
         
-        _inputHandler = inputHandler;
-        _inputHandler.onPositionChanged += MoveToTarget;
+        _actionHandler = humanActionHandler;
         
         _isHuman = isHuman;
 
@@ -40,6 +41,7 @@ public class Player : Actor
             OutlineThickness = 2,
         };
         
+        _window = window;
         
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
@@ -62,7 +64,7 @@ public class Player : Actor
     private void Eat(Actor actor)
     {
         Bounty += actor.Bounty;
-        _speed /= 1 + 0.005f/actor.Bounty;
+        _speed /= 1 + 0.05f/actor.Bounty;
         
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
@@ -71,18 +73,37 @@ public class Player : Actor
         OnBountyChanged?.Invoke(Bounty);
     }
 
-    private void MoveToTarget(Vector2f newPosition)
+    public void ProcessAction()
+    {
+        _actionHandler.ProcessAction();
+    }
+
+    public override void Update()
     {
         if (_isHuman)
         {
-            _targetPosition = newPosition;
-            
-            Move();
+            TryMove();
         }
         else
         {
-            MoveToRandomPosition();
+            TryChangePositionAndMove();
         }
+        
+        base.Update();
+    }
+
+    private void TryMove()
+    {
+        Vector2f newPosition = _actionHandler.GetPosition();
+        Vector2u windowSize = _window.Size;
+        
+        if (newPosition.X > windowSize.X || newPosition.X < 0 ||
+            newPosition.Y > windowSize.Y || newPosition.Y < 0)
+            return;
+        
+        _targetPosition = _actionHandler.GetPosition();
+            
+        Move();
     }
 
     private void Move()
@@ -92,14 +113,13 @@ public class Player : Actor
         Vector2f normalizedDirection = _direction.Normalize();
         
         Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
-        Console.WriteLine();
     }
     
-    private void MoveToRandomPosition()
+    private void TryChangePositionAndMove()
     {
         if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
         {
-            _targetPosition = GetRandomPosition();
+            _targetPosition = _actionHandler.GetPosition();
         }
 
         Move();
@@ -107,13 +127,4 @@ public class Player : Actor
     
     private Vector2f Lerp(Vector2f firstVector, Vector2f secondVector, float by)
         => firstVector + (secondVector - firstVector) * by;
-        
-
-    private Vector2f GetRandomPosition()
-    {
-        int x = _random.Next(0, (int)_fieldSize.width);
-        int y = _random.Next(0, (int)_fieldSize.height);
-
-        return new(x, y);
-    }
 }

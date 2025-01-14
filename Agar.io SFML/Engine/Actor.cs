@@ -28,7 +28,7 @@ public class Actor: IUpdatable, IDrawable
         _random = new ();
     }
     
-    public void Update()
+    public virtual void Update()
     {
         shape.Position = Position;
     }

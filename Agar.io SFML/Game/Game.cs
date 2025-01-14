@@ -24,8 +24,6 @@ public class Game
     private List<Player> _players;
     private List<Food> _food;
     
-    private InputHandler _inputHandler;
-    
     private Random _random;
 
     private float _foodRespawnDelay;
@@ -36,9 +34,11 @@ public class Game
     
     private List<Actor> _currentRemovingActors;
 
-    public Game(InputHandler inputHandler)
+    private RenderWindow _window;
+
+    public Game(RenderWindow window)
     {
-        _inputHandler = inputHandler;
+        _window = window;
 
         _playersOnStart = 10;
         _foodOnStart = 100;
@@ -50,8 +50,10 @@ public class Game
     }
     
     
-    public void Start()
+    public void Start(GameLoop gameLoop)
     {
+        gameLoop.OnInputProcessed += ProcessAction;
+        
         _players = new ();
         _food = new();
         _currentRemovingActors = new();
@@ -76,6 +78,14 @@ public class Game
         
         CreateScore(_mainPlayer);
         _endText = CreateEndText();
+    }
+
+    public void ProcessAction()
+    {
+        foreach (var player in _players)
+        {
+            player.ProcessAction();
+        }
     }
 
     private Food SpawnFood()
@@ -118,18 +128,20 @@ public class Game
     private Player SpawnPlayer(bool isHuman, Color color)
     {
         Vector2f startPosition;
+        IActionHandler actionHandler;
         
         if (isHuman)
         {
+            actionHandler = new HumanActionHandler(_window);
             startPosition = new (GameLoop.WINDOW_WIDTH / 2f, GameLoop.WINDOW_HEIGHT / 2f);
         }
         else
         {
+            actionHandler = new BotActionHandler(_window);
             startPosition = GetRandomPosition();
-            
         }
 
-        Player newPlayer = new(_inputHandler, isHuman, startPosition, color);
+        Player newPlayer = new(actionHandler, isHuman, startPosition, color, _window);
         
         OnUpdatableSpawned?.Invoke(newPlayer);
         OnDrawableSpawned?.Invoke(newPlayer);

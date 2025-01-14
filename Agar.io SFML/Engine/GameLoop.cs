@@ -12,10 +12,10 @@ public class GameLoop
     public const uint WINDOW_WIDTH = 1600;
     public const uint WINDOW_HEIGHT = 800;
     
+    public Action OnInputProcessed;
+    
     private string WINDOW_NAME = "Agar.io";
     private RenderWindow _window;
-    
-    private InputHandler _inputHandler;
     
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
@@ -50,13 +50,13 @@ public class GameLoop
     public void Start()
     {
         Time.Start();
-
-        _inputHandler = new();
+        
+        CreateWindow();
         
         _updatables = new();
         _drawables = new();
         
-        _game = new(_inputHandler);
+        _game = new(_window);
 
         _game.OnUpdatableSpawned += AddUpdatable;
         _game.OnUpdatableDestroyed += RemoveUpdatable;
@@ -64,11 +64,7 @@ public class GameLoop
         _game.OnDrawableSpawned += AddDrawable;
         _game.OnDrawableDestroyed += RemoveDrawable;
         
-        _game.Start();
-
-
-        
-        CreateWindow();
+        _game.Start(this);
 
         Run();
     }
@@ -112,13 +108,12 @@ public class GameLoop
     
     private void ProcessInput()
     {
-        _inputHandler.ProcessInput(_window);
+        _window.DispatchEvents();
+        OnInputProcessed?.Invoke();
     }
 
     private void Update()
     {
-        _window.DispatchEvents();
-         
         foreach (var updatable in _updatables)
         {
             updatable.Update();
