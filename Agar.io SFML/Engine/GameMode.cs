@@ -1,6 +1,6 @@
 namespace Agar.io_SFML;
 
-public struct GameMode
+public class GameMode
 {
     public bool IsGameEnded;
 }
