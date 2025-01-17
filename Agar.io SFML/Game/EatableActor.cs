@@ -5,6 +5,16 @@ namespace Agar.io_SFML;
 
 public class EatableActor : Actor, IUpdatable
 {
+    public Vector2f Center
+    {
+        get
+        {
+            var halfOfRadius = shape.Radius / 2f;
+            return new(shape.Position.X + halfOfRadius, shape.Position.Y + halfOfRadius);
+        }
+        set { }
+    }
+    
     public CircleShape shape { get; protected init; }
     
     public Action<EatableActor> OnDestroyed;

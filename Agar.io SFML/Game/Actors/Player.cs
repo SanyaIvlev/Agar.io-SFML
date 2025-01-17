@@ -59,8 +59,29 @@ public class Player : EatableActor
         
         if (Bounty > actor.Bounty)
         {
-            Eat(actor);
+            TryEat(actor);
         }
+    }
+
+    private void TryEat(EatableActor actor)
+    {
+        float collisionDepth = GetCollisionDepth(actor);
+        
+        if (collisionDepth < actor.shape.Radius)
+            return;
+        
+        Eat(actor);
+    }
+
+    private float GetCollisionDepth(EatableActor actor)
+    {
+        var dx = actor.Center.X - Center.X;
+        var dy = actor.Center.Y - Center.Y;
+        
+        float squaredDistance = dx * dx + dy * dy;
+        float distance = MathF.Sqrt(squaredDistance);
+        
+        return shape.Radius + actor.shape.Radius - distance;
     }
 
     private void Eat(EatableActor actor)

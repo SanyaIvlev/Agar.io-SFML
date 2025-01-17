@@ -22,9 +22,9 @@ public static class MathExtensions
     
     public static float GetSquaredDistanceTo(this Vector2f ownActor, Vector2f otherActor)
     {
-        float distanceX = ownActor.X - otherActor.X;
-        float distanceY = ownActor.Y - otherActor.Y;
+        float dx = ownActor.X - otherActor.X;
+        float dy = ownActor.Y - otherActor.Y;
         
-        return distanceX * distanceX + distanceY * distanceY;
+        return dx * dx + dy * dy;
     }
 }
