@@ -235,11 +235,11 @@ public class Game
         }
         if (_players.Contains(actor))
         {
-            _players.Remove(actor as Player);
+            _players.SwapRemove(actor as Player);
         }
         else if (_food.Contains(actor))
         {
-            _food.Remove(actor as Food);
+            _food.SwapRemove(actor as Food);
         }
         
         OnUpdatableDestroyed?.Invoke(actor);
