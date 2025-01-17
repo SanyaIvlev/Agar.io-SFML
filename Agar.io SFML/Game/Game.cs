@@ -82,7 +82,7 @@ public class Game
         _endText = CreateEndText();
     }
 
-    public void ProcessAction()
+    private void ProcessAction()
     {
         foreach (var player in _players)
         {
@@ -164,7 +164,7 @@ public class Game
     private string GetFontLocation(string fontName)
         => Path.GetFullPath(@"..\..\..\..\Resources\Fonts\" + fontName);
 
-    public void Update()
+    private void Update()
     {
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
         _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
