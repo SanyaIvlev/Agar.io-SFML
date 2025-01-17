@@ -3,11 +3,11 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Text : IDrawable
+public class Text : Actor
 {
     protected SFML.Graphics.Text Message;
     
-    public Text(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f position)
+    public Text(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f position) : base(position)
     {
         Message = new("", font)
         {
@@ -19,12 +19,12 @@ public class Text : IDrawable
         };
     }
 
-    public void Update(string newText)
+    public void SetText(string newText)
     {
         Message.DisplayedString = newText;
     }
     
-    public void Draw(RenderWindow window)
+    public override void Draw(RenderWindow window)
     {
         window.Draw(Message);
     }

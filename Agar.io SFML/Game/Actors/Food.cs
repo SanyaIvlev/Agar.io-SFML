@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Food : Actor
+public class Food : EatableActor
 {
     public Food(Vector2f initialPosition, Color color) : base(initialPosition)
     {

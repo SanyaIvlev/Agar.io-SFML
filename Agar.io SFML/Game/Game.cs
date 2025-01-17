@@ -30,7 +30,7 @@ public class Game
     private float _passedFoodTime;
     private float _passedPlayerTime;
     
-    private List<Actor> _currentRemovingActors;
+    private List<EatableActor> _currentRemovingActors;
 
     private readonly RenderWindow _window;
 
@@ -133,8 +133,8 @@ public class Game
 
         Player newPlayer = new(actionHandler, isHuman, startPosition, playerColor, _window);
         
-        OnUpdatableSpawned.Invoke(newPlayer);
-        OnDrawableSpawned.Invoke(newPlayer);
+        OnUpdatableSpawned?.Invoke(newPlayer);
+        OnDrawableSpawned?.Invoke(newPlayer);
 
         newPlayer.OnDestroyed += UpdateRemovingList;
         
@@ -147,7 +147,7 @@ public class Game
         Font font = new (GetFontLocation(fontName));
         Score score = new(font, 25, Color.Black, Color.White, 3, new(0,0), mainPlayer);
         
-        OnDrawableSpawned.Invoke(score);
+        OnDrawableSpawned?.Invoke(score);
     }
     
     private Text CreateEndText()
@@ -156,7 +156,7 @@ public class Game
         Font font = new (GetFontLocation(fontName));
         Text endText = new(font, 50, Color.Black, Color.White, 3, new(Boot.WindowWidth / 2f, Boot.WindowHeight / 2f));
         
-        OnDrawableSpawned.Invoke(endText);
+        OnDrawableSpawned?.Invoke(endText);
 
         return endText;
     }
@@ -181,7 +181,7 @@ public class Game
         {
             if (_players.Count == 1 && _players[0] == _mainPlayer)
             {
-                _endText.Update("You Win!");
+                _endText.SetText("You Win!");
                 _gameMode.IsGameEnded = true;
                 return;
             }
@@ -213,7 +213,7 @@ public class Game
         }
     }
 
-    private void UpdateRemovingList(Actor actor)
+    private void UpdateRemovingList(EatableActor actor)
     {
         _currentRemovingActors.Add(actor);
     }
@@ -226,11 +226,11 @@ public class Game
         }
     }
     
-    private void RemoveActor(Actor actor)
+    private void RemoveActor(EatableActor actor)
     {
         if (actor == _mainPlayer)
         {
-            _endText.Update("You lose!");
+            _endText.SetText("You lose!");
             _gameMode.IsGameEnded = true;
         }
         if (_players.Contains(actor))
@@ -242,8 +242,8 @@ public class Game
             _food.Remove(actor as Food);
         }
         
-        OnUpdatableDestroyed.Invoke(actor);
-        OnDrawableDestroyed.Invoke(actor);
+        OnUpdatableDestroyed?.Invoke(actor);
+        OnDrawableDestroyed?.Invoke(actor);
     }
 
 }

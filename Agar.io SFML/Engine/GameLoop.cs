@@ -100,7 +100,7 @@ public class GameLoop
     private void ProcessInput()
     {
         _window.DispatchEvents();
-        OnInputProcessed.Invoke();
+        OnInputProcessed?.Invoke();
     }
 
     private void Update()
@@ -110,7 +110,7 @@ public class GameLoop
             updatable.Update();
         }
         
-        OnGameUpdateNeeded.Invoke();
+        OnGameUpdateNeeded?.Invoke();
 
         Time.Update();
     }

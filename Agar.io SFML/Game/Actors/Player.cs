@@ -4,11 +4,13 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Player : Actor
+public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
     private Vector2f _targetPosition;
+    
+    private Vector2f _direction;
     
     private float _speed;
     private float _defaultSpeed;
@@ -48,7 +50,7 @@ public class Player : Actor
         _targetPosition = startPosition;
     }
 
-    public void CheckIntersectionWith(Actor actor)
+    public void CheckIntersectionWith(EatableActor actor)
     {
         var shapeBounds = shape.GetGlobalBounds();
 
@@ -61,7 +63,7 @@ public class Player : Actor
         }
     }
 
-    private void Eat(Actor actor)
+    private void Eat(EatableActor actor)
     {
         Bounty += actor.Bounty;
         _speed /= 1 + 0.025f/actor.Bounty;
@@ -69,8 +71,8 @@ public class Player : Actor
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
-        OnDestroyed.Invoke(actor);
-        OnBountyChanged.Invoke(Bounty);
+        OnDestroyed?.Invoke(actor);
+        OnBountyChanged?.Invoke(Bounty);
     }
 
     public void ProcessAction()
@@ -108,9 +110,9 @@ public class Player : Actor
 
     private void Move()
     {
-        Direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
+        _direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
         
-        Vector2f normalizedDirection = Direction.Normalize();
+        Vector2f normalizedDirection = _direction.Normalize();
         
         Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
     }

@@ -4,7 +4,7 @@ namespace Agar.io_SFML.Extensions;
 
 public static class SFMLExtensions
 {
-    public static bool Intersects(this FloatRect ownActor, Actor otherActor)
+    public static bool Intersects(this FloatRect ownActor, EatableActor otherActor)
     {
         var otherActorShape = otherActor.shape;
         FloatRect otherActorBounds = otherActorShape.GetGlobalBounds();
