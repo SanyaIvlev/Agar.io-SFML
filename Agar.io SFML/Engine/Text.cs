@@ -5,11 +5,11 @@ namespace Agar.io_SFML;
 
 public class Text : IDrawable
 {
-    protected SFML.Graphics.Text _text;
+    protected SFML.Graphics.Text Message;
     
     public Text(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f position)
     {
-        _text = new("", font)
+        Message = new("", font)
         {
             CharacterSize = characterSize,
             FillColor = fillColor,
@@ -21,11 +21,11 @@ public class Text : IDrawable
 
     public void Update(string newText)
     {
-        _text.DisplayedString = newText;
+        Message.DisplayedString = newText;
     }
     
     public void Draw(RenderWindow window)
     {
-        window.Draw(_text);
+        window.Draw(Message);
     }
 }

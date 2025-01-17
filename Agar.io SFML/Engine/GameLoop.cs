@@ -1,13 +1,12 @@
 using SFML.Graphics;
-using SFML.Window;
 
 namespace Agar.io_SFML;
 
 public class GameLoop
 {
-    public const int TARGET_FPS = 60;
-    public const int SECOND_TO_MICROSECONDS = 1000000;
-    public const long TIME_BEFORE_NEXT_FRAME = SECOND_TO_MICROSECONDS / TARGET_FPS;
+    private const int TargetFps = 60;
+    private const int SecondToMicroseconds = 1000000;
+    private const long TimeBeforeNextFrame = SecondToMicroseconds / TargetFps;
     
     public Action OnInputProcessed;
     public Action OnGameUpdateNeeded;
@@ -15,9 +14,9 @@ public class GameLoop
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
     
-    private RenderWindow _window;
+    private readonly RenderWindow _window;
     
-    private GameMode _gameMode;
+    private readonly GameMode _gameMode;
 
     public GameLoop(RenderWindow window, GameMode gameMode)
     {
@@ -40,22 +39,20 @@ public class GameLoop
     
     public void RemoveUpdatable(IUpdatable actor)
     {
-        if (_updatables.Contains(actor))
-            _updatables.Remove(actor);
+        _updatables.Remove(actor);
     }
 
     public void RemoveDrawable(IDrawable drawable)
     {
-        if (_drawables.Contains(drawable))
-            _drawables.Remove(drawable);
+        _drawables.Remove(drawable);
     }
 
     public void Initialize(Game game)
     {
         Time.Start();
         
-        _updatables = new();
-        _drawables = new();
+        _updatables = [];
+        _drawables = [];
 
         game.OnUpdatableSpawned += AddUpdatable;
         game.OnUpdatableDestroyed += RemoveUpdatable;
@@ -86,11 +83,11 @@ public class GameLoop
             
             totalTimeBeforeUpdate += deltaTime;
 
-            if (totalTimeBeforeUpdate >= TIME_BEFORE_NEXT_FRAME)
-            {
-                Update();
-                Render();
-            }
+            if (totalTimeBeforeUpdate < TimeBeforeNextFrame)
+                continue;
+            
+            Update();
+            Render();
         }
 
         WaitBeforeEnd();
@@ -103,7 +100,7 @@ public class GameLoop
     private void ProcessInput()
     {
         _window.DispatchEvents();
-        OnInputProcessed?.Invoke();
+        OnInputProcessed.Invoke();
     }
 
     private void Update()
@@ -113,7 +110,7 @@ public class GameLoop
             updatable.Update();
         }
         
-        OnGameUpdateNeeded?.Invoke();
+        OnGameUpdateNeeded.Invoke();
 
         Time.Update();
     }

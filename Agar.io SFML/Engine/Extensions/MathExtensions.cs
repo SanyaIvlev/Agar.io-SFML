@@ -19,4 +19,12 @@ public static class MathExtensions
 
         return vector;
     }
+    
+    public static float GetSquaredDistanceTo(this Vector2f ownActor, Vector2f otherActor)
+    {
+        float distanceX = ownActor.X - otherActor.X;
+        float distanceY = ownActor.Y - otherActor.Y;
+        
+        return distanceX * distanceX + distanceY * distanceY;
+    }
 }

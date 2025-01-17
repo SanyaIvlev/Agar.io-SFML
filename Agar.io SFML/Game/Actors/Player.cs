@@ -17,11 +17,11 @@ public class Player : Actor
 
     private uint _initialBounty;
 
-    private bool _isHuman;
+    private readonly bool _isHuman;
 
-    private float _squaredStopDistance = 3f;
+    private readonly float _squaredStopDistance = 3f;
     
-    private RenderWindow _window;
+    private readonly RenderWindow _window;
     
     public Player(IActionHandler humanActionHandler, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
     {
@@ -32,7 +32,7 @@ public class Player : Actor
         
         _isHuman = isHuman;
 
-        shape = new CircleShape()
+        shape = new()
         {
             Position = startPosition,
             Radius = 20,
@@ -52,12 +52,12 @@ public class Player : Actor
     {
         var shapeBounds = shape.GetGlobalBounds();
 
-        if (shapeBounds.Intersects(actor))
+        if (!shapeBounds.Intersects(actor))
+            return;
+        
+        if (Bounty > actor.Bounty)
         {
-            if (Bounty > actor.Bounty)
-            {
-                Eat(actor);
-            }
+            Eat(actor);
         }
     }
 
@@ -69,8 +69,8 @@ public class Player : Actor
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
-        OnDestroyed?.Invoke(actor);
-        OnBountyChanged?.Invoke(Bounty);
+        OnDestroyed.Invoke(actor);
+        OnBountyChanged.Invoke(Bounty);
     }
 
     public void ProcessAction()
@@ -108,9 +108,9 @@ public class Player : Actor
 
     private void Move()
     {
-        _direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
+        Direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
         
-        Vector2f normalizedDirection = _direction.Normalize();
+        Vector2f normalizedDirection = Direction.Normalize();
         
         Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
     }

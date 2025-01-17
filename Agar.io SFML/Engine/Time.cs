@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using SFML.System;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace Agar.io_SFML;
 
@@ -7,21 +7,23 @@ public static class Time
 {
     public static long ElapsedTime
     {
-        get => timer.ElapsedTime.AsMilliseconds();
+        get => _timer.ElapsedTime.AsMilliseconds();
         private set { }
     }
-    private static Clock timer = new();
+
+    private static Clock _timer;
 
     public static void Start()
     {
         ElapsedTime = 0;
-        timer.Restart();
+        _timer = new();
+        _timer.Restart();
     }
 
     public static void Update()
     {
-        ElapsedTime = timer.ElapsedTime.AsMilliseconds();
-        timer.Restart();
+        ElapsedTime = _timer.ElapsedTime.AsMilliseconds();
+        _timer.Restart();
     }
     
     public static long GetElapsedTimeAsMicroseconds()

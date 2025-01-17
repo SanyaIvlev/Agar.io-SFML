@@ -1,5 +1,4 @@
 using Agar.io_SFML.Extensions;
-using Microsoft.VisualBasic.CompilerServices;
 using SFML.Graphics;
 using SFML.System;
 
@@ -13,8 +12,8 @@ public class Game
     public Action<IUpdatable> OnUpdatableDestroyed;
     public Action<IDrawable> OnDrawableDestroyed;
     
-    private uint _playersOnStart;
-    private uint _foodOnStart;
+    private readonly uint _playersOnStart;
+    private readonly uint _foodOnStart;
 
     private Text _endText;
 
@@ -25,15 +24,15 @@ public class Game
     
     private Random _random;
 
-    private float _foodRespawnDelay;
-    private float _playerRespawnDelay;
+    private readonly float _foodRespawnDelay;
+    private readonly float _playerRespawnDelay;
     
     private float _passedFoodTime;
     private float _passedPlayerTime;
     
     private List<Actor> _currentRemovingActors;
 
-    private RenderWindow _window;
+    private readonly RenderWindow _window;
 
     private GameMode _gameMode;
 
@@ -58,9 +57,9 @@ public class Game
         gameLoop.OnInputProcessed += ProcessAction;
         gameLoop.OnGameUpdateNeeded += Update;
         
-        _players = new ();
-        _food = new();
-        _currentRemovingActors = new();
+        _players = [];
+        _food = [];
+        _currentRemovingActors = [];
         
         _random = new Random();
         
@@ -99,16 +98,16 @@ public class Game
         
         var newFood = new Food(initialPosition, foodColor);
         
-        OnUpdatableSpawned?.Invoke(newFood);
-        OnDrawableSpawned?.Invoke(newFood);
+        OnUpdatableSpawned(newFood);
+        OnDrawableSpawned(newFood);
         
         return newFood;
     }
     
     private Vector2f GetRandomPosition()
     {
-        int x = _random.Next(0, (int)Boot.WINDOW_WIDTH);
-        int y = _random.Next(0, (int)Boot.WINDOW_HEIGHT);
+        int x = _random.Next(0, (int)Boot.WindowWidth);
+        int y = _random.Next(0, (int)Boot.WindowHeight);
         
         return new (x, y);
     }
@@ -121,7 +120,7 @@ public class Game
         if (isHuman)
         {
             actionHandler = new HumanActionHandler(_window);
-            startPosition = new (Boot.WINDOW_WIDTH / 2f, Boot.WINDOW_HEIGHT / 2f);
+            startPosition = new (Boot.WindowWidth / 2f, Boot.WindowHeight / 2f);
         }
         else
         {
@@ -134,8 +133,8 @@ public class Game
 
         Player newPlayer = new(actionHandler, isHuman, startPosition, playerColor, _window);
         
-        OnUpdatableSpawned?.Invoke(newPlayer);
-        OnDrawableSpawned?.Invoke(newPlayer);
+        OnUpdatableSpawned.Invoke(newPlayer);
+        OnDrawableSpawned.Invoke(newPlayer);
 
         newPlayer.OnDestroyed += UpdateRemovingList;
         
@@ -144,26 +143,26 @@ public class Game
 
     private void CreateScore(Player mainPlayer)
     {
-        string fontName = "Obelix Pro.ttf";
+        const string fontName = "Obelix Pro.ttf";
         Font font = new (GetFontLocation(fontName));
         Score score = new(font, 25, Color.Black, Color.White, 3, new(0,0), mainPlayer);
         
-        OnDrawableSpawned?.Invoke(score);
+        OnDrawableSpawned.Invoke(score);
     }
     
     private Text CreateEndText()
     {
-        string fontName = "Obelix Pro.ttf";
+        const string fontName = "Obelix Pro.ttf";
         Font font = new (GetFontLocation(fontName));
-        Text endText = new(font, 50, Color.Black, Color.White, 3, new(Boot.WINDOW_WIDTH / 2f, Boot.WINDOW_HEIGHT / 2f));
+        Text endText = new(font, 50, Color.Black, Color.White, 3, new(Boot.WindowWidth / 2f, Boot.WindowHeight / 2f));
         
-        OnDrawableSpawned?.Invoke(endText);
+        OnDrawableSpawned.Invoke(endText);
 
         return endText;
     }
 
     private string GetFontLocation(string fontName)
-        => Path.GetFullPath("..\\..\\..\\..\\Resources\\Fonts\\" + fontName);
+        => Path.GetFullPath(@"..\..\..\..\Resources\Fonts\" + fontName);
 
     public void Update()
     {
@@ -199,16 +198,14 @@ public class Game
 
     private void CheckPlayersIntersections()
     {
-        foreach (Player currentPlayer in _players)
+        foreach (var currentPlayer in _players)
         {
-            foreach(Player anotherPlayer in _players)
+            foreach (var anotherPlayer
+                     in _players.Where(anotherPlayer => currentPlayer != anotherPlayer))
             {
-                if (currentPlayer != anotherPlayer)
-                {
-                    currentPlayer.CheckIntersectionWith(anotherPlayer);
-                }
+                currentPlayer.CheckIntersectionWith(anotherPlayer);
             }
-            
+
             foreach(var food in _food)
             {
                 currentPlayer.CheckIntersectionWith(food);
@@ -245,8 +242,8 @@ public class Game
             _food.Remove(actor as Food);
         }
         
-        OnUpdatableDestroyed?.Invoke(actor);
-        OnDrawableDestroyed?.Invoke(actor);
+        OnUpdatableDestroyed.Invoke(actor);
+        OnDrawableDestroyed.Invoke(actor);
     }
 
 }

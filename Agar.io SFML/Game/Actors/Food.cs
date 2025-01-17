@@ -7,7 +7,7 @@ public class Food : Actor
 {
     public Food(Vector2f initialPosition, Color color) : base(initialPosition)
     {
-        shape = new CircleShape()
+        shape = new()
         {
             Position = initialPosition,
             Radius = 5,

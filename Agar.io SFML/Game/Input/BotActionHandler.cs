@@ -1,6 +1,5 @@
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 
 namespace Agar.io_SFML;
 
@@ -8,9 +7,9 @@ public class BotActionHandler : IActionHandler
 {
     private Vector2f _newPosition;
     
-    private Random _random;
+    private readonly Random _random;
     
-    private RenderWindow _window;
+    private readonly RenderWindow _window;
 
     public BotActionHandler(RenderWindow window)
     {

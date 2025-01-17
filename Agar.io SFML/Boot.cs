@@ -5,11 +5,11 @@ namespace Agar.io_SFML;
 
 public class Boot
 {
-    public const uint WINDOW_WIDTH = 1600;
-    public const uint WINDOW_HEIGHT = 800;
-    
-    private string WINDOW_NAME = "Agar.io";
-    
+    public const uint WindowWidth = 1600;
+    public const uint WindowHeight = 800;
+
+    private const string WindowName = "Agar.io";
+
     private RenderWindow _window;
     
     public void Start()
@@ -28,13 +28,13 @@ public class Boot
     
     private void CreateWindow()
     {
-        _window = new(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_NAME);
+        _window = new(new VideoMode(WindowWidth, WindowHeight), WindowName);
         _window.Closed += WindowClosed;
     }
     
     private void WindowClosed(object? sender, EventArgs e)
     {
-        RenderWindow window = (RenderWindow)sender;
+        RenderWindow window = (RenderWindow)sender!;
         window.Close();
     }
 }
