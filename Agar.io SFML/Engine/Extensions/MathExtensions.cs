@@ -4,6 +4,7 @@ namespace Agar.io_SFML.Extensions;
 
 public static class MathExtensions
 {
+    private static Random _random = new();
     public static Vector2f Normalize(this Vector2f vector)
     {
         float vectorLength = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
@@ -26,5 +27,13 @@ public static class MathExtensions
         float dy = ownActor.Y - otherActor.Y;
         
         return dx * dx + dy * dy;
+    }
+
+    public static Vector2f GetRandomPosition(int maxX, int maxY)
+    {
+        int x = _random.Next(0, maxX);
+        int y = _random.Next(0, maxY);
+        
+        return new (x, y);
     }
 }

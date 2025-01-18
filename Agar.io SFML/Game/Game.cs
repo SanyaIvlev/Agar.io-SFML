@@ -92,7 +92,7 @@ public class Game
 
     private Food SpawnFood()
     {
-        Vector2f initialPosition = GetRandomPosition();
+        Vector2f initialPosition = MathExtensions.GetRandomPosition((int)Boot.WindowWidth, (int)Boot.WindowHeight);
         Color foodColor = new();
         foodColor = foodColor.GetRandomColor();
         
@@ -102,14 +102,6 @@ public class Game
         OnDrawableSpawned(newFood);
         
         return newFood;
-    }
-    
-    private Vector2f GetRandomPosition()
-    {
-        int x = _random.Next(0, (int)Boot.WindowWidth);
-        int y = _random.Next(0, (int)Boot.WindowHeight);
-        
-        return new (x, y);
     }
 
     private Player SpawnPlayer(bool isHuman)
@@ -125,7 +117,7 @@ public class Game
         else
         {
             actionHandler = new BotActionHandler(_window);
-            startPosition = GetRandomPosition();
+            startPosition = MathExtensions.GetRandomPosition((int)Boot.WindowWidth, (int)Boot.WindowHeight);
         }
 
         Color playerColor = new();
@@ -233,14 +225,9 @@ public class Game
             _endText.SetText("You lose!");
             _gameMode.IsGameEnded = true;
         }
-        if (_players.Contains(actor))
-        {
-            _players.SwapRemove(actor as Player);
-        }
-        else if (_food.Contains(actor))
-        {
-            _food.SwapRemove(actor as Food);
-        }
+
+        _players.SwapRemove(actor as Player);
+        _food.SwapRemove(actor as Food);
         
         OnUpdatableDestroyed?.Invoke(actor);
         OnDrawableDestroyed?.Invoke(actor);
