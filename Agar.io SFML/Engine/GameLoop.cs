@@ -1,3 +1,4 @@
+using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 
 namespace Agar.io_SFML;
@@ -39,12 +40,12 @@ public class GameLoop
     
     public void RemoveUpdatable(IUpdatable actor)
     {
-        _updatables.Remove(actor);
+        _updatables.SwapRemove(actor);
     }
 
     public void RemoveDrawable(IDrawable drawable)
     {
-        _drawables.Remove(drawable);
+        _drawables.SwapRemove(drawable);
     }
 
     public void Initialize(Game game)

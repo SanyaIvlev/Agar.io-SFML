@@ -12,7 +12,6 @@ public class EatableActor : Actor, IUpdatable
             var halfOfRadius = shape.Radius / 2f;
             return new(shape.Position.X + halfOfRadius, shape.Position.Y + halfOfRadius);
         }
-        set { }
     }
     
     public CircleShape shape { get; protected init; }
@@ -21,7 +20,7 @@ public class EatableActor : Actor, IUpdatable
     
     public uint Bounty { get; protected set; } 
 
-    public EatableActor(Vector2f initialPosition) : base(initialPosition)
+    protected EatableActor(Vector2f initialPosition) : base(initialPosition)
     {
         
     }

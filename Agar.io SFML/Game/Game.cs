@@ -21,8 +21,6 @@ public class Game
     
     private List<Player> _players;
     private List<Food> _food;
-    
-    private Random _random;
 
     private readonly float _foodRespawnDelay;
     private readonly float _playerRespawnDelay;
@@ -61,8 +59,6 @@ public class Game
         _food = [];
         _currentRemovingActors = [];
         
-        _random = new Random();
-        
         _mainPlayer = SpawnPlayer(true);
         _players.Add(_mainPlayer);
         
@@ -93,13 +89,14 @@ public class Game
     private Food SpawnFood()
     {
         Vector2f initialPosition = MathExtensions.GetRandomPosition((int)Boot.WindowWidth, (int)Boot.WindowHeight);
+        
         Color foodColor = new();
         foodColor = foodColor.GetRandomColor();
         
         var newFood = new Food(initialPosition, foodColor);
         
-        OnUpdatableSpawned(newFood);
-        OnDrawableSpawned(newFood);
+        OnUpdatableSpawned?.Invoke(newFood);
+        OnDrawableSpawned?.Invoke(newFood);
         
         return newFood;
     }
@@ -192,10 +189,12 @@ public class Game
     {
         foreach (var currentPlayer in _players)
         {
-            foreach (var anotherPlayer
-                     in _players.Where(anotherPlayer => currentPlayer != anotherPlayer))
+            foreach (var anotherPlayer in _players)
             {
-                currentPlayer.CheckIntersectionWith(anotherPlayer);
+                if (currentPlayer != anotherPlayer)
+                {
+                    currentPlayer.CheckIntersectionWith(anotherPlayer);
+                }
             }
 
             foreach(var food in _food)

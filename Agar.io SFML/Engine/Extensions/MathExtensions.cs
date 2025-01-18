@@ -9,7 +9,7 @@ public static class MathExtensions
     {
         float vectorLength = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
         
-        if (Math.Abs(vectorLength) <= 0.0001f)
+        if (vectorLength <= 0.0001f)
         {
             return vector;
         }

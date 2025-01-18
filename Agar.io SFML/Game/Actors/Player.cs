@@ -124,7 +124,7 @@ public class Player : EatableActor
             newPosition.Y > windowSize.Y || newPosition.Y < 0)
             return;
         
-        _targetPosition = _actionHandler.GetPosition();
+        _targetPosition = newPosition;
             
         Move();
     }
