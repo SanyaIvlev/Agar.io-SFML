@@ -21,7 +21,7 @@ public class Text : Actor
 
     public void SetText(string newText)
     {
-        Message.DisplayedString = newText;
+        Message.DisplayedString = newText; 
     }
     
     public override void Draw(RenderWindow window)

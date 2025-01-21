@@ -24,6 +24,9 @@ public class GameLoop
         _window = window;
         
         _gameMode = gameMode;
+        
+        _updatables = [];
+        _drawables = [];
     }
     
     public void AddDrawable(IDrawable drawable)
@@ -47,23 +50,11 @@ public class GameLoop
     {
         _drawables.SwapRemove(drawable);
     }
-
-    public void Initialize(Game game)
-    {
-        Time.Start();
-        
-        _updatables = [];
-        _drawables = [];
-
-        game.OnUpdatableSpawned += AddUpdatable;
-        game.OnUpdatableDestroyed += RemoveUpdatable;
-        
-        game.OnDrawableSpawned += AddDrawable;
-        game.OnDrawableDestroyed += RemoveDrawable;
-    }
     
     public void Start()
     {
+        Time.Start();
+        
         Run();
     }
     
@@ -127,7 +118,6 @@ public class GameLoop
         
         _window.Display();
     }
-    
     
     private void WaitBeforeEnd()
     {

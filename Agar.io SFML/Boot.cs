@@ -1,3 +1,4 @@
+using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -18,10 +19,13 @@ public class Boot
         
         GameMode gameMode = new();
         
-        Game game = new(_window, gameMode);
         GameLoop gameLoop = new(_window, gameMode);
         
-        gameLoop.Initialize(game);
+        EatableActorFactory eatableActorFactory = new(_window, gameLoop);
+        TextFactory textFactory = new(gameLoop);
+        
+        Game game = new(gameMode, eatableActorFactory, textFactory);
+        
         game.Start(gameLoop);
         gameLoop.Start();
     }

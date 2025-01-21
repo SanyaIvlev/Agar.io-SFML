@@ -1,17 +1,12 @@
 using Agar.io_SFML.Extensions;
-using SFML.Graphics;
-using SFML.System;
+using Agar.io_SFML.Factory;
+
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
 namespace Agar.io_SFML;
 
 public class Game
 {
-    public Action<IUpdatable> OnUpdatableSpawned;
-    public Action<IDrawable> OnDrawableSpawned;
-    
-    public Action<IUpdatable> OnUpdatableDestroyed;
-    public Action<IDrawable> OnDrawableDestroyed;
-    
     private readonly uint _playersOnStart;
     private readonly uint _foodOnStart;
 
@@ -30,15 +25,17 @@ public class Game
     
     private List<EatableActor> _currentRemovingActors;
 
-    private readonly RenderWindow _window;
+    private readonly GameMode _gameMode;
+    
+    private readonly EatableActorFactory _eatableActorFactory;
+    private readonly TextFactory _textFactory;
 
-    private GameMode _gameMode;
-
-    public Game(RenderWindow window, GameMode gameMode)
+    public Game(GameMode gameMode, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
-        _window = window;
-        
         _gameMode = gameMode;
+        
+        _eatableActorFactory = eatableActorFactory;
+        _textFactory = textFactory;
 
         _playersOnStart = 10;
         _foodOnStart = 100;
@@ -58,24 +55,37 @@ public class Game
         _players = [];
         _food = [];
         _currentRemovingActors = [];
-        
+
         _mainPlayer = SpawnPlayer(true);
-        _players.Add(_mainPlayer);
         
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
         {
-            Food newFood = SpawnFood();
-            _food.Add(newFood);
+            SpawnFood();
         }
         
         foreach(var _ in Enumerable.Range(0, (int)_playersOnStart))
         {
-            Player bot = SpawnPlayer(false);
-            _players.Add(bot);
+            SpawnPlayer(false);
         }
         
-        CreateScore(_mainPlayer);
-        _endText = CreateEndText();
+        _textFactory.CreateScoreText(_mainPlayer);
+        _endText = _textFactory.CreateText();
+    }
+
+    private Player SpawnPlayer(bool isHuman)
+    {
+        Player player = _eatableActorFactory.CreatePlayer(isHuman);
+        
+        player.OnDestroyed += UpdateRemovingList;
+        _players.Add(player);
+
+        return player;
+    }
+
+    private void SpawnFood()
+    {
+        Food newFood = _eatableActorFactory.CreateFood();
+        _food.Add(newFood);
     }
 
     private void ProcessAction()
@@ -86,97 +96,28 @@ public class Game
         }
     }
 
-    private Food SpawnFood()
-    {
-        Vector2f initialPosition = MathExtensions.GetRandomPosition((int)Boot.WindowWidth, (int)Boot.WindowHeight);
-        
-        Color foodColor = new();
-        foodColor = foodColor.GetRandomColor();
-        
-        var newFood = new Food(initialPosition, foodColor);
-        
-        OnUpdatableSpawned?.Invoke(newFood);
-        OnDrawableSpawned?.Invoke(newFood);
-        
-        return newFood;
-    }
-
-    private Player SpawnPlayer(bool isHuman)
-    {
-        Vector2f startPosition;
-        IActionHandler actionHandler;
-        
-        if (isHuman)
-        {
-            actionHandler = new HumanActionHandler(_window);
-            startPosition = new (Boot.WindowWidth / 2f, Boot.WindowHeight / 2f);
-        }
-        else
-        {
-            actionHandler = new BotActionHandler(_window);
-            startPosition = MathExtensions.GetRandomPosition((int)Boot.WindowWidth, (int)Boot.WindowHeight);
-        }
-
-        Color playerColor = new();
-        playerColor = playerColor.GetRandomColor();
-
-        Player newPlayer = new(actionHandler, isHuman, startPosition, playerColor, _window);
-        
-        OnUpdatableSpawned?.Invoke(newPlayer);
-        OnDrawableSpawned?.Invoke(newPlayer);
-
-        newPlayer.OnDestroyed += UpdateRemovingList;
-        
-        return newPlayer;
-    }
-
-    private void CreateScore(Player mainPlayer)
-    {
-        const string fontName = "Obelix Pro.ttf";
-        Font font = new (GetFontLocation(fontName));
-        Score score = new(font, 25, Color.Black, Color.White, 3, new(0,0), mainPlayer);
-        
-        OnDrawableSpawned?.Invoke(score);
-    }
-    
-    private Text CreateEndText()
-    {
-        const string fontName = "Obelix Pro.ttf";
-        Font font = new (GetFontLocation(fontName));
-        Text endText = new(font, 50, Color.Black, Color.White, 3, new(Boot.WindowWidth / 2f, Boot.WindowHeight / 2f));
-        
-        OnDrawableSpawned?.Invoke(endText);
-
-        return endText;
-    }
-
-    private string GetFontLocation(string fontName)
-        => Path.GetFullPath(@"..\..\..\..\Resources\Fonts\" + fontName);
-
     private void Update()
     {
+        if (_players.Count == 1 && _players[0] == _mainPlayer)
+        {
+            _endText.SetText("You Win!");
+            _gameMode.IsGameEnded = true;
+            return;
+        }
+        
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
         _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
         
         if (_passedFoodTime >= _foodRespawnDelay)
         {
-            Food newFood = SpawnFood();
-            _food.Add(newFood);
+            SpawnFood();
             
             _passedFoodTime = 0;
         }
         
         if(_passedPlayerTime >= _playerRespawnDelay)
         {
-            if (_players.Count == 1 && _players[0] == _mainPlayer)
-            {
-                _endText.SetText("You Win!");
-                _gameMode.IsGameEnded = true;
-                return;
-            }
-            
-            Player newPlayer = SpawnPlayer(false);
-            _players.Add(newPlayer);
+           SpawnPlayer(false);
             
             _passedPlayerTime = 0;
         }
@@ -227,9 +168,8 @@ public class Game
 
         _players.SwapRemove(actor as Player);
         _food.SwapRemove(actor as Food);
-        
-        OnUpdatableDestroyed?.Invoke(actor);
-        OnDrawableDestroyed?.Invoke(actor);
+
+        _eatableActorFactory.Unregister(actor);
     }
 
 }
