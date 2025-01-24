@@ -1,4 +1,6 @@
-﻿namespace Agar.io_SFML.Extensions;
+﻿using SFML.System;
+
+namespace Agar.io_SFML.Extensions;
 
 public static class ListExtensions
 {
@@ -11,5 +13,30 @@ public static class ListExtensions
         
         list[removingIndex] = list[^1];
         list.RemoveAt(list.Count - 1);
+    }
+
+    public static Player FindNearestPlayer(this List<Player> players, Player comparingPlayer)
+    {
+        Player nearestPlayer = null;
+        float minimalSquaredDistance = float.MaxValue;
+
+        foreach (var player in players)
+        {
+            if(comparingPlayer == player) 
+                continue;
+            
+            Vector2f currentPlayerPosition = player.Position;
+
+            var comparingPlayerPosition = comparingPlayer.Position;
+            float currentSquaredDistance = comparingPlayerPosition.GetSquaredDistanceTo(currentPlayerPosition);
+
+            if (currentSquaredDistance < minimalSquaredDistance)
+            {
+                minimalSquaredDistance = currentSquaredDistance;
+                nearestPlayer = player;
+            }
+        }
+        
+        return nearestPlayer;
     }
 }
