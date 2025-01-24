@@ -8,7 +8,7 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
-    public IPositionHandler PositionHandler;
+    private IPositionHandler _positionHandler;
     
     private Vector2f _targetPosition;
     
@@ -20,7 +20,7 @@ public class Player : EatableActor
 
     private uint _initialBounty;
 
-    private readonly bool _isHuman;
+    private bool _isHuman;
 
     private readonly float _squaredStopDistance = 3f;
     
@@ -31,7 +31,7 @@ public class Player : EatableActor
         _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
         
-        PositionHandler = humanPositionHandler;
+        _positionHandler = humanPositionHandler;
         
         _isHuman = isHuman;
 
@@ -99,7 +99,7 @@ public class Player : EatableActor
 
     public void ProcessAction()
     {
-        PositionHandler.ProcessAction();
+        _positionHandler.ProcessAction();
     }
 
     public override void Update()
@@ -118,7 +118,7 @@ public class Player : EatableActor
 
     private void TryMove()
     {
-        Vector2f newPosition = PositionHandler.GetPosition();
+        Vector2f newPosition = _positionHandler.GetPosition();
         Vector2u windowSize = _window.Size;
         
         if (newPosition.X > windowSize.X || newPosition.X < 0 ||
@@ -143,9 +143,15 @@ public class Player : EatableActor
     {
         if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
         {
-            _targetPosition = PositionHandler.GetPosition();
+            _targetPosition = _positionHandler.GetPosition();
         }
 
         Move();
+    }
+
+    public void SwapWith(Player other)
+    {
+        (_positionHandler, other._positionHandler) = (other._positionHandler, _positionHandler);
+        (_isHuman, other._isHuman) = (other._isHuman, _isHuman);
     }
 }

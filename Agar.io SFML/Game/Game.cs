@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.Marshalling;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 using SFML.Window;
@@ -33,6 +34,8 @@ public class Game
     
     private KeyBindBundle _keyBinds;
 
+    private string _swapBindName = "Swap";
+
     public Game(GameMode gameMode, KeyBindBundle keyBindBundle, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
         _gameMode = gameMode;
@@ -62,6 +65,11 @@ public class Game
         _currentRemovingActors = [];
 
         _mainPlayer = SpawnPlayer(true);
+        
+        _keyBinds.AddKeyBind(_swapBindName, Keyboard.Key.F);
+        
+        var swapBind = _keyBinds.GetKeyBindByName(_swapBindName);
+        swapBind.OnPressed += Swap;
         
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
         {
@@ -148,6 +156,15 @@ public class Game
                 currentPlayer.CheckIntersectionWith(food);
             }
         }
+    }
+
+    private void Swap()
+    {
+        Player closestPlayer = _players.FindNearestPlayer(_mainPlayer);
+        
+        _mainPlayer.SwapWith(closestPlayer);
+        
+        _mainPlayer = closestPlayer;
     }
 
     private void UpdateRemovingList(EatableActor actor)
