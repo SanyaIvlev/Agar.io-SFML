@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class BotActionHandler : IActionHandler
+public class BotPositionHandler : IPositionHandler
 {
     private Vector2f _newPosition;
     
@@ -11,7 +11,7 @@ public class BotActionHandler : IActionHandler
     
     private readonly RenderWindow _window;
 
-    public BotActionHandler(RenderWindow window)
+    public BotPositionHandler(RenderWindow window)
     {
         _window = window;
         

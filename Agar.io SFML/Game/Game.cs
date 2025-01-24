@@ -1,5 +1,6 @@
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
+using SFML.Window;
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
@@ -29,8 +30,10 @@ public class Game
     
     private readonly EatableActorFactory _eatableActorFactory;
     private readonly TextFactory _textFactory;
+    
+    private KeyBindBundle _keyBinds;
 
-    public Game(GameMode gameMode, EatableActorFactory eatableActorFactory, TextFactory textFactory)
+    public Game(GameMode gameMode, KeyBindBundle keyBindBundle, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
         _gameMode = gameMode;
         
@@ -44,6 +47,8 @@ public class Game
         
         _foodRespawnDelay = 0.5f;
         _playerRespawnDelay = 10f;
+        
+        _keyBinds = keyBindBundle;
     }
     
     

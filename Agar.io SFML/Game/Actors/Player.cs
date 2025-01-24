@@ -8,6 +8,8 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
+    public IPositionHandler PositionHandler;
+    
     private Vector2f _targetPosition;
     
     private Vector2f _direction;
@@ -15,7 +17,6 @@ public class Player : EatableActor
     private float _speed;
     private float _defaultSpeed;
     
-    private IActionHandler _actionHandler;
 
     private uint _initialBounty;
 
@@ -25,12 +26,12 @@ public class Player : EatableActor
     
     private readonly RenderWindow _window;
     
-    public Player(IActionHandler humanActionHandler, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
+    public Player(IPositionHandler humanPositionHandler, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
     {
         _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
         
-        _actionHandler = humanActionHandler;
+        PositionHandler = humanPositionHandler;
         
         _isHuman = isHuman;
 
@@ -98,7 +99,7 @@ public class Player : EatableActor
 
     public void ProcessAction()
     {
-        _actionHandler.ProcessAction();
+        PositionHandler.ProcessAction();
     }
 
     public override void Update()
@@ -117,7 +118,7 @@ public class Player : EatableActor
 
     private void TryMove()
     {
-        Vector2f newPosition = _actionHandler.GetPosition();
+        Vector2f newPosition = PositionHandler.GetPosition();
         Vector2u windowSize = _window.Size;
         
         if (newPosition.X > windowSize.X || newPosition.X < 0 ||
@@ -142,7 +143,7 @@ public class Player : EatableActor
     {
         if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
         {
-            _targetPosition = _actionHandler.GetPosition();
+            _targetPosition = PositionHandler.GetPosition();
         }
 
         Move();
