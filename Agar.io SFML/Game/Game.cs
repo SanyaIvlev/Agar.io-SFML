@@ -185,7 +185,7 @@ public class Game
         _players.SwapRemove(actor as Player);
         _food.SwapRemove(actor as Food);
 
-        _eatableActorFactory.Unregister(actor);
+        _eatableActorFactory.Destroy(actor);
     }
 
     private void EndGameWithText(string message)

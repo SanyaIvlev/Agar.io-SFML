@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class EatableActor : Actor, IUpdatable
+public class EatableActor : Actor
 {
     public Vector2f Center
     {
@@ -14,15 +14,15 @@ public class EatableActor : Actor, IUpdatable
         }
     }
     
-    public CircleShape shape { get; protected init; }
+    public CircleShape shape { get; protected set; }
     
     public Action<EatableActor> OnDestroyed;
     
     public uint Bounty { get; protected set; } 
 
-    protected EatableActor(Vector2f initialPosition) : base(initialPosition)
+    protected void Initialize(Vector2f initialPosition)
     {
-        
+        base.Initialize(initialPosition);
     }
 
     public override void Update()

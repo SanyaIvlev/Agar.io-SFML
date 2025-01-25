@@ -3,13 +3,18 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Actor: IDrawable
+public class Actor: IDrawable, IUpdatable
 {
     public Vector2f Position { get; protected set; }
     
-    public Actor(Vector2f startPosition)
+    public Actor()
     {
-        Position = startPosition;
+        
+    }
+
+    protected void Initialize(Vector2f initialPosition)
+    {
+        Position = initialPosition;
     }
     
     public virtual void Update()

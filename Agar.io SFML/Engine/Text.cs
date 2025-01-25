@@ -5,10 +5,13 @@ namespace Agar.io_SFML;
 
 public class Text : Actor
 {
-    protected SFML.Graphics.Text Message;
+    private SFML.Graphics.Text Message;
 
-    public Text(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f position) : base(position)
+    public void Initialize(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness,
+        Vector2f position)
     {
+        base.Initialize(position);
+        
         Message = new("", font)
         {
             CharacterSize = characterSize,

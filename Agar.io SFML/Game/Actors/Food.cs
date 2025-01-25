@@ -5,8 +5,10 @@ namespace Agar.io_SFML;
 
 public class Food : EatableActor
 {
-    public Food(Vector2f initialPosition, Color color) : base(initialPosition)
+    public void Initialize(Vector2f initialPosition, Color color)
     {
+        base.Initialize(initialPosition);
+        
         shape = new()
         {
             Position = initialPosition,

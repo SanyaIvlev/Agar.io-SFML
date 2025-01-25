@@ -24,10 +24,13 @@ public class Player : EatableActor
 
     private readonly float _squaredStopDistance = 3f;
     
-    private readonly RenderWindow _window;
-    
-    public Player(IController humanController, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
+    private RenderWindow _window;
+
+    public void Initalize(IController humanController, bool isHuman, Vector2f startPosition, Color color,
+        RenderWindow window)
     {
+        base.Initialize(startPosition);
+        
         _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
         
