@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 using SFML.Window;
@@ -63,9 +64,7 @@ public class Game
 
         _mainPlayer = SpawnPlayer(true);
         
-        KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
-        
-        swapBind.OnGetDown = Swap;
+        InitializeKeyInputs();
 
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
         {
@@ -79,6 +78,13 @@ public class Game
         
         _textFactory.CreateScoreText(_mainPlayer);
         _endText = _textFactory.CreateText();
+    }
+
+    private void InitializeKeyInputs()
+    {
+        KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
+
+        swapBind.OnPressed = Swap;
     }
 
     private Player SpawnPlayer(bool isHuman)

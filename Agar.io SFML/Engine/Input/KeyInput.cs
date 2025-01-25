@@ -4,7 +4,8 @@ namespace Agar.io_SFML;
 
 public class KeyInput
 {
-    public Action OnGetDown;
+    public Action OnPressed;
+    public Action OnHoldDown; // for future
 
     private bool _wasDown;
     private bool _isDown;
@@ -23,7 +24,11 @@ public class KeyInput
 
         if (_isDown && !_wasDown)
         {
-            OnGetDown?.Invoke();
+            OnPressed?.Invoke();
+        }
+        else if (_isDown && _wasDown)
+        {
+            OnHoldDown?.Invoke();
         }
     }
 }

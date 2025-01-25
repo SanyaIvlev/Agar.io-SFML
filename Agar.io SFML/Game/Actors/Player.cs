@@ -16,7 +16,6 @@ public class Player : EatableActor
     
     private float _speed;
     private float _defaultSpeed;
-    
 
     private uint _initialBounty;
 
