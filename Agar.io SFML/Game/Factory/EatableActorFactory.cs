@@ -10,7 +10,7 @@ public class EatableActorFactory
     private RenderWindow _renderWindow;
     
     private Vector2f _startPosition;
-    private IPositionHandler _positionHandler;
+    private IController _controller;
     private Color _color;
 
     private int _maxWidth => (int)Boot.WindowWidth;
@@ -27,17 +27,17 @@ public class EatableActorFactory
     {
         if (isHuman)
         {
-            _positionHandler = new HumanPositionHandler(_renderWindow);
+            _controller = new HumanController(_renderWindow);
             _startPosition = new (_maxWidth / 2f, _maxHeight / 2f);
         }
         else
         {
-            _positionHandler = new BotPositionHandler(_renderWindow);
+            _controller = new BotController(_renderWindow);
             _startPosition = MathExtensions.GetRandomPosition(_maxWidth, _maxHeight);
         }
         _color = _color.GetRandomColor();
 
-        Player newPlayer = new(_positionHandler, isHuman, _startPosition, _color, _renderWindow);
+        Player newPlayer = new(_controller, isHuman, _startPosition, _color, _renderWindow);
 
         Register(newPlayer);
         

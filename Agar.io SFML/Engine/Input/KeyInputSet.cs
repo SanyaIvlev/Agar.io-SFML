@@ -9,28 +9,17 @@ public class KeyInputSet
 
     public KeyInputSet()
     {
-        _keyBinds = new List<KeyInput>();
+        _keyBinds = new();
     }
 
-    public void AddKeyBind(string name, Keyboard.Key keyBind)
+    public KeyInput AddKeyBind(Keyboard.Key keyBind)
     {
-        KeyInput input = new(name, keyBind);
+        KeyInput input = new(keyBind);
         _keyBinds.Add(input);
+        
+        return input;
     }
-
-    public KeyInput GetKeyBindByName(string name)
-    {
-        foreach (var key in _keyBinds)
-        {
-            if (key.Name == name)
-            {
-                return key; 
-            }
-        }
-
-        return null;
-    }
-
+    
     public void Update()
     {
         foreach (var keyBind in _keyBinds)

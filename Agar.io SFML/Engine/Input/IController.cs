@@ -2,7 +2,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public interface IPositionHandler
+public interface IController
 {
     Vector2f GetPosition();
     

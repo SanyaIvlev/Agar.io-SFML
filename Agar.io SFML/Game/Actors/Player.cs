@@ -8,7 +8,7 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
-    private IPositionHandler _positionHandler;
+    private IController _controller;
     
     private Vector2f _targetPosition;
     
@@ -26,12 +26,12 @@ public class Player : EatableActor
     
     private readonly RenderWindow _window;
     
-    public Player(IPositionHandler humanPositionHandler, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
+    public Player(IController humanController, bool isHuman, Vector2f startPosition, Color color, RenderWindow window) : base(startPosition)
     {
         _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
         
-        _positionHandler = humanPositionHandler;
+        _controller = humanController;
         
         _isHuman = isHuman;
 
@@ -99,7 +99,7 @@ public class Player : EatableActor
 
     public void ProcessAction()
     {
-        _positionHandler.ProcessAction();
+        _controller.ProcessAction();
     }
 
     public override void Update()
@@ -118,7 +118,7 @@ public class Player : EatableActor
 
     private void TryMove()
     {
-        Vector2f newPosition = _positionHandler.GetPosition();
+        Vector2f newPosition = _controller.GetPosition();
         Vector2u windowSize = _window.Size;
         
         if (newPosition.X > windowSize.X || newPosition.X < 0 ||
@@ -143,7 +143,7 @@ public class Player : EatableActor
     {
         if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
         {
-            _targetPosition = _positionHandler.GetPosition();
+            _targetPosition = _controller.GetPosition();
         }
 
         Move();
@@ -151,7 +151,7 @@ public class Player : EatableActor
 
     public void SwapWith(Player other)
     {
-        (_positionHandler, other._positionHandler) = (other._positionHandler, _positionHandler);
+        (_controller, other._controller) = (other._controller, _controller);
         (_isHuman, other._isHuman) = (other._isHuman, _isHuman);
     }
 }

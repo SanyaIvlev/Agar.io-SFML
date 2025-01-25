@@ -4,24 +4,26 @@ namespace Agar.io_SFML;
 
 public class KeyInput
 {
-    public Action OnPressed;
+    public Action OnGetDown;
 
-    public string Name { get; private set; }
+    private bool _wasDown;
+    private bool _isDown;
+
     private Keyboard.Key _key;
 
-    public KeyInput(string name, Keyboard.Key key)
+    public KeyInput(Keyboard.Key key)
     {
-        Name = name;
         _key = key;
     }
-
+    
     public void Update()
     {
-        bool isPressed = Keyboard.IsKeyPressed(_key);
+        _wasDown = _isDown;
+        _isDown = Keyboard.IsKeyPressed(_key);
 
-        if (isPressed)
+        if (_isDown && !_wasDown)
         {
-            OnPressed?.Invoke();
+            OnGetDown?.Invoke();
         }
     }
 }

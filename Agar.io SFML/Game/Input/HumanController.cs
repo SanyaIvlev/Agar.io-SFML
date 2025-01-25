@@ -4,12 +4,12 @@ using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class HumanPositionHandler : IPositionHandler
+public class HumanController : IController
 {
     private Vector2f _mousePosition;
     private readonly RenderWindow _window;
 
-    public HumanPositionHandler(RenderWindow window)
+    public HumanController(RenderWindow window)
     {
         _window = window;
     }

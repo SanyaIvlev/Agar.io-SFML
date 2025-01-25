@@ -33,8 +33,6 @@ public class Game
     
     private KeyInputSet _keyInputs;
 
-    private string _swapInputName = "Swap";
-
     public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
         _gameMode = gameMode;
@@ -65,11 +63,10 @@ public class Game
 
         _mainPlayer = SpawnPlayer(true);
         
-        _keyInputs.AddKeyBind(_swapInputName, Keyboard.Key.F);
+        KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
         
-        var swapBind = _keyInputs.GetKeyBindByName(_swapInputName);
-        swapBind.OnPressed += Swap;
-        
+        swapBind.OnGetDown = Swap;
+
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
         {
             SpawnFood();
