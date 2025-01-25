@@ -15,13 +15,13 @@ public class GameLoop
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
     
-    private KeyBindBundle _keyBinds;
+    private KeyInputSet _keyInputs;
     
     private readonly RenderWindow _window;
     
     private readonly GameMode _gameMode;
 
-    public GameLoop(RenderWindow window, GameMode gameMode, KeyBindBundle keyBinds)
+    public GameLoop(RenderWindow window, GameMode gameMode, KeyInputSet keyInputs)
     {
         _window = window;
         
@@ -30,7 +30,7 @@ public class GameLoop
         _updatables = [];
         _drawables = [];
 
-        _keyBinds = keyBinds;
+        _keyInputs = keyInputs;
     }
     
     public void AddDrawable(IDrawable drawable)
@@ -101,7 +101,7 @@ public class GameLoop
 
     private void Update()
     {
-        _keyBinds.Update();
+        _keyInputs.Update();
         
         foreach (var updatable in _updatables)
         {

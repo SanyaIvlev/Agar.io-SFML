@@ -6,7 +6,7 @@ namespace Agar.io_SFML;
 public class Text : Actor
 {
     protected SFML.Graphics.Text Message;
-    
+
     public Text(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f position) : base(position)
     {
         Message = new("", font)
@@ -15,13 +15,26 @@ public class Text : Actor
             FillColor = fillColor,
             OutlineColor = outlineColor,
             OutlineThickness = outlineThickness,
-            Position = position,
         };
+        
+        SetPosition(position);
     }
 
-    public void SetText(string newText)
+    public void SetPosition(Vector2f position)
     {
-        Message.DisplayedString = newText; 
+        var floatRect = Message.GetLocalBounds();
+        Message.Origin = new Vector2f(floatRect.Left + floatRect.Width/ 2, floatRect.Top + floatRect.Height / 2);
+        
+        Message.Position = position;
+    }
+
+    public void UpdateText(string newText)
+    {
+        var currentPosition = Message.Position;
+        
+        Message.DisplayedString = newText;
+        
+        SetPosition(currentPosition);
     }
     
     public override void Draw(RenderWindow window)

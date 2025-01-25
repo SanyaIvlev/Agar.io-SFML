@@ -2,14 +2,14 @@
 
 namespace Agar.io_SFML;
 
-public class KeyBind
+public class KeyInput
 {
     public Action OnPressed;
 
     public string Name { get; private set; }
     private Keyboard.Key _key;
 
-    public KeyBind(string name, Keyboard.Key key)
+    public KeyInput(string name, Keyboard.Key key)
     {
         Name = name;
         _key = key;

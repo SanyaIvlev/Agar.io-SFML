@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.Marshalling;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 using SFML.Window;
@@ -32,11 +31,11 @@ public class Game
     private readonly EatableActorFactory _eatableActorFactory;
     private readonly TextFactory _textFactory;
     
-    private KeyBindBundle _keyBinds;
+    private KeyInputSet _keyInputs;
 
-    private string _swapBindName = "Swap";
+    private string _swapInputName = "Swap";
 
-    public Game(GameMode gameMode, KeyBindBundle keyBindBundle, EatableActorFactory eatableActorFactory, TextFactory textFactory)
+    public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
         _gameMode = gameMode;
         
@@ -51,7 +50,7 @@ public class Game
         _foodRespawnDelay = 0.5f;
         _playerRespawnDelay = 10f;
         
-        _keyBinds = keyBindBundle;
+        _keyInputs = keyInputSet;
     }
     
     
@@ -66,9 +65,9 @@ public class Game
 
         _mainPlayer = SpawnPlayer(true);
         
-        _keyBinds.AddKeyBind(_swapBindName, Keyboard.Key.F);
+        _keyInputs.AddKeyBind(_swapInputName, Keyboard.Key.F);
         
-        var swapBind = _keyBinds.GetKeyBindByName(_swapBindName);
+        var swapBind = _keyInputs.GetKeyBindByName(_swapInputName);
         swapBind.OnPressed += Swap;
         
         foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
@@ -113,8 +112,7 @@ public class Game
     {
         if (_players.Count == 1 && _players[0] == _mainPlayer)
         {
-            _endText.SetText("You Win!");
-            _gameMode.IsGameEnded = true;
+            EndGameWithText("You win!");
             return;
         }
         
@@ -184,14 +182,20 @@ public class Game
     {
         if (actor == _mainPlayer)
         {
-            _endText.SetText("You lose!");
-            _gameMode.IsGameEnded = true;
+            EndGameWithText("You lose!");
         }
 
         _players.SwapRemove(actor as Player);
         _food.SwapRemove(actor as Food);
 
         _eatableActorFactory.Unregister(actor);
+    }
+
+    private void EndGameWithText(string message)
+    {
+        _endText.UpdateText(message);
+        _endText.SetPosition(new ((int)Boot.WindowWidth / 2f, (int)Boot.WindowHeight / 2f));
+        _gameMode.IsGameEnded = true;
     }
 
 }

@@ -6,7 +6,7 @@ public class TextFactory
 {
     private const string FontName = "Obelix Pro.ttf";
 
-    public GameLoop _gameLoop;
+    private GameLoop _gameLoop;
     
     private int _maxWidth => (int)Boot.WindowWidth;
     private int _maxHeight => (int)Boot.WindowHeight;
@@ -31,7 +31,7 @@ public class TextFactory
 
     public void CreateScoreText(Player mainPlayer)
     {
-        Score score = new(_font, 25, Color.Black, Color.White, 3, new(0,0), mainPlayer);
+        Score score = new(_font, 25, Color.Black, Color.White, 3, new(Boot.WindowWidth / 2f, 20), mainPlayer);
         
         Register(score);
     }

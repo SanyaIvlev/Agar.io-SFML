@@ -17,16 +17,16 @@ public class Boot
     {
         CreateWindow();
         
-        KeyBindBundle keyBindBundle = new KeyBindBundle();
+        KeyInputSet keyInputSet = new KeyInputSet();
         
         GameMode gameMode = new();
         
-        GameLoop gameLoop = new(_window, gameMode, keyBindBundle);
+        GameLoop gameLoop = new(_window, gameMode, keyInputSet);
         
         EatableActorFactory eatableActorFactory = new(_window, gameLoop);
         TextFactory textFactory = new(gameLoop);
         
-        Game game = new(gameMode, keyBindBundle, eatableActorFactory, textFactory);
+        Game game = new(gameMode, keyInputSet, eatableActorFactory, textFactory);
         
         game.Start(gameLoop);
         gameLoop.Start();
