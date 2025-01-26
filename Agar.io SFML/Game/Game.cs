@@ -84,7 +84,7 @@ public class Game
     {
         KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
 
-        swapBind.OnPressed = Swap;
+        swapBind.AddCallBackOnPressed(Swap);
     }
 
     private Player SpawnPlayer(bool isHuman)
