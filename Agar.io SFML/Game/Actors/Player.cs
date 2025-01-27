@@ -8,9 +8,7 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
-    public Vector2f TargetPosition;
-    
-    private Vector2f _direction;
+    public Vector2f Direction;
     
     private float _speed;
     private float _defaultSpeed;
@@ -34,8 +32,6 @@ public class Player : EatableActor
         };
         
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
-        
-        TargetPosition = startPosition;
     }
 
     public void CheckIntersectionWith(EatableActor actor)
@@ -93,10 +89,12 @@ public class Player : EatableActor
 
     private void Move()
     {
-        _direction = new Vector2f(TargetPosition.X - Position.X, TargetPosition.Y - Position.Y);
+        Vector2f nextPosition = Position + Direction * _speed * Time.GetElapsedTimeAsSeconds();
+
+        if (nextPosition.X > Boot.WindowWidth || nextPosition.X < 0 ||
+            nextPosition.Y > Boot.WindowHeight || nextPosition.Y < 0)
+            return;
         
-        Vector2f normalizedDirection = _direction.Normalize();
-        
-        Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
+        Position = nextPosition;
     }
 }
