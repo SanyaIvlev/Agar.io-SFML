@@ -9,11 +9,12 @@ public class GameLoop
     private const int SecondToMicroseconds = 1000000;
     private const long TimeBeforeNextFrame = SecondToMicroseconds / TargetFps;
     
-    public Action OnInputProcessed;
     public Action OnGameUpdateNeeded;
     
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
+    
+    private List<Controller> _controllers;
     
     private KeyInputSet _keyInputs;
     
@@ -29,6 +30,7 @@ public class GameLoop
         
         _updatables = [];
         _drawables = [];
+        _controllers = [];
 
         _keyInputs = keyInputs;
     }
@@ -53,6 +55,16 @@ public class GameLoop
     public void RemoveDrawable(IDrawable drawable)
     {
         _drawables.SwapRemove(drawable);
+    }
+
+    public void AddController(Controller controller)
+    {
+        _controllers.Add(controller);
+    }
+
+    public void RemoveController(Controller controller)
+    {
+        _controllers.SwapRemove(controller);
     }
     
     public void Start()
@@ -96,7 +108,11 @@ public class GameLoop
     private void ProcessInput()
     {
         _window.DispatchEvents();
-        OnInputProcessed?.Invoke();
+
+        foreach (Controller controller in _controllers)
+        {
+            controller.Update();
+        }
     }
 
     private void Update()

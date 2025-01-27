@@ -7,7 +7,7 @@ namespace Agar.io_SFML.Factory;
 public class EatableActorFactory : ActorFactory
 {
     private Vector2f _startPosition;
-    private IController _controller;
+    private Controller _controller;
     private Color _color;
 
     private int _maxWidth => (int)Boot.WindowWidth;
@@ -19,24 +19,37 @@ public class EatableActorFactory : ActorFactory
     {
         _window = window;
     }
+
+    public Controller CreateController(bool isHuman)
+    {
+        Player controlledPlayer = CreatePlayer(isHuman);
+        
+        if(isHuman)
+            _controller = CreateActor<AgarioPlayerController>();
+        else
+            _controller = CreateActor<AgarioAIController>();
+        
+        _controller.Initialize(controlledPlayer, _window);
+        
+        return _controller;
+    }
     
-    public Player CreatePlayer(bool isHuman)
+    private Player CreatePlayer(bool isHuman)
     {
         Player newPlayer = CreateActor<Player>();
         
         if (isHuman)
         {
-            _controller = new HumanController(_window);
             _startPosition = new (_maxWidth / 2f, _maxHeight / 2f);
         }
         else
         {
-            _controller = new BotController(_window);
             _startPosition = MathExtensions.GetRandomPosition(_maxWidth, _maxHeight);
         }
+        
         _color = _color.GetRandomColor();
 
-        newPlayer.Initalize(_controller, isHuman, _startPosition, _color, _window);
+        newPlayer.Initalize(_startPosition, _color);
         
         return newPlayer;
     }

@@ -8,9 +8,7 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
-    private IController _controller;
-    
-    private Vector2f _targetPosition;
+    public Vector2f TargetPosition;
     
     private Vector2f _direction;
     
@@ -19,23 +17,12 @@ public class Player : EatableActor
 
     private uint _initialBounty;
 
-    private bool _isHuman;
-
-    private readonly float _squaredStopDistance = 3f;
-    
-    private RenderWindow _window;
-
-    public void Initalize(IController humanController, bool isHuman, Vector2f startPosition, Color color,
-        RenderWindow window)
+    public void Initalize(Vector2f startPosition, Color color)
     {
         base.Initialize(startPosition);
         
         _speed = _defaultSpeed = 100f;
         Bounty = _initialBounty = 10;
-        
-        _controller = humanController;
-        
-        _isHuman = isHuman;
 
         shape = new()
         {
@@ -46,11 +33,9 @@ public class Player : EatableActor
             OutlineThickness = 2,
         };
         
-        _window = window;
-        
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
         
-        _targetPosition = startPosition;
+        TargetPosition = startPosition;
     }
 
     public void CheckIntersectionWith(EatableActor actor)
@@ -99,61 +84,19 @@ public class Player : EatableActor
         OnBountyChanged?.Invoke(Bounty);
     }
 
-    public void ProcessAction()
-    {
-        _controller.ProcessAction();
-    }
-
     public override void Update()
     {
-        if (_isHuman)
-        {
-            TryMove();
-        }
-        else
-        {
-            TryChangePositionAndMove();
-        }
+        Move();
         
         base.Update();
     }
 
-    private void TryMove()
-    {
-        Vector2f newPosition = _controller.GetPosition();
-        Vector2u windowSize = _window.Size;
-        
-        if (newPosition.X > windowSize.X || newPosition.X < 0 ||
-            newPosition.Y > windowSize.Y || newPosition.Y < 0)
-            return;
-        
-        _targetPosition = newPosition;
-            
-        Move();
-    }
-
     private void Move()
     {
-        _direction = new Vector2f(_targetPosition.X - Position.X, _targetPosition.Y - Position.Y);
+        _direction = new Vector2f(TargetPosition.X - Position.X, TargetPosition.Y - Position.Y);
         
         Vector2f normalizedDirection = _direction.Normalize();
         
         Position += normalizedDirection * _speed * Time.GetElapsedTimeAsSeconds();
-    }
-    
-    private void TryChangePositionAndMove()
-    {
-        if (Position.GetSquaredDistanceTo(_targetPosition) <= _squaredStopDistance)
-        {
-            _targetPosition = _controller.GetPosition();
-        }
-
-        Move();
-    }
-
-    public void SwapWith(Player other)
-    {
-        (_controller, other._controller) = (other._controller, _controller);
-        (_isHuman, other._isHuman) = (other._isHuman, _isHuman);
     }
 }

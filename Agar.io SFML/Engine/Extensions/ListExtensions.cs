@@ -15,28 +15,31 @@ public static class ListExtensions
         list.RemoveAt(list.Count - 1);
     }
 
-    public static Player FindNearestPlayer(this List<Player> players, Player comparingPlayer)
+    public static Controller FindNearestController(this List<Controller> controllers, Controller comparingController)
     {
-        Player nearestPlayer = null;
+        Controller nearestController = null;
         float minimalSquaredDistance = float.MaxValue;
 
-        foreach (var player in players)
+        foreach (var controller in controllers)
         {
-            if(comparingPlayer == player) 
+            if(comparingController == controller) 
                 continue;
-            
-            Vector2f currentPlayerPosition = player.Position;
 
+            var currentPlayer = controller.ControlledPlayer;
+            var comparingPlayer = comparingController.ControlledPlayer;
+            
+            Vector2f currentPlayerPosition = currentPlayer.Position;
             var comparingPlayerPosition = comparingPlayer.Position;
+
             float currentSquaredDistance = comparingPlayerPosition.GetSquaredDistanceTo(currentPlayerPosition);
 
             if (currentSquaredDistance < minimalSquaredDistance)
             {
                 minimalSquaredDistance = currentSquaredDistance;
-                nearestPlayer = player;
+                nearestController = controller;
             }
         }
         
-        return nearestPlayer;
+        return nearestController;
     }
 }

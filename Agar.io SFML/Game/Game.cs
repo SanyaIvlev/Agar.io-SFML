@@ -14,9 +14,9 @@ public class Game
 
     private Text _endText;
 
-    private Player _mainPlayer;
+    private Controller _mainController;
     
-    private List<Player> _players;
+    private List<Controller> _controllers;
     private List<Food> _food;
 
     private readonly float _foodRespawnDelay;
@@ -55,14 +55,13 @@ public class Game
     
     public void Start(GameLoop gameLoop)
     {
-        gameLoop.OnInputProcessed += ProcessAction;
         gameLoop.OnGameUpdateNeeded += Update;
         
-        _players = [];
+        _controllers = [];
         _food = [];
         _currentRemovingActors = [];
 
-        _mainPlayer = SpawnPlayer(true);
+        _mainController = SpawnController(true);
         
         InitializeKeyInputs();
 
@@ -73,10 +72,10 @@ public class Game
         
         foreach(var _ in Enumerable.Range(0, (int)_playersOnStart))
         {
-            SpawnPlayer(false);
+            SpawnController(false);
         }
         
-        _textFactory.CreateScoreText(_mainPlayer);
+        _textFactory.CreateScoreText(_mainController.ControlledPlayer);
         _endText = _textFactory.CreateText();
     }
 
@@ -87,14 +86,16 @@ public class Game
         swapBind.AddCallBackOnPressed(Swap);
     }
 
-    private Player SpawnPlayer(bool isHuman)
+    private Controller SpawnController(bool isHuman)
     {
-        Player player = _eatableActorFactory.CreatePlayer(isHuman);
-        
-        player.OnDestroyed += UpdateRemovingList;
-        _players.Add(player);
+        Controller controller = _eatableActorFactory.CreateController(isHuman);
 
-        return player;
+        var player = controller.ControlledPlayer;
+        player.OnDestroyed += UpdateRemovingList;
+        
+        _controllers.Add(controller);
+
+        return controller;
     }
 
     private void SpawnFood()
@@ -103,17 +104,9 @@ public class Game
         _food.Add(newFood);
     }
 
-    private void ProcessAction()
-    {
-        foreach (var player in _players)
-        {
-            player.ProcessAction();
-        }
-    }
-
     private void Update()
     {
-        if (_players.Count == 1 && _players[0] == _mainPlayer)
+        if (_controllers.Count == 1 && _controllers[0] == _mainController)
         {
             EndGameWithText("You win!");
             return;
@@ -131,7 +124,7 @@ public class Game
         
         if(_passedPlayerTime >= _playerRespawnDelay)
         {
-           SpawnPlayer(false);
+           SpawnController(false);
             
             _passedPlayerTime = 0;
         }
@@ -142,10 +135,15 @@ public class Game
 
     private void CheckPlayersIntersections()
     {
-        foreach (var currentPlayer in _players)
+        
+        foreach (var currentController in _controllers)
         {
-            foreach (var anotherPlayer in _players)
+            Player currentPlayer = currentController.ControlledPlayer;
+            
+            foreach (var anotherController in _controllers)
             {
+                Player anotherPlayer = anotherController.ControlledPlayer;
+                
                 if (currentPlayer != anotherPlayer)
                 {
                     currentPlayer.CheckIntersectionWith(anotherPlayer);
@@ -161,11 +159,11 @@ public class Game
 
     private void Swap()
     {
-        Player closestPlayer = _players.FindNearestPlayer(_mainPlayer);
+        Controller closestController = _controllers.FindNearestController(_mainController);
         
-        _mainPlayer.SwapWith(closestPlayer);
+        _mainController.SwapWith(closestController);
         
-        _mainPlayer = closestPlayer;
+        _mainController = closestController;
     }
 
     private void UpdateRemovingList(EatableActor actor)
@@ -181,16 +179,31 @@ public class Game
         }
     }
     
-    private void RemoveActor(EatableActor actor)
+    private void RemoveActor(Actor actor)
     {
-        if (actor == _mainPlayer)
+        
+        
+        if (actor is Player player)
         {
-            EndGameWithText("You lose!");
+            foreach (var controller in _controllers)
+            {
+                if (player == controller.ControlledPlayer)
+                {
+                    _controllers.SwapRemove(controller);
+                    
+                    _eatableActorFactory.Destroy(controller);
+                    
+                    if (controller == _mainController)
+                    {
+                        EndGameWithText("You lose!");
+                    }
+
+                    return;
+                }
+            }
         }
-
-        _players.SwapRemove(actor as Player);
         _food.SwapRemove(actor as Food);
-
+        
         _eatableActorFactory.Destroy(actor);
     }
 

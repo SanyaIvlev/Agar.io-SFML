@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Actor: IDrawable, IUpdatable
+public class Actor
 {
     public Vector2f Position { get; protected set; }
     

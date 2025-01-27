@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class EatableActor : Actor
+public class EatableActor : Actor, IDrawable, IUpdatable
 {
     public Vector2f Center
     {

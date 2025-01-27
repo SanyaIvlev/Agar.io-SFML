@@ -1,8 +1,11 @@
-﻿namespace Agar.io_SFML;
+﻿using SFML.Graphics;
+
+namespace Agar.io_SFML;
 
 public class ActorFactory
 {
     private GameLoop _gameLoop;
+    
     
     protected ActorFactory(GameLoop gameLoop)
     {
@@ -19,13 +22,25 @@ public class ActorFactory
     
     private void Register(Actor actor)
     {
-        _gameLoop.AddUpdatable(actor);
-        _gameLoop.AddDrawable(actor);
+        if (actor is IUpdatable updatable)
+            _gameLoop.AddUpdatable(updatable);
+        
+        if(actor is IDrawable drawable)
+            _gameLoop.AddDrawable(drawable);
+        
+        if(actor is Controller controller)
+            _gameLoop.AddController(controller);
     }
     
     protected void Destroy(Actor actor)
     {
-        _gameLoop.RemoveUpdatable(actor);
-        _gameLoop.RemoveDrawable(actor);
+        if (actor is IUpdatable updatable)
+            _gameLoop.RemoveUpdatable(updatable);
+        
+        if(actor is IDrawable drawable)
+            _gameLoop.RemoveDrawable(drawable);
+
+        if (actor is Controller controller)
+            _gameLoop.RemoveController(controller);
     }
 }

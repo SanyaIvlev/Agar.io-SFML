@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Text : Actor
+public class Text : Actor, IDrawable
 {
     private SFML.Graphics.Text Message;
 
