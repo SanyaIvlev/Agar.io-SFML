@@ -8,8 +8,6 @@ public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     
-    public Vector2f Direction;
-    
     private float _speed;
     private float _defaultSpeed;
 

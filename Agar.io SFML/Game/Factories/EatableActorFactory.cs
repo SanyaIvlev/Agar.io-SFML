@@ -14,10 +14,17 @@ public class EatableActorFactory : ActorFactory
     private int _maxHeight => (int)Boot.WindowHeight;
     
     private readonly RenderWindow _window;
+
+    private Action<EatableActor> _onPlayerDeath;
     
     public EatableActorFactory(RenderWindow window, GameLoop gameLoop) : base(gameLoop)
     {
         _window = window;
+    }
+
+    public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)
+    {
+        _onPlayerDeath += onPlayerDeath;
     }
 
     public Controller CreateController(bool isHuman)
@@ -48,8 +55,10 @@ public class EatableActorFactory : ActorFactory
         }
         
         _color = _color.GetRandomColor();
-
+        
         newPlayer.Initalize(_startPosition, _color);
+
+        newPlayer.OnDestroyed += _onPlayerDeath;
         
         return newPlayer;
     }

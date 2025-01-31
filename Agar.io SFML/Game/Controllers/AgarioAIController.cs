@@ -10,7 +10,7 @@ public class AgarioAIController : Controller
     
     private Random _random;
     
-    public override void Initialize(Player controlledPlayer, RenderWindow window)
+    public override void Initialize(Actor controlledPlayer, RenderWindow window)
     {
         base.Initialize(controlledPlayer, window);
         
@@ -31,7 +31,7 @@ public class AgarioAIController : Controller
 
     private bool NearNewPosition()
     {
-        var playerPosition = ControlledPlayer.Position;
+        var playerPosition = ControlledActor.Position;
         
         return playerPosition.GetSquaredDistanceTo(NewPosition) <= _squaredStopDistance;
     }

@@ -6,6 +6,8 @@ namespace Agar.io_SFML;
 public class Actor
 {
     public Vector2f Position { get; protected set; }
+
+    public Vector2f Direction;
     
     public Actor()
     {

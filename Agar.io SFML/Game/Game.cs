@@ -57,6 +57,8 @@ public class Game
     {
         gameLoop.OnGameUpdateNeeded += Update;
         
+        _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
+        
         _controllers = [];
         _food = [];
         _currentRemovingActors = [];
@@ -74,8 +76,12 @@ public class Game
         {
             SpawnController(false);
         }
-        
-        _textFactory.CreateScoreText(_mainController.ControlledPlayer);
+
+        if (_mainController.ControlledActor is Player player)
+        {
+            _textFactory.CreateScoreText(player);
+        }
+
         _endText = _textFactory.CreateText();
     }
 
@@ -89,9 +95,6 @@ public class Game
     private Controller SpawnController(bool isHuman)
     {
         Controller controller = _eatableActorFactory.CreateController(isHuman);
-
-        var player = controller.ControlledPlayer;
-        player.OnDestroyed += UpdateRemovingList;
         
         _controllers.Add(controller);
 
@@ -138,11 +141,17 @@ public class Game
         
         foreach (var currentController in _controllers)
         {
-            Player currentPlayer = currentController.ControlledPlayer;
+            Player currentPlayer = currentController.ControlledActor as Player;
+            
+            if(currentPlayer == null)
+                continue;
             
             foreach (var anotherController in _controllers)
             {
-                Player anotherPlayer = anotherController.ControlledPlayer;
+                Player anotherPlayer = anotherController.ControlledActor as Player;
+                
+                if(anotherPlayer == null) 
+                    continue;
                 
                 if (currentPlayer != anotherPlayer)
                 {
@@ -181,13 +190,11 @@ public class Game
     
     private void RemoveActor(Actor actor)
     {
-        
-        
         if (actor is Player player)
         {
             foreach (var controller in _controllers)
             {
-                if (player == controller.ControlledPlayer)
+                if (player == controller.ControlledActor)
                 {
                     _controllers.SwapRemove(controller);
                     

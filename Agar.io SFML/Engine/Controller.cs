@@ -6,7 +6,7 @@ namespace Agar.io_SFML;
 
 public class Controller : Actor
 {
-    public Player ControlledPlayer { get; protected set; }
+    public Actor ControlledActor { get; protected set; }
 
     protected RenderWindow _window;
     
@@ -14,9 +14,9 @@ public class Controller : Actor
 
     private Vector2f _direction;
     
-    public virtual void Initialize(Player controlledPlayer, RenderWindow window)
+    public virtual void Initialize(Actor controlledPlayer, RenderWindow window)
     {
-        ControlledPlayer = controlledPlayer;
+        ControlledActor = controlledPlayer;
         
         _window = window;
     }
@@ -25,17 +25,17 @@ public class Controller : Actor
     {
         MakeDirection();
         
-        ControlledPlayer.Direction = _direction;
+        ControlledActor.Direction = _direction;
     }
 
     public void SwapWith(Controller anotherController)
     {
-        (ControlledPlayer, anotherController.ControlledPlayer) = (anotherController.ControlledPlayer, ControlledPlayer);
+        (ControlledActor, anotherController.ControlledActor) = (anotherController.ControlledActor, ControlledActor);
     }
     
     private void MakeDirection()
     {
-        Vector2f nonNormalizedDirection = new Vector2f(NewPosition.X - ControlledPlayer.Position.X, NewPosition.Y - ControlledPlayer.Position.Y);
+        Vector2f nonNormalizedDirection = new Vector2f(NewPosition.X - ControlledActor.Position.X, NewPosition.Y - ControlledActor.Position.Y);
         
         _direction = nonNormalizedDirection.Normalize();
     }
