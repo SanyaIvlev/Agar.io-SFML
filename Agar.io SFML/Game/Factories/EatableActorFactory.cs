@@ -10,6 +10,7 @@ public class EatableActorFactory : ActorFactory
     private Vector2f _startPosition;
     private Controller _controller;
     private Color _color;
+    private Color _outline;
     
     private readonly RenderWindow _window;
 
@@ -53,8 +54,9 @@ public class EatableActorFactory : ActorFactory
         }
         
         _color = _color.GetRandomColor();
+        _outline = _color.GetDarkerShade();
         
-        newPlayer.Initalize(_startPosition, _color);
+        newPlayer.Initalize(_startPosition, _color, _outline);
 
         newPlayer.OnDestroyed += _onPlayerDeath;
         

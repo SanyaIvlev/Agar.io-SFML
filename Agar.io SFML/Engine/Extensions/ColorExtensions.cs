@@ -14,4 +14,13 @@ public static class ColorExtensions
 
         return new Color(r, g, b);
     }
+
+    public static Color GetDarkerShade(this Color color)
+    {
+        byte r = (byte)(color.R - 25);
+        byte g = (byte)(color.G - 25);
+        byte b = (byte)(color.B - 25);
+
+        return new Color(r, g, b);
+    }
 }

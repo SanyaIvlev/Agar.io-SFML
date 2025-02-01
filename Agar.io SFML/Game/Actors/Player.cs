@@ -11,7 +11,7 @@ public class Player : EatableActor
     
     private float _speed;
 
-    public void Initalize(Vector2f startPosition, Color color)
+    public void Initalize(Vector2f startPosition, Color color, Color outline)
     {
         Initialize(startPosition);
         
@@ -23,7 +23,7 @@ public class Player : EatableActor
             Position = startPosition,
             Radius = 20,
             FillColor = color,
-            OutlineColor = Color.Black,
+            OutlineColor = outline,
             OutlineThickness = 2,
         };
         
