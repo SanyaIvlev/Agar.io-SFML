@@ -6,7 +6,7 @@ namespace Agar.io_SFML;
 
 public class Controller : Actor
 {
-    public Actor ControlledActor { get; protected set; }
+    public Actor Pawn { get; protected set; }
 
     protected RenderWindow _window;
     
@@ -16,7 +16,7 @@ public class Controller : Actor
     
     public virtual void Initialize(Actor controlledPlayer, RenderWindow window)
     {
-        ControlledActor = controlledPlayer;
+        Pawn = controlledPlayer;
         
         _window = window;
     }
@@ -25,17 +25,17 @@ public class Controller : Actor
     {
         MakeDirection();
         
-        ControlledActor.Direction = _direction;
+        Pawn.Direction = _direction;
     }
 
     public void SwapWith(Controller anotherController)
     {
-        (ControlledActor, anotherController.ControlledActor) = (anotherController.ControlledActor, ControlledActor);
+        (Pawn, anotherController.Pawn) = (anotherController.Pawn, Pawn);
     }
     
     private void MakeDirection()
     {
-        Vector2f nonNormalizedDirection = new Vector2f(NewPosition.X - ControlledActor.Position.X, NewPosition.Y - ControlledActor.Position.Y);
+        Vector2f nonNormalizedDirection = new Vector2f(NewPosition.X - Pawn.Position.X, NewPosition.Y - Pawn.Position.Y);
         
         _direction = nonNormalizedDirection.Normalize();
     }

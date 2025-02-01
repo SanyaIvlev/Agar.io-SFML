@@ -65,7 +65,7 @@ public class Game
             SpawnController(false);
         }
 
-        if (_mainController.ControlledActor is Player player)
+        if (_mainController.Pawn is Player player)
         {
             _textFactory.CreateScoreText(player);
         }
@@ -129,14 +129,14 @@ public class Game
         
         foreach (var currentController in _controllers)
         {
-            Player currentPlayer = currentController.ControlledActor as Player;
+            Player currentPlayer = currentController.Pawn as Player;
             
             if(currentPlayer == null)
                 continue;
             
             foreach (var anotherController in _controllers)
             {
-                Player anotherPlayer = anotherController.ControlledActor as Player;
+                Player anotherPlayer = anotherController.Pawn as Player;
                 
                 if(anotherPlayer == null) 
                     continue;
@@ -159,8 +159,6 @@ public class Game
         Controller closestController = _controllers.FindNearestController(_mainController);
         
         _mainController.SwapWith(closestController);
-        
-        _mainController = closestController;
     }
 
     private void UpdateRemovingList(EatableActor actor)
@@ -182,7 +180,7 @@ public class Game
         {
             foreach (var controller in _controllers)
             {
-                if (player == controller.ControlledActor)
+                if (player == controller.Pawn)
                 {
                     _controllers.SwapRemove(controller);
                     

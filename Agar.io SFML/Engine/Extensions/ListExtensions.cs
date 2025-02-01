@@ -25,8 +25,8 @@ public static class ListExtensions
             if(comparingController == controller) 
                 continue;
 
-            var currentPlayer = controller.ControlledActor;
-            var comparingPlayer = comparingController.ControlledActor;
+            var currentPlayer = controller.Pawn;
+            var comparingPlayer = comparingController.Pawn;
             
             Vector2f currentPlayerPosition = currentPlayer.Position;
             var comparingPlayerPosition = comparingPlayer.Position;

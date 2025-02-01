@@ -31,7 +31,7 @@ public class AgarioAIController : Controller
 
     private bool NearNewPosition()
     {
-        var playerPosition = ControlledActor.Position;
+        var playerPosition = Pawn.Position;
         
         return playerPosition.GetSquaredDistanceTo(NewPosition) <= _squaredStopDistance;
     }
