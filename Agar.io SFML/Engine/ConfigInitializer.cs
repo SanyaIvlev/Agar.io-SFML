@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Agar.io_SFML;
@@ -35,23 +36,23 @@ public static class ConfigInitializer
                 string fieldValue = lineKeyAndValue[1].Trim();
                 
                 FieldInfo? fieldInfo = currentTypeOfConfig?.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+
+                object? parsedValue = TryParseValue(fieldInfo, fieldValue);
                 
-                if (int.TryParse(fieldValue, out int intValue))
-                {
-                    fieldInfo?.SetValue(null, intValue);
-                }
-                else if (float.TryParse(fieldValue, out float floatValue))
-                {
-                    fieldInfo?.SetValue(null, floatValue);
-                }
-                else
-                {
-                    fieldInfo?.SetValue(null, fieldValue);
-                }
+                fieldInfo.SetValue(null, parsedValue);
             }
         }
-        
         configReader.Close();
+    }
+
+    private static object? TryParseValue(FieldInfo fieldInfo, string value)
+    {
+        Type type = fieldInfo.FieldType;
+        
+        object? newValue = TypeDescriptor.GetConverter(type)
+            .ConvertFromInvariantString(value);
+        
+        return newValue;
     }
 
     public static void UpdateConfig(string name, string newValue)
