@@ -10,16 +10,13 @@ public class Player : EatableActor
     public Action<uint> OnBountyChanged;
     
     private float _speed;
-    private float _defaultSpeed;
-
-    private uint _initialBounty;
 
     public void Initalize(Vector2f startPosition, Color color)
     {
-        base.Initialize(startPosition);
+        Initialize(startPosition);
         
-        _speed = _defaultSpeed = 100f;
-        Bounty = _initialBounty = 10;
+        _speed = 100f;
+        Bounty = 10;
 
         shape = new()
         {
@@ -90,8 +87,8 @@ public class Player : EatableActor
     {
         Vector2f nextPosition = Position + Direction * _speed * Time.GetElapsedTimeAsSeconds();
 
-        if (nextPosition.X > GameConfig.WindowWidth || nextPosition.X < 0 ||
-            nextPosition.Y > GameConfig.WindowHeight || nextPosition.Y < 0)
+        if (nextPosition.X > WindowConfig.WindowWidth || nextPosition.X < 0 ||
+            nextPosition.Y > WindowConfig.WindowHeight || nextPosition.Y < 0)
             return;
         
         Position = nextPosition;

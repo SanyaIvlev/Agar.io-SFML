@@ -45,11 +45,11 @@ public class EatableActorFactory : ActorFactory
         
         if (isHuman)
         {
-            _startPosition = new (GameConfig.WindowWidth / 2f, GameConfig.WindowHeight / 2f);
+            _startPosition = new (WindowConfig.WindowWidth / 2f, WindowConfig.WindowHeight / 2f);
         }
         else
         {
-            _startPosition = MathExtensions.GetRandomPosition((int)GameConfig.WindowWidth, (int)GameConfig.WindowHeight);
+            _startPosition = MathExtensions.GetRandomPosition(WindowConfig.WindowWidth, WindowConfig.WindowHeight);
         }
         
         _color = _color.GetRandomColor();
@@ -65,7 +65,7 @@ public class EatableActorFactory : ActorFactory
     {
         Food newFood = CreateActor<Food>();
         
-        _startPosition = MathExtensions.GetRandomPosition((int)GameConfig.WindowWidth, (int)GameConfig.WindowHeight);
+        _startPosition = MathExtensions.GetRandomPosition(WindowConfig.WindowWidth, WindowConfig.WindowHeight);
         
         _color = _color.GetRandomColor();
         

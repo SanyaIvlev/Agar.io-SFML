@@ -32,7 +32,7 @@ public class Boot
     
     private void CreateWindow()
     {
-        _window = new(new VideoMode((uint)GameConfig.WindowWidth, (uint)GameConfig.WindowHeight), GameConfig.WindowName);
+        _window = new(new VideoMode((uint)WindowConfig.WindowWidth, (uint)WindowConfig.WindowHeight), WindowConfig.WindowName);
         _window.Closed += WindowClosed;
     }
     

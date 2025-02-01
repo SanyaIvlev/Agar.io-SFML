@@ -35,9 +35,13 @@ public static class ConfigInitializer
                 
                 FieldInfo? fieldInfo = currentTypeOfConfig?.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
                 
-                if (int.TryParse(fieldValue, out int value))
+                if (int.TryParse(fieldValue, out int intValue))
                 {
-                    fieldInfo?.SetValue(null, value);
+                    fieldInfo?.SetValue(null, intValue);
+                }
+                else if (float.TryParse(fieldValue, out float floatValue))
+                {
+                    fieldInfo?.SetValue(null, floatValue);
                 }
                 else
                 {

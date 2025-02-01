@@ -19,7 +19,7 @@ public class TextFactory : ActorFactory
     {
         Text endText = CreateActor<Text>();
         
-        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(GameConfig.WindowWidth / 2f, GameConfig.WindowHeight / 2f));
+        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(WindowConfig.WindowWidth / 2f, WindowConfig.WindowHeight / 2f));
 
         return endText;
     }
@@ -28,7 +28,7 @@ public class TextFactory : ActorFactory
     {
         Score newScore = CreateActor<Score>();
         
-        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(GameConfig.WindowWidth / 2f, 20), mainPlayer);
+        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(WindowConfig.WindowWidth / 2f, 20), mainPlayer);
     }
     
     private string GetFontLocation(string fontName)

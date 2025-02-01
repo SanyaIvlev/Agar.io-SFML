@@ -9,18 +9,12 @@ namespace Agar.io_SFML;
 
 public class Game
 {
-    private readonly uint _playersOnStart;
-    private readonly uint _foodOnStart;
-
     private Text _endText;
 
     private Controller _mainController;
     
     private List<Controller> _controllers;
     private List<Food> _food;
-
-    private readonly float _foodRespawnDelay;
-    private readonly float _playerRespawnDelay;
     
     private float _passedFoodTime;
     private float _passedPlayerTime;
@@ -40,14 +34,8 @@ public class Game
         
         _eatableActorFactory = eatableActorFactory;
         _textFactory = textFactory;
-
-        _playersOnStart = 10;
-        _foodOnStart = 100;
         
         _passedFoodTime = _passedPlayerTime = 0;
-        
-        _foodRespawnDelay = 0.5f;
-        _playerRespawnDelay = 10f;
         
         _keyInputs = keyInputSet;
     }
@@ -67,12 +55,12 @@ public class Game
         
         InitializeKeyInputs();
 
-        foreach(var _ in Enumerable.Range(0, (int)_foodOnStart))
+        foreach(var _ in Enumerable.Range(0, GameConfig.FoodOnStart))
         {
             SpawnFood();
         }
         
-        foreach(var _ in Enumerable.Range(0, (int)_playersOnStart))
+        foreach(var _ in Enumerable.Range(0, GameConfig.PlayersOnStart))
         {
             SpawnController(false);
         }
@@ -118,14 +106,14 @@ public class Game
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
         _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
         
-        if (_passedFoodTime >= _foodRespawnDelay)
+        if (_passedFoodTime >= GameConfig.FoodRespawnDelay)
         {
             SpawnFood();
             
             _passedFoodTime = 0;
         }
         
-        if(_passedPlayerTime >= _playerRespawnDelay)
+        if(_passedPlayerTime >= GameConfig.PlayerRespawnDelay)
         {
            SpawnController(false);
             
@@ -217,7 +205,7 @@ public class Game
     private void EndGameWithText(string message)
     {
         _endText.UpdateText(message);
-        _endText.SetPosition(new ((int)GameConfig.WindowWidth / 2f, (int)GameConfig.WindowHeight / 2f));
+        _endText.SetPosition(new (WindowConfig.WindowWidth / 2f, WindowConfig.WindowHeight / 2f));
         _gameMode.IsGameEnded = true;
     }
 

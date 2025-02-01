@@ -2,8 +2,9 @@
 
 public static class GameConfig
 {
-    public static string WindowName = "Agar.io";
+    public static int PlayersOnStart = 10;
+    public static int FoodOnStart = 100;
     
-    public static int WindowWidth = 1600;
-    public static int WindowHeight = 800;
+    public static float FoodRespawnDelay = 0.5f;
+    public static float PlayerRespawnDelay = 10f;
 }
