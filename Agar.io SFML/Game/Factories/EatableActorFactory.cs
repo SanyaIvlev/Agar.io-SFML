@@ -1,4 +1,5 @@
-﻿using Agar.io_SFML.Extensions;
+﻿using Agar.io_SFML.Configs;
+using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
 
@@ -9,9 +10,6 @@ public class EatableActorFactory : ActorFactory
     private Vector2f _startPosition;
     private Controller _controller;
     private Color _color;
-
-    private int _maxWidth => (int)Boot.WindowWidth;
-    private int _maxHeight => (int)Boot.WindowHeight;
     
     private readonly RenderWindow _window;
 
@@ -47,11 +45,11 @@ public class EatableActorFactory : ActorFactory
         
         if (isHuman)
         {
-            _startPosition = new (_maxWidth / 2f, _maxHeight / 2f);
+            _startPosition = new (GameConfig.WindowWidth / 2f, GameConfig.WindowHeight / 2f);
         }
         else
         {
-            _startPosition = MathExtensions.GetRandomPosition(_maxWidth, _maxHeight);
+            _startPosition = MathExtensions.GetRandomPosition((int)GameConfig.WindowWidth, (int)GameConfig.WindowHeight);
         }
         
         _color = _color.GetRandomColor();
@@ -67,7 +65,7 @@ public class EatableActorFactory : ActorFactory
     {
         Food newFood = CreateActor<Food>();
         
-        _startPosition = MathExtensions.GetRandomPosition(_maxWidth, _maxHeight);
+        _startPosition = MathExtensions.GetRandomPosition((int)GameConfig.WindowWidth, (int)GameConfig.WindowHeight);
         
         _color = _color.GetRandomColor();
         

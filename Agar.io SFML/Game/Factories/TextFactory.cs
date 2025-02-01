@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using Agar.io_SFML.Configs;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML.Factory;
@@ -6,9 +7,6 @@ namespace Agar.io_SFML.Factory;
 public class TextFactory : ActorFactory
 {
     private const string FontName = "Obelix Pro.ttf";
-    
-    private int _maxWidth => (int)Boot.WindowWidth;
-    private int _maxHeight => (int)Boot.WindowHeight;
     
     private Font _font;
 
@@ -21,7 +19,7 @@ public class TextFactory : ActorFactory
     {
         Text endText = CreateActor<Text>();
         
-        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(_maxWidth / 2f, _maxHeight / 2f));
+        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(GameConfig.WindowWidth / 2f, GameConfig.WindowHeight / 2f));
 
         return endText;
     }
@@ -30,7 +28,7 @@ public class TextFactory : ActorFactory
     {
         Score newScore = CreateActor<Score>();
         
-        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(Boot.WindowWidth / 2f, 20), mainPlayer);
+        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(GameConfig.WindowWidth / 2f, 20), mainPlayer);
     }
     
     private string GetFontLocation(string fontName)

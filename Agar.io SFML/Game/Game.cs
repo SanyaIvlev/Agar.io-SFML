@@ -1,4 +1,4 @@
-using System.Reflection.PortableExecutable;
+using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 using SFML.Window;
@@ -217,7 +217,7 @@ public class Game
     private void EndGameWithText(string message)
     {
         _endText.UpdateText(message);
-        _endText.SetPosition(new ((int)Boot.WindowWidth / 2f, (int)Boot.WindowHeight / 2f));
+        _endText.SetPosition(new ((int)GameConfig.WindowWidth / 2f, (int)GameConfig.WindowHeight / 2f));
         _gameMode.IsGameEnded = true;
     }
 

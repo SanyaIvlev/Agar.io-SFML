@@ -1,3 +1,4 @@
+using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
@@ -89,8 +90,8 @@ public class Player : EatableActor
     {
         Vector2f nextPosition = Position + Direction * _speed * Time.GetElapsedTimeAsSeconds();
 
-        if (nextPosition.X > Boot.WindowWidth || nextPosition.X < 0 ||
-            nextPosition.Y > Boot.WindowHeight || nextPosition.Y < 0)
+        if (nextPosition.X > GameConfig.WindowWidth || nextPosition.X < 0 ||
+            nextPosition.Y > GameConfig.WindowHeight || nextPosition.Y < 0)
             return;
         
         Position = nextPosition;

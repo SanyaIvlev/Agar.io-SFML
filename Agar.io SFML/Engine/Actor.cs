@@ -8,11 +8,6 @@ public class Actor
     public Vector2f Position { get; protected set; }
 
     public Vector2f Direction;
-    
-    public Actor()
-    {
-        
-    }
 
     protected void Initialize(Vector2f initialPosition)
     {

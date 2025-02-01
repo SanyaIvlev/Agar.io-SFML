@@ -1,20 +1,18 @@
 using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.Window;
+using Agar.io_SFML.Configs;
 
 namespace Agar.io_SFML;
 
 public class Boot
 {
-    public const uint WindowWidth = 1600;
-    public const uint WindowHeight = 800;
-
-    private const string WindowName = "Agar.io";
-
     private RenderWindow _window;
     
     public void Start()
     {
+        ConfigInitializer.ReadWholeConfig();
+        
         CreateWindow();
         
         KeyInputSet keyInputSet = new KeyInputSet();
@@ -34,7 +32,7 @@ public class Boot
     
     private void CreateWindow()
     {
-        _window = new(new VideoMode(WindowWidth, WindowHeight), WindowName);
+        _window = new(new VideoMode((uint)GameConfig.WindowWidth, (uint)GameConfig.WindowHeight), GameConfig.WindowName);
         _window.Closed += WindowClosed;
     }
     
