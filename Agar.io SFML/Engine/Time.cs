@@ -12,6 +12,11 @@ public static class Time
     }
 
     private static Clock _timer;
+    
+    
+    private static long totalTimeBeforeUpdate = 0;
+    private static long previousTimeElapsed = 0;
+    private static long deltaTime;
 
     public static void Start()
     {
@@ -20,10 +25,24 @@ public static class Time
         _timer.Restart();
     }
 
-    public static void Update()
+    public static void UpdateTimer()
     {
+        totalTimeBeforeUpdate = 0;
+        
         ElapsedTime = _timer.ElapsedTime.AsMilliseconds();
         _timer.Restart();
+    }
+
+    public static long UpdateTimeBeforeUpdate()
+    {
+        long elapsedTime = GetElapsedTimeAsMicroseconds();
+            
+        deltaTime = Math.Abs(elapsedTime - previousTimeElapsed);
+        previousTimeElapsed = elapsedTime;
+            
+        totalTimeBeforeUpdate += deltaTime;
+        
+        return totalTimeBeforeUpdate;
     }
     
     public static long GetElapsedTimeAsMicroseconds()

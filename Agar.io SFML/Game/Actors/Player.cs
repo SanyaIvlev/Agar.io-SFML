@@ -15,7 +15,7 @@ public class Player : EatableActor
     {
         Initialize(startPosition);
         
-        _speed = 100f;
+        _speed = 150f;
         Bounty = 10;
 
         shape = new()

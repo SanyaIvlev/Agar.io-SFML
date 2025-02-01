@@ -5,9 +5,9 @@ namespace Agar.io_SFML;
 
 public class GameLoop
 {
-    private const int TargetFps = 60;
+    private const int TargetFps = 1200;
     private const int SecondToMicroseconds = 1000000;
-    private const long TimeBeforeNextFrame = SecondToMicroseconds / TargetFps;
+    private const float TimeBeforeNextFrame =  SecondToMicroseconds * 1f / TargetFps;
     
     public Action OnGameUpdateNeeded;
     
@@ -59,7 +59,8 @@ public class GameLoop
 
     public void AddController(Controller controller)
     {
-        _controllers.Add(controller);
+        if(!_controllers.Contains(controller))
+            _controllers.Add(controller);
     }
 
     public void RemoveController(Controller controller)
@@ -76,22 +77,11 @@ public class GameLoop
     
     private void Run()
     {
-        long totalTimeBeforeUpdate = 0;
-        long previousTimeElapsed = 0;
-        long deltaTime;
-        
         while (!IsGameLoopEnded())
         {
             ProcessInput();
 
-            long elapsedTime = Time.GetElapsedTimeAsMicroseconds();
-            
-            deltaTime = elapsedTime - previousTimeElapsed;
-            previousTimeElapsed = elapsedTime;
-            
-            totalTimeBeforeUpdate += deltaTime;
-
-            if (totalTimeBeforeUpdate < TimeBeforeNextFrame)
+            if (Time.UpdateTimeBeforeUpdate() < TimeBeforeNextFrame)
                 continue;
             
             Update();
@@ -126,7 +116,7 @@ public class GameLoop
         
         OnGameUpdateNeeded?.Invoke();
 
-        Time.Update();
+        Time.UpdateTimer();
     }
 
     private void Render()
