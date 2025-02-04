@@ -30,9 +30,9 @@ public class TextFactory : ActorFactory
         
         newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(WindowConfig.WindowWidth / 2f, 20), mainPlayer);
     }
-    
+
     private string GetFontLocation(string fontName)
-        => Path.GetFullPath(@"..\..\..\..\Resources\Fonts\" + fontName);
-    
-    
+        => fontName;
+
+
 }

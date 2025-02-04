@@ -6,7 +6,7 @@ namespace Agar.io_SFML;
 
 public static class ConfigInitializer
 {
-    private static readonly string _configFilePath = Path.GetFullPath(@"..\..\..\..\Configuration\config.ini");
+    private static readonly string _configFilePath = "config.ini";
     
     public static void ReadWholeConfig()
     {

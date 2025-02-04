@@ -1,5 +1,7 @@
+using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
+using SFML.System;
 
 namespace Agar.io_SFML;
 
