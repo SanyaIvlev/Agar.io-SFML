@@ -14,6 +14,6 @@ public class AgarioPlayerController : Controller
 
     private void ProcessMousePosition()
     {
-        NewPosition = (Vector2f)Mouse.GetPosition(_window);
+        NewPosition = _window.MapPixelToCoords(Mouse.GetPosition(_window));
     }
 }

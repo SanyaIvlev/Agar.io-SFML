@@ -24,7 +24,9 @@ public class GameLoop
     
     private readonly GameMode _gameMode;
 
-    public GameLoop(RenderWindow window, GameMode gameMode, KeyInputSet keyInputs)
+    private Camera _camera;
+
+    public GameLoop(RenderWindow window, GameMode gameMode, KeyInputSet keyInputs, Camera camera)
     {
         _window = window;
         
@@ -35,6 +37,8 @@ public class GameLoop
         _controllers = [];
 
         _keyInputs = keyInputs;
+        
+        _camera = camera;
     }
     
     public void AddDrawable(IDrawable drawable)
@@ -124,6 +128,8 @@ public class GameLoop
     private void Render()
     {
         _window.Clear(new Color(122,122,122));
+        
+        _camera.Update();
 
         foreach (var drawable in _drawables)
         {

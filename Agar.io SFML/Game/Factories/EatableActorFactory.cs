@@ -23,8 +23,8 @@ public class EatableActorFactory : ActorFactory
     {
         _window = window;
         
-        _windowWidth = WindowConfig.WindowHeight;
-        _windowHeight = WindowConfig.WindowWidth;
+        _windowWidth = WindowConfig.WindowWidth;
+        _windowHeight = WindowConfig.WindowHeight;
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)

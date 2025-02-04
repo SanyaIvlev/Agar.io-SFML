@@ -31,12 +31,16 @@ public class Game
     private int _windowWidth;
     private int _windowHeight;
     
-    public int _playersOnStart;
-    public int _foodOnStart;
+    private int _playersOnStart;
+    private int _foodOnStart;
     
-    public float _foodRespawnDelay;
-    public float _playerRespawnDelay;
-    public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory)
+    private float _foodRespawnDelay;
+    private float _playerRespawnDelay;
+
+    private Camera _camera;
+    
+    
+    public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory, Camera camera)
     {
         _gameMode = gameMode;
         
@@ -46,6 +50,8 @@ public class Game
         _passedFoodTime = _passedPlayerTime = 0;
         
         _keyInputs = keyInputSet;
+        
+        _camera = camera;
     }
     
     
@@ -69,6 +75,8 @@ public class Game
         _currentRemovingActors = [];
 
         _mainController = SpawnController(true);
+        
+        _camera.FocusOn(_mainController.Pawn);
         
         InitializeKeyInputs();
 
@@ -176,6 +184,8 @@ public class Game
         Controller closestController = _controllers.FindNearestController(_mainController);
         
         _mainController.SwapWith(closestController);
+        
+        _camera.FocusOn(_mainController.Pawn);
     }
 
     private void UpdateRemovingList(EatableActor actor)
@@ -220,7 +230,6 @@ public class Game
     private void EndGameWithText(string message)
     {
         _endText.UpdateText(message);
-        _endText.SetPosition(new (_windowWidth / 2f, _windowHeight / 2f));
         _gameMode.IsGameEnded = true;
     }
 

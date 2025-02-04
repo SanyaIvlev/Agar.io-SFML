@@ -22,17 +22,19 @@ public class Boot
         _windowName = WindowConfig.WindowName;
         
         CreateWindow();
+
+        Camera camera = new(_window, new(_windowWidth / 4f, _windowHeight / 4f, _windowWidth * 3/4f, _windowHeight * 3/4f));
         
         KeyInputSet keyInputSet = new KeyInputSet();
         
         GameMode gameMode = new();
         
-        GameLoop gameLoop = new(_window, gameMode, keyInputSet);
+        GameLoop gameLoop = new(_window, gameMode, keyInputSet, camera);
         
         EatableActorFactory eatableActorFactory = new(_window, gameLoop);
-        TextFactory textFactory = new(gameLoop);
+        TextFactory textFactory = new(gameLoop, camera);
         
-        Game game = new(gameMode, keyInputSet, eatableActorFactory, textFactory);
+        Game game = new(gameMode, keyInputSet, eatableActorFactory, textFactory, camera);
         
         game.Start(gameLoop);
         gameLoop.Start(); 

@@ -3,16 +3,16 @@ using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Text : Actor, IDrawable
+public class Text : Actor, IDrawable, IUpdatable
 {
-    private SFML.Graphics.Text Message;
+    private SFML.Graphics.Text _message;
+    private Camera _camera;
+    private Vector2f _offset;
 
     public void Initialize(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness,
-        Vector2f position)
+        Vector2f offset, Camera camera)
     {
-        base.Initialize(position);
-        
-        Message = new("", font)
+        _message = new("", font)
         {
             CharacterSize = characterSize,
             FillColor = fillColor,
@@ -20,28 +20,45 @@ public class Text : Actor, IDrawable
             OutlineThickness = outlineThickness,
         };
         
-        SetPosition(position);
+        _camera = camera;
+        
+        _offset = offset;
+        
+        
+        base.Initialize(offset + _camera.GetGlobalViewPosition());
+        
+        SetPosition(_offset);
     }
 
     public void SetPosition(Vector2f position)
     {
-        var floatRect = Message.GetLocalBounds();
-        Message.Origin = new Vector2f(floatRect.Left + floatRect.Width/ 2, floatRect.Top + floatRect.Height / 2);
+        var floatRect = _message.GetLocalBounds();
+        _message.Origin = new Vector2f(floatRect.Left + floatRect.Width / 2, floatRect.Top + floatRect.Height / 2);
+
+
+        var globalViewPosition = _camera.GetGlobalViewPosition();
         
-        Message.Position = position;
+        _message.Position = globalViewPosition + position;
     }
 
     public void UpdateText(string newText)
     {
-        var currentPosition = Message.Position;
+        var currentPosition = _offset;
         
-        Message.DisplayedString = newText;
+        _message.DisplayedString = newText;
         
         SetPosition(currentPosition);
+    }
+
+    public override void Update()
+    {
+        Vector2f globalViewPosition = _camera.GetGlobalViewPosition();
+
+        _message.Position = globalViewPosition + _offset;
     }
     
     public override void Draw(RenderWindow window)
     {
-        window.Draw(Message);
+        window.Draw(_message);
     }
 }
