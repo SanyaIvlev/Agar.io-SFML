@@ -16,9 +16,15 @@ public class EatableActorFactory : ActorFactory
 
     private Action<EatableActor> _onPlayerDeath;
     
+    private readonly int _windowWidth;
+    private readonly int _windowHeight;
+    
     public EatableActorFactory(RenderWindow window, GameLoop gameLoop) : base(gameLoop)
     {
         _window = window;
+        
+        _windowWidth = WindowConfig.WindowHeight;
+        _windowHeight = WindowConfig.WindowWidth;
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)
@@ -46,11 +52,11 @@ public class EatableActorFactory : ActorFactory
         
         if (isHuman)
         {
-            _startPosition = new (WindowConfig.WindowWidth / 2f, WindowConfig.WindowHeight / 2f);
+            _startPosition = new (_windowWidth / 2f, _windowHeight / 2f);
         }
         else
         {
-            _startPosition = MathExtensions.GetRandomPosition(WindowConfig.WindowWidth, WindowConfig.WindowHeight);
+            _startPosition = MathExtensions.GetRandomPosition(_windowWidth, _windowHeight);
         }
         
         _color = _color.GetRandomColor();
@@ -67,7 +73,7 @@ public class EatableActorFactory : ActorFactory
     {
         Food newFood = CreateActor<Food>();
         
-        _startPosition = MathExtensions.GetRandomPosition(WindowConfig.WindowWidth, WindowConfig.WindowHeight);
+        _startPosition = MathExtensions.GetRandomPosition(_windowWidth, _windowHeight);
         
         _color = _color.GetRandomColor();
         

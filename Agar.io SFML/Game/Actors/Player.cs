@@ -11,9 +11,15 @@ public class Player : EatableActor
     
     private float _speed;
 
+    private int _windowWidth;
+    private int _windowHeight;
+
     public void Initalize(Vector2f startPosition, Color color, Color outline)
     {
         Initialize(startPosition);
+        
+        _windowWidth = WindowConfig.WindowWidth;
+        _windowHeight = WindowConfig.WindowHeight;
         
         _speed = 150f;
         Bounty = 10;
@@ -87,8 +93,8 @@ public class Player : EatableActor
     {
         Vector2f nextPosition = Position + Direction * _speed * Time.GetElapsedTimeAsSeconds();
 
-        if (nextPosition.X > WindowConfig.WindowWidth || nextPosition.X < 0 ||
-            nextPosition.Y > WindowConfig.WindowHeight || nextPosition.Y < 0)
+        if (nextPosition.X > _windowWidth || nextPosition.X < 0 ||
+            nextPosition.Y > _windowHeight || nextPosition.Y < 0)
             return;
         
         Position = nextPosition;

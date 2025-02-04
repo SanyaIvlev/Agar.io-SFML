@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Agar.io_SFML;
 
-public static class ConfigInitializer
+public static class ConfigProcesser
 {
     private static readonly string _configFilePath = "config.ini";
     

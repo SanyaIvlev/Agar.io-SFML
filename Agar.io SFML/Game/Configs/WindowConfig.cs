@@ -2,7 +2,6 @@
 
 public class WindowConfig
 {
-    
     public static string WindowName = "Agar.io";
     
     public static int WindowWidth = 1600;

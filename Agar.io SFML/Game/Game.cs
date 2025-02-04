@@ -28,6 +28,14 @@ public class Game
     
     private KeyInputSet _keyInputs;
 
+    private int _windowWidth;
+    private int _windowHeight;
+    
+    public int _playersOnStart;
+    public int _foodOnStart;
+    
+    public float _foodRespawnDelay;
+    public float _playerRespawnDelay;
     public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory)
     {
         _gameMode = gameMode;
@@ -47,6 +55,15 @@ public class Game
         
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
         
+        _windowWidth = WindowConfig.WindowWidth;
+        _windowHeight = WindowConfig.WindowHeight;
+        
+        _playersOnStart = GameConfig.PlayersOnStart;
+        _foodOnStart = GameConfig.FoodOnStart;
+        
+        _playerRespawnDelay = GameConfig.PlayerRespawnDelay;
+        _foodRespawnDelay = GameConfig.FoodRespawnDelay;
+        
         _controllers = [];
         _food = [];
         _currentRemovingActors = [];
@@ -55,12 +72,12 @@ public class Game
         
         InitializeKeyInputs();
 
-        foreach(var _ in Enumerable.Range(0, GameConfig.FoodOnStart))
+        foreach(var _ in Enumerable.Range(0, _foodOnStart))
         {
             SpawnFood();
         }
         
-        foreach(var _ in Enumerable.Range(0, GameConfig.PlayersOnStart))
+        foreach(var _ in Enumerable.Range(0, _playersOnStart))
         {
             SpawnController(false);
         }
@@ -106,14 +123,14 @@ public class Game
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
         _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
         
-        if (_passedFoodTime >= GameConfig.FoodRespawnDelay)
+        if (_passedFoodTime >= _foodRespawnDelay)
         {
             SpawnFood();
             
             _passedFoodTime = 0;
         }
         
-        if(_passedPlayerTime >= GameConfig.PlayerRespawnDelay)
+        if(_passedPlayerTime >= _playerRespawnDelay)
         {
            SpawnController(false);
             
@@ -203,7 +220,7 @@ public class Game
     private void EndGameWithText(string message)
     {
         _endText.UpdateText(message);
-        _endText.SetPosition(new (WindowConfig.WindowWidth / 2f, WindowConfig.WindowHeight / 2f));
+        _endText.SetPosition(new (_windowWidth / 2f, _windowHeight / 2f));
         _gameMode.IsGameEnded = true;
     }
 
