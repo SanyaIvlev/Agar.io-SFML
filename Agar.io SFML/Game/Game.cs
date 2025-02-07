@@ -11,9 +11,9 @@ public class Game
 {
     private Text _endText;
 
-    private Controller _mainController;
+    private AgarioController _mainController;
     
-    private List<Controller> _controllers;
+    private List<AgarioController> _controllers;
     private List<Food> _food;
     
     private float _passedFoodTime;
@@ -27,9 +27,6 @@ public class Game
     private readonly TextFactory _textFactory;
     
     private KeyInputSet _keyInputs;
-
-    private int _windowWidth;
-    private int _windowHeight;
     
     private int _playersOnStart;
     private int _foodOnStart;
@@ -61,9 +58,6 @@ public class Game
         
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
         
-        _windowWidth = WindowConfig.WindowWidth;
-        _windowHeight = WindowConfig.WindowHeight;
-        
         _playersOnStart = GameConfig.PlayersOnStart;
         _foodOnStart = GameConfig.FoodOnStart;
         
@@ -76,7 +70,7 @@ public class Game
 
         _mainController = SpawnController(true);
         
-        _camera.FocusOn(_mainController.Pawn);
+        _camera.FocusOn(_mainController.PlayerPawn);
         
         InitializeKeyInputs();
 
@@ -90,10 +84,7 @@ public class Game
             SpawnController(false);
         }
 
-        if (_mainController.Pawn is Player player)
-        {
-            _textFactory.CreateScoreText(player);
-        }
+        _textFactory.CreateScoreText(_mainController.PlayerPawn);
 
         _endText = _textFactory.CreateText();
     }
@@ -105,9 +96,9 @@ public class Game
         swapBind.AddCallBackOnPressed(Swap);
     }
 
-    private Controller SpawnController(bool isHuman)
+    private AgarioController SpawnController(bool isHuman)
     {
-        Controller controller = _eatableActorFactory.CreateController(isHuman);
+        AgarioController controller = _eatableActorFactory.CreateController(isHuman);
         
         _controllers.Add(controller);
 
@@ -154,17 +145,11 @@ public class Game
         
         foreach (var currentController in _controllers)
         {
-            Player currentPlayer = currentController.Pawn as Player;
-            
-            if(currentPlayer == null)
-                continue;
+            Player currentPlayer = currentController.PlayerPawn;
             
             foreach (var anotherController in _controllers)
             {
-                Player anotherPlayer = anotherController.Pawn as Player;
-                
-                if(anotherPlayer == null) 
-                    continue;
+                Player anotherPlayer = anotherController.PlayerPawn;
                 
                 if (currentPlayer != anotherPlayer)
                 {
@@ -185,7 +170,7 @@ public class Game
         
         _mainController.SwapWith(closestController);
         
-        _camera.FocusOn(_mainController.Pawn);
+        _camera.FocusOn(_mainController.PlayerPawn);
     }
 
     private void UpdateRemovingList(EatableActor actor)
@@ -207,7 +192,7 @@ public class Game
         {
             foreach (var controller in _controllers)
             {
-                if (player == controller.Pawn)
+                if (player == controller.PlayerPawn)
                 {
                     _controllers.SwapRemove(controller);
                     
@@ -222,6 +207,7 @@ public class Game
                 }
             }
         }
+        
         _food.SwapRemove(actor as Food);
         
         _eatableActorFactory.Destroy(actor);

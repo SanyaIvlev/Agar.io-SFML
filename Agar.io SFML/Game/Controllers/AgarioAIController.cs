@@ -1,10 +1,9 @@
 ﻿using Agar.io_SFML.Extensions;
 using SFML.Graphics;
-using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class AgarioAIController : Controller
+public class AgarioAIController : AgarioController
 {
     private readonly float _squaredStopDistance = 3f;
     
@@ -31,7 +30,7 @@ public class AgarioAIController : Controller
 
     private bool NearNewPosition()
     {
-        var playerPosition = Pawn.Position;
+        var playerPosition = PlayerPawn.Position;
         
         return playerPosition.GetSquaredDistanceTo(NewPosition) <= _squaredStopDistance;
     }

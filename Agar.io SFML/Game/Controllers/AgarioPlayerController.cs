@@ -1,10 +1,8 @@
-﻿using SFML.Graphics;
-using SFML.System;
-using SFML.Window;
+﻿using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class AgarioPlayerController : Controller
+public class AgarioPlayerController : AgarioController
 {
     public override void Update()
     {

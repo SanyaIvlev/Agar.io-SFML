@@ -6,7 +6,9 @@ namespace Agar.io_SFML;
 
 public class Controller : Actor
 {
-    public Actor Pawn { get; protected set; }
+    public Actor Pawn { get; private set; }
+    
+    protected Action<Actor> OnPawnUpdated;
 
     protected RenderWindow _window;
     
@@ -16,8 +18,7 @@ public class Controller : Actor
     
     public virtual void Initialize(Actor controlledPlayer, RenderWindow window)
     {
-        Pawn = controlledPlayer;
-        
+        SetPawn(controlledPlayer);
         _window = window;
     }
 
@@ -28,9 +29,18 @@ public class Controller : Actor
         Pawn.Direction = _direction;
     }
 
+    private void SetPawn(Actor pawn)
+    {
+        Pawn = pawn;
+        OnPawnUpdated?.Invoke(pawn);
+    }
+    
     public void SwapWith(Controller anotherController)
     {
-        (Pawn, anotherController.Pawn) = (anotherController.Pawn, Pawn);
+        var tempPawn = Pawn;
+        
+        SetPawn(anotherController.Pawn);
+        anotherController.SetPawn(tempPawn);
     }
     
     private void MakeDirection()

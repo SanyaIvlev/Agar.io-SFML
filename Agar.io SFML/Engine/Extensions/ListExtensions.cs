@@ -15,19 +15,19 @@ public static class ListExtensions
         list.RemoveAt(list.Count - 1);
     }
 
-    public static Controller FindNearestController(this List<Controller> controllers, Controller comparingController)
+    public static Controller FindNearestController<TController>(this List<TController> controllers, Controller comparingController) where TController: Controller
     {
         Controller nearestController = null;
         float minimalSquaredDistance = float.MaxValue;
 
         foreach (var controller in controllers)
         {
-            if(comparingController == controller) 
+            if (comparingController == controller)
                 continue;
 
             var currentPlayer = controller.Pawn;
             var comparingPlayer = comparingController.Pawn;
-            
+
             Vector2f currentPlayerPosition = currentPlayer.Position;
             var comparingPlayerPosition = comparingPlayer.Position;
 
@@ -39,7 +39,7 @@ public static class ListExtensions
                 nearestController = controller;
             }
         }
-        
+
         return nearestController;
     }
 }

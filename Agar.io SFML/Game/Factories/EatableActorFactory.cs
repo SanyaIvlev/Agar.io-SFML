@@ -8,7 +8,7 @@ namespace Agar.io_SFML.Factory;
 public class EatableActorFactory : ActorFactory
 {
     private Vector2f _startPosition;
-    private Controller _controller;
+    private AgarioController _controller;
     private Color _color;
     private Color _outline;
     
@@ -32,7 +32,7 @@ public class EatableActorFactory : ActorFactory
         _onPlayerDeath += onPlayerDeath;
     }
 
-    public Controller CreateController(bool isHuman)
+    public AgarioController CreateController(bool isHuman)
     {
         Player controlledPlayer = CreatePlayer(isHuman);
         
