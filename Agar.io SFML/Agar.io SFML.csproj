@@ -15,10 +15,14 @@
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
 
-	
-      <Content Include="..\Resources\Fonts\Obelix Pro.ttf">
+      <Content Include="..\Resources\Fonts\*.*">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
 
+      <Content Include="..\Resources\Audio\*.*">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+
+    </ItemGroup>
+    
 </Project>

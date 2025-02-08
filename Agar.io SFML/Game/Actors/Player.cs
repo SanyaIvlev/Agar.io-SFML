@@ -8,10 +8,14 @@ namespace Agar.io_SFML;
 public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
+    public Action<int> OnElimination;
+    public Action OnFoodEaten;
     
     private float _speed;
 
     private Bounds _bounds;
+
+    private int _eliminatedPlayers;
 
     public void Initalize(Vector2f startPosition, Color color, Color outline)
     {
@@ -75,6 +79,16 @@ public class Player : EatableActor
         
         shape.Radius += actor.Bounty / 2f;
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
+
+        if (actor is Player)
+        {
+            OnElimination?.Invoke(++_eliminatedPlayers);
+        }
+
+        if (actor is Food)
+        {
+            OnFoodEaten?.Invoke();
+        }
         
         OnDestroyed?.Invoke(actor);
         OnBountyChanged?.Invoke(Bounty);

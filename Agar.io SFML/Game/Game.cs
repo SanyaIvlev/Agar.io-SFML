@@ -1,3 +1,4 @@
+using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
@@ -37,6 +38,7 @@ public class Game
     private float _playerRespawnDelay;
 
     private Camera _camera;
+    private AudioSystem _audioSystem;
     
     
     public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
@@ -71,6 +73,9 @@ public class Game
         _food = [];
         _currentRemovingActors = [];
 
+        _audioSystem = new();
+        _audioSystem.Initialize();
+
         InitializeKeyInputs();
         
         SetActors();
@@ -81,6 +86,8 @@ public class Game
         _shapeFactory.CreateBackground();
         
         _mainController = SpawnController(true);
+        _mainController.PlayerPawn.OnElimination += ConvertAndPlayEliminationSound;
+        _mainController.PlayerPawn.OnFoodEaten += () => _audioSystem.PlaySoundOnce(AudioType.Eating);
         
         _camera.FocusOn(_mainController.PlayerPawn);
 
@@ -97,6 +104,22 @@ public class Game
         _textFactory.CreateScoreText(_mainController.PlayerPawn);
 
         _endText = _textFactory.CreateText();
+    }
+
+    private void ConvertAndPlayEliminationSound(int eliminationsNumber)
+    {
+        AudioType? playingSoundType = eliminationsNumber switch
+        {
+            1 => AudioType.FirstBlood,
+            2 => AudioType.DoubleKill,
+            3 => AudioType.TripleKill,
+            4 => AudioType.UltraKill,
+            5 => AudioType.MegaKill,
+            _ => null,
+        };
+        
+        if(playingSoundType is AudioType soundType) 
+            _audioSystem.PlaySoundOnce(soundType);
     }
 
     private void InitializeKeyInputs()
