@@ -1,6 +1,7 @@
 using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
+using SFML.Graphics;
 using SFML.Window;
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
@@ -23,8 +24,9 @@ public class Game
 
     private readonly GameMode _gameMode;
     
-    private readonly EatableActorFactory _eatableActorFactory;
-    private readonly TextFactory _textFactory;
+    private EatableActorFactory _eatableActorFactory;
+    private TextFactory _textFactory;
+    private ShapeFactory _shapeFactory;
     
     private KeyInputSet _keyInputs;
     
@@ -37,12 +39,9 @@ public class Game
     private Camera _camera;
     
     
-    public Game(GameMode gameMode, KeyInputSet keyInputSet, EatableActorFactory eatableActorFactory, TextFactory textFactory, Camera camera)
+    public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
     {
         _gameMode = gameMode;
-        
-        _eatableActorFactory = eatableActorFactory;
-        _textFactory = textFactory;
         
         _passedFoodTime = _passedPlayerTime = 0;
         
@@ -52,9 +51,13 @@ public class Game
     }
     
     
-    public void Start(GameLoop gameLoop)
+    public void Start(GameLoop gameLoop, RenderWindow window)
     {
         gameLoop.OnGameUpdateNeeded += Update;
+        
+        _eatableActorFactory = new(window, gameLoop);
+        _textFactory = new(gameLoop, _camera);
+        _shapeFactory = new(window, gameLoop);
         
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
         
@@ -68,11 +71,18 @@ public class Game
         _food = [];
         _currentRemovingActors = [];
 
+        InitializeKeyInputs();
+        
+        SetActors();
+    }
+
+    private void SetActors()
+    {
+        _shapeFactory.CreateBackground();
+        
         _mainController = SpawnController(true);
         
         _camera.FocusOn(_mainController.PlayerPawn);
-        
-        InitializeKeyInputs();
 
         foreach(var _ in Enumerable.Range(0, _foodOnStart))
         {

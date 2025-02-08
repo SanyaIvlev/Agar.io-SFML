@@ -50,14 +50,14 @@ public class Text : Actor, IDrawable, IUpdatable
         SetPosition(currentPosition);
     }
 
-    public override void Update()
+    public void Update()
     {
         Vector2f globalViewPosition = _camera.GetGlobalViewPosition();
 
         _message.Position = globalViewPosition + _offset;
     }
     
-    public override void Draw(RenderWindow window)
+    public void Draw(RenderWindow window)
     {
         window.Draw(_message);
     }

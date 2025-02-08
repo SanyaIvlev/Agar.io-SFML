@@ -25,12 +25,12 @@ public class EatableActor : Actor, IDrawable, IUpdatable
         base.Initialize(initialPosition);
     }
 
-    public override void Update()
+    public virtual void Update()
     {
         shape.Position = Position;
     }
 
-    public override void Draw(RenderWindow window)
+    public void Draw(RenderWindow window)
     {
         window.Draw(shape);
     }

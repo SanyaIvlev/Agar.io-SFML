@@ -127,7 +127,7 @@ public class GameLoop
 
     private void Render()
     {
-        _window.Clear(new Color(122,122,122));
+        _window.Clear(new Color(100, 100,100));
         
         _camera.Update();
 

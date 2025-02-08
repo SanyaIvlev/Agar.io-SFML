@@ -22,7 +22,7 @@ public class Controller : Actor
         _window = window;
     }
 
-    public override void Update()
+    public virtual void Update()
     {
         MakeDirection();
         

@@ -7,7 +7,7 @@ public static class MathExtensions
     private static Random _random = new();
     public static Vector2f Normalize(this Vector2f vector)
     {
-        float vectorLength = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+        float vectorLength = MathF.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
         
         if (vectorLength <= 0.0001f)
         {

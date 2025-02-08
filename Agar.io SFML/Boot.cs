@@ -2,6 +2,7 @@ using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.Window;
 using Agar.io_SFML.Configs;
+using SFML.System;
 
 namespace Agar.io_SFML;
 
@@ -16,11 +17,12 @@ public class Boot
     public void Start()
     {
         ConfigProcesser.ReadWholeConfig();
+        
 
         _windowWidth = (uint)WindowConfig.WindowWidth;
         _windowHeight = (uint)WindowConfig.WindowHeight;
         _windowName = WindowConfig.WindowName;
-        
+            
         CreateWindow();
 
         Camera camera = new(_window, new(_windowWidth / 4f, _windowHeight / 4f, _windowWidth * 3/4f, _windowHeight * 3/4f));
@@ -31,12 +33,9 @@ public class Boot
         
         GameLoop gameLoop = new(_window, gameMode, keyInputSet, camera);
         
-        EatableActorFactory eatableActorFactory = new(_window, gameLoop);
-        TextFactory textFactory = new(gameLoop, camera);
+        Game game = new(gameMode, keyInputSet, camera);
         
-        Game game = new(gameMode, keyInputSet, eatableActorFactory, textFactory, camera);
-        
-        game.Start(gameLoop);
+        game.Start(gameLoop, _window);
         gameLoop.Start(); 
     }
     
