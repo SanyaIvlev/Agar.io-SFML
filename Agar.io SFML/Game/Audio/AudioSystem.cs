@@ -4,12 +4,15 @@ namespace Agar.io_SFML.Audio;
 
 public enum AudioType
 {
+    Kill,
     FirstBlood,
     DoubleKill,
     TripleKill,
     UltraKill,
     MegaKill,
     Eating,
+    Victory,
+    Lose,
 } 
 
 public class AudioSystem // розмiстив цей файл у папцi Game, бо тут enum AudioType Залежить вiд умов гри

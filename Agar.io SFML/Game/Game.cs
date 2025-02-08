@@ -108,18 +108,17 @@ public class Game
 
     private void ConvertAndPlayEliminationSound(int eliminationsNumber)
     {
-        AudioType? playingSoundType = eliminationsNumber switch
+        AudioType playingSoundType = eliminationsNumber switch
         {
             1 => AudioType.FirstBlood,
             2 => AudioType.DoubleKill,
             3 => AudioType.TripleKill,
             4 => AudioType.UltraKill,
             5 => AudioType.MegaKill,
-            _ => null,
+            _ => AudioType.Kill,
         };
         
-        if(playingSoundType is AudioType soundType) 
-            _audioSystem.PlaySoundOnce(soundType);
+        _audioSystem.PlaySoundOnce(playingSoundType);
     }
 
     private void InitializeKeyInputs()
@@ -148,6 +147,7 @@ public class Game
     {
         if (_controllers.Count == 1 && _controllers[0] == _mainController)
         {
+            _audioSystem.PlaySoundOnce(AudioType.Victory);
             EndGameWithText("You win!");
             return;
         }
@@ -233,6 +233,7 @@ public class Game
                     
                     if (controller == _mainController)
                     {
+                        _audioSystem.PlaySoundOnce(AudioType.Lose);
                         EndGameWithText("You lose!");
                     }
 

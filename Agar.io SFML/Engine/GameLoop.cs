@@ -141,6 +141,6 @@ public class GameLoop
     
     private void WaitBeforeEnd()
     {
-        Thread.Sleep(1000);
+        Thread.Sleep(1500);
     }
 }
