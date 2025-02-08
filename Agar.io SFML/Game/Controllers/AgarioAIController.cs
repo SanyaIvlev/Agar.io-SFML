@@ -7,13 +7,9 @@ public class AgarioAIController : AgarioController
 {
     private readonly float _squaredStopDistance = 3f;
     
-    private Random _random;
-    
     public override void Initialize(Actor controlledPlayer, RenderWindow window)
     {
         base.Initialize(controlledPlayer, window);
-        
-        _random = new Random();
         
         GenerateNewPosition();
         base.Update();
@@ -37,8 +33,8 @@ public class AgarioAIController : AgarioController
 
     private void GenerateNewPosition()
     {
-        int x = _random.Next(0, (int)_window.Size.X);
-        int y = _random.Next(0, (int)_window.Size.Y);
+        int x = MyRandom.Next(0, (int)_window.Size.X);
+        int y = MyRandom.Next(0, (int)_window.Size.Y);
 
         NewPosition = new(x, y);
     }
