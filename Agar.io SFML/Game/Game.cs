@@ -39,7 +39,10 @@ public class Game
 
     private Camera _camera;
     private AudioSystem _audioSystem;
-    
+
+    private string _eatingSound;
+    private string _victorySound;
+    private string _defeatSound;
     
     public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
     {
@@ -68,6 +71,10 @@ public class Game
         
         _playerRespawnDelay = GameConfig.PlayerRespawnDelay;
         _foodRespawnDelay = GameConfig.FoodRespawnDelay;
+
+        _eatingSound = AudioConfig.Eating;
+        _victorySound = AudioConfig.Victory;
+        _defeatSound = AudioConfig.Defeat;
         
         _controllers = [];
         _food = [];
@@ -86,9 +93,8 @@ public class Game
         _shapeFactory.CreateBackground();
         
         _mainController = SpawnController(true);
-        _mainController.PlayerPawn.OnElimination += ConvertAndPlayEliminationSound;
-        _mainController.PlayerPawn.OnFoodEaten += () => _audioSystem.PlaySoundOnce(AudioType.Eating);
-        
+        FollowPlayerActions();
+
         _camera.FocusOn(_mainController.PlayerPawn);
 
         foreach(var _ in Enumerable.Range(0, _foodOnStart))
@@ -106,19 +112,10 @@ public class Game
         _endText = _textFactory.CreateText();
     }
 
-    private void ConvertAndPlayEliminationSound(int eliminationsNumber)
+    private void FollowPlayerActions()
     {
-        AudioType playingSoundType = eliminationsNumber switch
-        {
-            1 => AudioType.FirstBlood,
-            2 => AudioType.DoubleKill,
-            3 => AudioType.TripleKill,
-            4 => AudioType.UltraKill,
-            5 => AudioType.MegaKill,
-            _ => AudioType.Kill,
-        };
-        
-        _audioSystem.PlaySoundOnce(playingSoundType);
+        _mainController.PlayerPawn.OnElimination += _audioSystem.PlayEliminationSound;
+        _mainController.PlayerPawn.OnFoodEaten += () => _audioSystem.PlaySoundOnce(_eatingSound);
     }
 
     private void InitializeKeyInputs()
@@ -147,7 +144,7 @@ public class Game
     {
         if (_controllers.Count == 1 && _controllers[0] == _mainController)
         {
-            _audioSystem.PlaySoundOnce(AudioType.Victory);
+            _audioSystem.PlaySoundOnce(_victorySound);
             EndGameWithText("You win!");
             return;
         }
@@ -201,9 +198,14 @@ public class Game
     {
         Controller closestController = _controllers.FindNearestController(_mainController);
         
+        _mainController.PlayerPawn.OnElimination -= _audioSystem.PlayEliminationSound;
+        _mainController.PlayerPawn.OnFoodEaten -= () => _audioSystem.PlaySoundOnce(_eatingSound);
+        
         _mainController.SwapWith(closestController);
         
         _camera.FocusOn(_mainController.PlayerPawn);
+
+        FollowPlayerActions();
     }
 
     private void UpdateRemovingList(EatableActor actor)
@@ -233,7 +235,7 @@ public class Game
                     
                     if (controller == _mainController)
                     {
-                        _audioSystem.PlaySoundOnce(AudioType.Lose);
+                        _audioSystem.PlaySoundOnce(_defeatSound);
                         EndGameWithText("You lose!");
                     }
 
