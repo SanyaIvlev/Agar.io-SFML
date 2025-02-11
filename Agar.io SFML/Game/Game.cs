@@ -38,7 +38,7 @@ public class Game
     private float _playerRespawnDelay;
 
     private Camera _camera;
-    private AudioSystem _audioSystem;
+    private AgarioAudioSystem _audioSystem;
 
     private string _eatingSound;
     private string _victorySound;
@@ -60,7 +60,10 @@ public class Game
     {
         gameLoop.OnGameUpdateNeeded += Update;
         
-        _eatableActorFactory = new(window, gameLoop);
+        _audioSystem = new();
+        _audioSystem.Initialize();
+        
+        _eatableActorFactory = new(window, gameLoop, _audioSystem);
         _textFactory = new(gameLoop, _camera);
         _shapeFactory = new(window, gameLoop);
         
@@ -80,9 +83,6 @@ public class Game
         _food = [];
         _currentRemovingActors = [];
 
-        _audioSystem = new();
-        _audioSystem.Initialize();
-
         InitializeKeyInputs();
         
         SetActors();
@@ -93,7 +93,6 @@ public class Game
         _shapeFactory.CreateBackground();
         
         _mainController = SpawnController(true);
-        FollowPlayerActions();
 
         _camera.FocusOn(_mainController.PlayerPawn);
 
@@ -110,12 +109,6 @@ public class Game
         _textFactory.CreateScoreText(_mainController.PlayerPawn);
 
         _endText = _textFactory.CreateText();
-    }
-
-    private void FollowPlayerActions()
-    {
-        _mainController.PlayerPawn.OnElimination += _audioSystem.PlayEliminationSound;
-        _mainController.PlayerPawn.OnFoodEaten += () => _audioSystem.PlaySoundOnce(_eatingSound);
     }
 
     private void InitializeKeyInputs()
@@ -198,14 +191,9 @@ public class Game
     {
         Controller closestController = _controllers.FindNearestController(_mainController);
         
-        _mainController.PlayerPawn.OnElimination -= _audioSystem.PlayEliminationSound;
-        _mainController.PlayerPawn.OnFoodEaten -= () => _audioSystem.PlaySoundOnce(_eatingSound);
-        
         _mainController.SwapWith(closestController);
         
         _camera.FocusOn(_mainController.PlayerPawn);
-
-        FollowPlayerActions();
     }
 
     private void UpdateRemovingList(EatableActor actor)

@@ -29,18 +29,10 @@ public class Controller : Actor
         Pawn.Direction = _direction;
     }
 
-    private void SetPawn(Actor pawn)
+    public void SetPawn(Actor pawn)
     {
         Pawn = pawn;
         OnPawnUpdated?.Invoke(pawn);
-    }
-    
-    public void SwapWith(Controller anotherController)
-    {
-        var tempPawn = Pawn;
-        
-        SetPawn(anotherController.Pawn);
-        anotherController.SetPawn(tempPawn);
     }
     
     private void MakeDirection()

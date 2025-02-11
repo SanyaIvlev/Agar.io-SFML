@@ -1,4 +1,5 @@
-﻿using Agar.io_SFML.Configs;
+﻿using Agar.io_SFML.Audio;
+using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
@@ -18,13 +19,16 @@ public class EatableActorFactory : ActorFactory
     
     private readonly int _windowWidth;
     private readonly int _windowHeight;
-    
-    public EatableActorFactory(RenderWindow window, GameLoop gameLoop) : base(gameLoop)
+    private readonly AgarioAudioSystem _audioSystem;
+
+    public EatableActorFactory(RenderWindow window, GameLoop gameLoop, AgarioAudioSystem audioSystem) : base(gameLoop)
     {
         _window = window;
         
         _windowWidth = WindowConfig.WindowWidth;
         _windowHeight = WindowConfig.WindowHeight;
+
+        _audioSystem = audioSystem;
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)
@@ -35,13 +39,17 @@ public class EatableActorFactory : ActorFactory
     public AgarioController CreateController(bool isHuman)
     {
         Player controlledPlayer = CreatePlayer(isHuman);
-        
-        if(isHuman)
+
+        if (isHuman)
+        {
             _controller = CreateActor<AgarioPlayerController>();
+            _controller.Initialize(controlledPlayer, _window, _audioSystem);
+        }
         else
+        {
             _controller = CreateActor<AgarioAIController>();
-        
-        _controller.Initialize(controlledPlayer, _window);
+            _controller.Initialize(controlledPlayer, _window);
+        }
         
         return _controller;
     }
