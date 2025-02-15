@@ -127,8 +127,8 @@ public class Game : IPauseHandler
 
     private void InitializeKeyInputs()
     {
-        KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
-        KeyInput pauseBind = _keyInputs.AddKeyBind(Keyboard.Key.P);
+        KeyInput swapBind = _keyInputs.AddKeyBind(KeyboardEventConfig.Swap);
+        KeyInput pauseBind = _keyInputs.AddKeyBind(KeyboardEventConfig.Pause);
 
         swapBind.AddCallBackOnPressed(Swap);
         pauseBind.AddCallBackOnPressed(SwitchPause);
