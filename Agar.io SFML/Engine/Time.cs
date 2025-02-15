@@ -5,6 +5,7 @@ namespace Agar.io_SFML;
 
 public static class Time
 {
+    /// <summary>Returns elapsed time as milliseconds.</summary>
     public static long ElapsedTime
     {
         get => _timer.ElapsedTime.AsMilliseconds();
