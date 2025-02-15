@@ -2,22 +2,32 @@ using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.Window;
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.PauseControl;
 using SFML.System;
 
 namespace Agar.io_SFML;
 
 public class Boot
 {
+    public static Boot Instance;
+    public PauseManager pauseManager;
+    
     private RenderWindow _window;
 
     private uint _windowWidth;
     private uint _windowHeight;
     private string _windowName;
 
+    public Boot()
+    {
+        Instance = this;
+    }
+
     public void Start()
     {
         ConfigProcesser.ReadWholeConfig();
         
+        pauseManager = new ();
 
         _windowWidth = (uint)WindowConfig.WindowWidth;
         _windowHeight = (uint)WindowConfig.WindowHeight;

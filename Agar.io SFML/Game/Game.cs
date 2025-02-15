@@ -2,6 +2,7 @@ using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
+using Agar.io_SFML.PauseControl;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -9,7 +10,7 @@ using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class Game
+public class Game : IPauseHandler
 {
     private Text _endText;
 
@@ -40,9 +41,11 @@ public class Game
     private Camera _camera;
     private AgarioAudioSystem _audioSystem;
 
-    private string _eatingSound;
     private string _victorySound;
     private string _defeatSound;
+    
+    private PauseManager _pauseManager;
+    private bool _isPaused;
     
     public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
     {
@@ -59,6 +62,9 @@ public class Game
     public void Start(GameLoop gameLoop, RenderWindow window)
     {
         gameLoop.OnGameUpdateNeeded += Update;
+
+        _pauseManager = Boot.Instance.pauseManager;
+        _pauseManager.Register(this);
         
         _audioSystem = new();
         _audioSystem.Initialize();
@@ -74,8 +80,7 @@ public class Game
         
         _playerRespawnDelay = GameConfig.PlayerRespawnDelay;
         _foodRespawnDelay = GameConfig.FoodRespawnDelay;
-
-        _eatingSound = AudioConfig.Eating;
+        
         _victorySound = AudioConfig.Victory;
         _defeatSound = AudioConfig.Defeat;
         
@@ -86,6 +91,11 @@ public class Game
         InitializeKeyInputs();
         
         SetActors();
+    }
+
+    public void SetPaused(bool isPaused)
+    {
+        _isPaused = isPaused;
     }
 
     private void SetActors()
@@ -114,8 +124,10 @@ public class Game
     private void InitializeKeyInputs()
     {
         KeyInput swapBind = _keyInputs.AddKeyBind(Keyboard.Key.F);
+        KeyInput pauseBind = _keyInputs.AddKeyBind(Keyboard.Key.P);
 
         swapBind.AddCallBackOnPressed(Swap);
+        pauseBind.AddCallBackOnPressed(_pauseManager.SwitchPauseState);
     }
 
     private AgarioController SpawnController(bool isHuman)
@@ -135,6 +147,9 @@ public class Game
 
     private void Update()
     {
+        if(_isPaused)
+            return;
+        
         if (_controllers.Count == 1 && _controllers[0] == _mainController)
         {
             _audioSystem.PlaySoundOnce(_victorySound);

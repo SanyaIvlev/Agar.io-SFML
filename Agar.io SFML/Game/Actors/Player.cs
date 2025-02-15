@@ -1,11 +1,11 @@
-using Agar.io_SFML.Configs;
 using Agar.io_SFML.Extensions;
+using Agar.io_SFML.PauseControl;
 using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Player : EatableActor
+public class Player : EatableActor, IPauseHandler
 {
     public Action<uint> OnBountyChanged;
     public Action<int> OnElimination;
@@ -16,6 +16,7 @@ public class Player : EatableActor
     private Bounds _bounds;
 
     private int _eliminatedPlayers;
+    private bool _isPaused;
 
     public void Initalize(Vector2f startPosition, Color color, Color outline)
     {
@@ -49,6 +50,11 @@ public class Player : EatableActor
         {
             TryEat(actor);
         }
+    }
+
+    public void SetPaused(bool isPaused)
+    {
+        _isPaused = isPaused;
     }
 
     private void TryEat(EatableActor actor)
@@ -96,6 +102,9 @@ public class Player : EatableActor
 
     public override void Update()
     {
+        if (_isPaused)
+            return;
+        
         Move();
         
         base.Update();

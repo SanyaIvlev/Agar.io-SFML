@@ -1,13 +1,16 @@
 ﻿using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.PauseControl;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class AgarioPlayerController : AgarioController
+public class AgarioPlayerController : AgarioController, IPauseHandler
 { 
     private readonly string _eatingSound;
+
+    private bool _isPaused;
     
     public AgarioPlayerController()
     {
@@ -23,8 +26,16 @@ public class AgarioPlayerController : AgarioController
 
     public override void Update()
     {
+        if (_isPaused)
+            return;
+        
         ProcessMousePosition();
         base.Update();
+    }
+    
+    public void SetPaused(bool isPaused)
+    {
+        _isPaused = isPaused;
     }
 
     public override void SwapWith(Controller anotherController)
