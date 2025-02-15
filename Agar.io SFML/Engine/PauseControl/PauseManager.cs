@@ -5,11 +5,12 @@ namespace Agar.io_SFML.PauseControl;
 public class PauseManager
 {
     private readonly List<IPauseHandler> _pauseHandlers;
-    private bool _isPaused = false;
+    public bool IsPaused { get; private set; }
 
     public PauseManager()
     {
         _pauseHandlers = new ();
+        IsPaused = false;
     }
 
     public void Register(IPauseHandler pauseHandler)
@@ -24,10 +25,10 @@ public class PauseManager
 
     public void SwitchPauseState()
     {
-        _isPaused = !_isPaused;
+        IsPaused = !IsPaused;
         foreach (var handler in _pauseHandlers)
         {
-            handler.SetPaused(_isPaused);
+            handler.SetPaused(IsPaused);
         }
     }
 }

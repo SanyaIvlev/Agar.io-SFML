@@ -27,12 +27,13 @@ public class Animation
     public void Update()
     {
         _progress += Time.ElapsedTime;
+        
         if(_progress < _neededTime)
             return;
         
         _currentIndex++;
         
-        if(_currentIndex == _frames.Count - 1)
+        if(_currentIndex == _frames.Count)
             _currentIndex = 0;
         
         CurrentFrame = _frames[_currentIndex];

@@ -13,6 +13,7 @@ namespace Agar.io_SFML;
 public class Game : IPauseHandler
 {
     private Text _endText;
+    private Text _hintText;
 
     private AgarioController _mainController;
     
@@ -118,6 +119,9 @@ public class Game : IPauseHandler
 
         _textFactory.CreateScoreText(_mainController.PlayerPawn);
 
+        var viewSize = _camera.view.Size;
+        
+        _hintText = _textFactory.CreateText((int)viewSize.X / 2, (int)viewSize.Y / 4);
         _endText = _textFactory.CreateText();
     }
 
@@ -127,7 +131,7 @@ public class Game : IPauseHandler
         KeyInput pauseBind = _keyInputs.AddKeyBind(Keyboard.Key.P);
 
         swapBind.AddCallBackOnPressed(Swap);
-        pauseBind.AddCallBackOnPressed(_pauseManager.SwitchPauseState);
+        pauseBind.AddCallBackOnPressed(SwitchPause);
     }
 
     private AgarioController SpawnController(bool isHuman)
@@ -143,6 +147,20 @@ public class Game : IPauseHandler
     {
         Food newFood = _eatableActorFactory.CreateFood();
         _food.Add(newFood);
+    }
+
+    private void SwitchPause()
+    {
+        _pauseManager.SwitchPauseState();
+        
+        if (_pauseManager.IsPaused)
+        {
+            _hintText.UpdateText("Game is paused");
+        }
+        else
+        {
+            _hintText.UpdateText("");
+        }
     }
 
     private void Update()

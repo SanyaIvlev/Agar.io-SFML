@@ -26,12 +26,21 @@ public class TextFactory : ActorFactory
         _camera = camera;
         _cameraView = _camera.view;
     }
-
+    
     public Text CreateText()
     {
         Text endText = CreateActor<Text>();
         
         endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, _cameraView.Size.Y / 2f), _camera);
+
+        return endText;
+    }
+
+    public Text CreateText(int width, int height)
+    {
+        Text endText = CreateActor<Text>();
+        
+        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(width, height), _camera);
 
         return endText;
     }
