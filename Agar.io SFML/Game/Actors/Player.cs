@@ -18,7 +18,7 @@ public class Player : EatableActor, IPauseHandler
     private int _eliminatedPlayers;
     private bool _isPaused;
 
-    public void Initalize(Vector2f startPosition, Color color, Color outline)
+    public void Initalize(Vector2f startPosition, Color color)
     {
         Initialize(startPosition);
 
@@ -32,8 +32,6 @@ public class Player : EatableActor, IPauseHandler
             Position = startPosition,
             Radius = 20,
             FillColor = color,
-            OutlineColor = outline,
-            OutlineThickness = 2,
         };
         
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
@@ -100,21 +98,26 @@ public class Player : EatableActor, IPauseHandler
         OnBountyChanged?.Invoke(Bounty);
     }
 
+    public bool IsMoving()
+    {
+        return !_isPaused;
+    }
+
     public override void Update()
     {
         if (_isPaused)
             return;
-        
+
         Move();
-        
         base.Update();
     }
 
     private void Move()
     {
         Vector2f nextPosition = Position + Direction * _speed * Time.GetElapsedTimeAsSeconds();
-
+        
         if (_bounds.IsInside(nextPosition))
             Position = nextPosition;
     }
+
 }

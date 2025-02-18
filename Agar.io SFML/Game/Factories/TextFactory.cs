@@ -53,7 +53,7 @@ public class TextFactory : ActorFactory
     }
 
     private string GetFontLocation(string fontName)
-        => fontName;
+        => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Fonts\" + fontName;
 
 
 }

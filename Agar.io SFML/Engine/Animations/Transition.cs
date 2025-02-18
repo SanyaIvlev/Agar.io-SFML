@@ -3,10 +3,12 @@
 public class Transition
 {
     private State _to;
+    private Func<bool> _condition;
 
-    public Transition(State to)
+    public Transition(State to, Func<bool> condition)
     {
         _to = to;
+        _condition = condition;
     }
 
     public State ChangeState()
@@ -18,6 +20,6 @@ public class Transition
     
     public virtual bool IsConditionComplied()
     {
-        return false;
+        return _condition.Invoke();
     }
 }

@@ -13,10 +13,12 @@ public class Animation
     private long _progress;
     private long _neededTime;
 
-    public Animation(Texture[] frames)
+    public Animation(Texture[] frames, long neededTimeInMilliseconds)
     {
         _frames = new List<Texture>();
         _frames.AddRange(frames);
+        
+        _neededTime = neededTimeInMilliseconds;
     }
 
     public void Start()
@@ -30,6 +32,8 @@ public class Animation
         
         if(_progress < _neededTime)
             return;
+
+        _progress = 0;
         
         _currentIndex++;
         

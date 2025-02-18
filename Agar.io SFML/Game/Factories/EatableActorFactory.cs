@@ -11,7 +11,6 @@ public class EatableActorFactory : ActorFactory
     private Vector2f _startPosition;
     private AgarioController _controller;
     private Color _color;
-    private Color _outline;
     
     private readonly RenderWindow _window;
 
@@ -20,6 +19,8 @@ public class EatableActorFactory : ActorFactory
     private readonly int _windowWidth;
     private readonly int _windowHeight;
     private readonly AgarioAudioSystem _audioSystem;
+    
+    private AnimatorFactory _animatorFactory;
 
     public EatableActorFactory(RenderWindow window, GameLoop gameLoop, AgarioAudioSystem audioSystem) : base(gameLoop)
     {
@@ -29,6 +30,8 @@ public class EatableActorFactory : ActorFactory
         _windowHeight = WindowConfig.WindowHeight;
 
         _audioSystem = audioSystem;
+
+        _animatorFactory = new(gameLoop);
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)
@@ -68,11 +71,12 @@ public class EatableActorFactory : ActorFactory
         }
         
         _color = _color.GetRandomColor();
-        _outline = _color.GetDarkerShade();
         
-        newPlayer.Initalize(_startPosition, _color, _outline);
+        newPlayer.Initalize(_startPosition, _color);
 
         newPlayer.OnDestroyed += _onPlayerDeath;
+        
+       _animatorFactory.CreatePlayerAnimator(newPlayer, isHuman); 
         
         return newPlayer;
     }

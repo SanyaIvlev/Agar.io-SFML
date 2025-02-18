@@ -7,7 +7,7 @@ public class ShapeAnimator : Actor, IUpdatable
     private Shape _shape;
     private AnimationStateMachine _animationStateMachine;
 
-    public ShapeAnimator(Shape shape, State state)
+    public void Initialize(Shape shape, State state)
     {
         _shape = shape;
         _animationStateMachine = new (state);
@@ -16,12 +16,12 @@ public class ShapeAnimator : Actor, IUpdatable
     public void Update()
     {
         _animationStateMachine.Update();
-        
+        Console.WriteLine(_shape.Texture == _animationStateMachine.CurrentFrame);
         _shape.Texture = _animationStateMachine.CurrentFrame;
     }
 
-    public void AddTransition(State from, State to)
+    public void AddTransition(State from, State to, Func<bool> condition)
     {
-        _animationStateMachine.AddTransition(from, to);
+        _animationStateMachine.AddTransition(from, to, condition);
     }
 }

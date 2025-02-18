@@ -6,6 +6,7 @@
         <RootNamespace>Agar.io_SFML</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +23,14 @@
       <Content Include="..\Resources\Audio\*.*">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-
     </ItemGroup>
+
+      <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="XCOPY &quot;$(SolutionDir)Configuration\&quot; &quot;$(TargetDir)Configuration\&quot; /S /Y" />
+      </Target>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="XCOPY &quot;$(SolutionDir)Resources\&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
+    </Target>
     
 </Project>
