@@ -91,6 +91,8 @@ public class EatableActorFactory : ActorFactory
         
         newFood.Initialize(_startPosition, _color);
         
+        _animatorFactory.CreateFoodAnimator(newFood.shape);
+        
         return newFood;
     }
 

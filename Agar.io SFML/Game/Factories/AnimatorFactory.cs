@@ -28,4 +28,15 @@ public class AnimatorFactory : ActorFactory
         animator.AddTransition(idleState, walkingState, () => player.IsMoving());
         animator.AddTransition(walkingState, idleState, () => !player.IsMoving());
     }
+
+    public void CreateFoodAnimator(Shape foodShape)
+    {
+        ShapeAnimator animator = CreateActor<ShapeAnimator>();
+
+        Texture[] idleFrames = _textureLoader.LoadTexturesFrom("Food", "Idle");
+        
+        State idleState = new(idleFrames, 100);
+        
+        animator.Initialize(foodShape, idleState);
+    }
 }
