@@ -1,4 +1,5 @@
 ﻿using Agar.io_SFML.Configs;
+using SFML.Graphics;
 
 namespace Agar.io_SFML.Audio;
 
@@ -11,7 +12,7 @@ public class AgarioAudioSystem : AudioSystem
     private string _fifthKill;
     private string _kill;
 
-    public AgarioAudioSystem()
+    public AgarioAudioSystem(RenderWindow window) : base(window)
     {
         _firstKill = AudioConfig.FirstBlood;
         _secondKill = AudioConfig.DoubleKill;

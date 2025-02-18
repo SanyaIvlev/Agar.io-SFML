@@ -67,7 +67,7 @@ public class Game : IPauseHandler
         _pauseManager = Boot.Instance.pauseManager;
         _pauseManager.Register(this);
         
-        _audioSystem = new();
+        _audioSystem = new(window);
         _audioSystem.Initialize();
         
         _eatableActorFactory = new(window, gameLoop, _audioSystem);
