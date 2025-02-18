@@ -13,6 +13,13 @@ public class ShapeActor : Actor, IDrawable
         _window = window;
         this.shape = shape;
     }
+
+    public void Initialize(RenderWindow window, Shape shape, Texture texture)
+    {
+        Initialize(window, shape);
+        shape.Texture = texture;
+    }
+    
     public void Draw(RenderWindow window)
     {
         _window.Draw(shape);

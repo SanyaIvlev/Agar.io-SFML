@@ -18,13 +18,13 @@ public class ShapeFactory : ActorFactory
         _windowHeight = WindowConfig.WindowHeight;
     }
 
-    public ShapeActor CreateBackground()
+    public void CreateBackground()
     {
         ShapeActor background = CreateActor<ShapeActor>();
         
-        background.Initialize(_window, new RectangleShape(new Vector2f(_windowWidth, _windowHeight)));
-        background.shape.FillColor = new Color(122, 122, 122);
+        Texture backgroundTexture = new Texture(PathUtils.TexturesDirectory + @"\background.jpg");
         
-        return background;
+        background.Initialize(_window, new RectangleShape(new Vector2f(_windowWidth, _windowHeight)), backgroundTexture);
+        background.shape.FillColor = new Color(180, 180, 180);
     }
 }
