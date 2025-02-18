@@ -8,7 +8,7 @@ public class TextureLoader
 
     public TextureLoader()
     {
-        _animationsDirectory = Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Animations\";
+        _animationsDirectory = PathUtils.AnimationsDirectory;
     }
 
     public Texture[] LoadTexturesFrom(string actorTypeDirectory, string animationTypeDirectory)

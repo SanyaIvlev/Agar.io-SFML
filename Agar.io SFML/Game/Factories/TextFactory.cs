@@ -6,22 +6,17 @@ namespace Agar.io_SFML.Factory;
 
 public class TextFactory : ActorFactory
 {
-    private const string FontName = "Obelix Pro.ttf";
+    private const string FontName = @"\Obelix Pro.ttf";
     
     private Font _font;
     
-    private readonly int _windowWidth;
-    private readonly int _windowHeight;
     private readonly Camera _camera;
     
     private View _cameraView;
 
     public TextFactory(GameLoop gameLoop, Camera camera) : base (gameLoop)
     {
-        _font = new (GetFontLocation(FontName));
-        
-        _windowWidth = WindowConfig.WindowWidth;
-        _windowHeight = WindowConfig.WindowHeight;
+        _font = new (PathUtils.FontsDirectory + FontName);
         
         _camera = camera;
         _cameraView = _camera.view;
@@ -51,9 +46,4 @@ public class TextFactory : ActorFactory
         
         newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, 20), mainPlayer, _camera);
     }
-
-    private string GetFontLocation(string fontName)
-        => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Fonts\" + fontName;
-
-
 }

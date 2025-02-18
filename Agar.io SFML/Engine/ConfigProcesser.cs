@@ -10,7 +10,7 @@ public static class ConfigProcesser
 
     static ConfigProcesser()
     {
-        _configFilePath = Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Configuration\config.ini";
+        _configFilePath = PathUtils.ConfigurationDirectory + @"\config.ini";
     }
     
     public static void ReadWholeConfig()

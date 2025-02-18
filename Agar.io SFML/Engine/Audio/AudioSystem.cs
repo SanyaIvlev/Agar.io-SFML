@@ -13,7 +13,7 @@ public class AudioSystem
     {
         _sounds = new Dictionary<string, Sound>();
         
-        DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Audio\");
+        DirectoryInfo directoryInfo = new DirectoryInfo(PathUtils.AudioDirectory);
         _audioFilesInfo = directoryInfo.GetFiles("*.mp3");
     }
 

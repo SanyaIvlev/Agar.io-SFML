@@ -35,7 +35,7 @@ public class AnimatorFactory : ActorFactory
 
         Texture[] idleFrames = _textureLoader.LoadTexturesFrom("Food", "Idle");
         
-        State idleState = new(idleFrames, 100);
+        State idleState = new(idleFrames, 50);
         
         animator.Initialize(foodShape, idleState);
     }
