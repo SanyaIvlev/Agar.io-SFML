@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="XCOPY &quot;$(SolutionDir)Resources\&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
+        <Exec Command="XCOPY &quot;$(SolutionDir)Resources\&quot; &quot;$(TargetDir)Resources\&quot; /S /Y /D /E /-Y" />
     </Target>
     
 </Project>
