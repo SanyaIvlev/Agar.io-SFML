@@ -20,7 +20,7 @@ public class AnimatorFactory : ActorFactory
         Texture[] idleFrames = _textureLoader.LoadTexturesFrom(actorTypeDirectory, "Idle");
         Texture[] walkingFrames = _textureLoader.LoadTexturesFrom(actorTypeDirectory, "Movement");
 
-        State idleState = new(idleFrames, 100);
+        State idleState = new(idleFrames, 200);
         State walkingState = new(walkingFrames, 100);
         
         animator.Initialize(player.shape, idleState);

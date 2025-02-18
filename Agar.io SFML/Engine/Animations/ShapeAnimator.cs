@@ -16,7 +16,7 @@ public class ShapeAnimator : Actor, IUpdatable
     public void Update()
     {
         _animationStateMachine.Update();
-        Console.WriteLine(_shape.Texture == _animationStateMachine.CurrentFrame);
+        
         _shape.Texture = _animationStateMachine.CurrentFrame;
     }
 

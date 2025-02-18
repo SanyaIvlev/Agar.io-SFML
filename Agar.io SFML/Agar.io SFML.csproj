@@ -11,23 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="SFML.Net" Version="2.6.0" />
-
-      <Content Include="..\Configuration\config.ini">
-         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-
-      <Content Include="..\Resources\Fonts\*.*">
-         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-
-      <Content Include="..\Resources\Audio\*.*">
-         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
-
-      <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="XCOPY &quot;$(SolutionDir)Configuration\&quot; &quot;$(TargetDir)Configuration\&quot; /S /Y" />
-      </Target>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="XCOPY &quot;$(SolutionDir)Resources\&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
