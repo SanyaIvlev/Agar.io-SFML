@@ -16,26 +16,26 @@ public class Game : IPauseHandler
     private Text _hintText;
 
     private AgarioController _mainController;
-    
+
     private List<AgarioController> _controllers;
     private List<Food> _food;
-    
+
     private float _passedFoodTime;
     private float _passedPlayerTime;
-    
+
     private List<EatableActor> _currentRemovingActors;
 
     private readonly GameMode _gameMode;
-    
+
     private EatableActorFactory _eatableActorFactory;
     private TextFactory _textFactory;
     private ShapeFactory _shapeFactory;
-    
+
     private KeyInputSet _keyInputs;
-    
+
     private int _playersOnStart;
     private int _foodOnStart;
-    
+
     private float _foodRespawnDelay;
     private float _playerRespawnDelay;
 
@@ -44,21 +44,20 @@ public class Game : IPauseHandler
 
     private string _victorySound;
     private string _defeatSound;
-    
+
     private PauseManager _pauseManager;
     private bool _isPaused;
-    
+
     public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
     {
         _gameMode = gameMode;
-        
+
         _passedFoodTime = _passedPlayerTime = 0;
-        
+
         _keyInputs = keyInputSet;
-        
+
         _camera = camera;
     }
-    
     
     public void Start(GameLoop gameLoop, RenderWindow window)
     {
@@ -66,31 +65,31 @@ public class Game : IPauseHandler
 
         _pauseManager = Boot.Instance.pauseManager;
         _pauseManager.Register(this);
-        
+
         _audioSystem = new(window);
         _audioSystem.Initialize();
-        
+
         _eatableActorFactory = new(window, gameLoop, _audioSystem);
         _textFactory = new(gameLoop, _camera);
         _shapeFactory = new(window, gameLoop);
-        
+
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
-        
+
         _playersOnStart = GameConfig.PlayersOnStart;
         _foodOnStart = GameConfig.FoodOnStart;
-        
+
         _playerRespawnDelay = GameConfig.PlayerRespawnDelay;
         _foodRespawnDelay = GameConfig.FoodRespawnDelay;
-        
+
         _victorySound = AudioConfig.Victory;
         _defeatSound = AudioConfig.Defeat;
-        
+
         _controllers = [];
         _food = [];
         _currentRemovingActors = [];
 
         InitializeKeyInputs();
-        
+
         SetActors();
     }
 
@@ -102,17 +101,17 @@ public class Game : IPauseHandler
     private void SetActors()
     {
         _shapeFactory.CreateBackground();
-        
+
         _mainController = SpawnController(true);
 
         _camera.FocusOn(_mainController.PlayerPawn);
 
-        foreach(var _ in Enumerable.Range(0, _foodOnStart))
+        foreach (var _ in Enumerable.Range(0, _foodOnStart))
         {
             SpawnFood();
         }
-        
-        foreach(var _ in Enumerable.Range(0, _playersOnStart))
+
+        foreach (var _ in Enumerable.Range(0, _playersOnStart))
         {
             SpawnController(false);
         }
@@ -120,7 +119,7 @@ public class Game : IPauseHandler
         _textFactory.CreateScoreText(_mainController.PlayerPawn);
 
         var viewSize = _camera.view.Size;
-        
+
         _hintText = _textFactory.CreateText((int)viewSize.X / 2, (int)viewSize.Y / 4);
         _endText = _textFactory.CreateText();
     }
@@ -137,7 +136,7 @@ public class Game : IPauseHandler
     private AgarioController SpawnController(bool isHuman)
     {
         AgarioController controller = _eatableActorFactory.CreateController(isHuman);
-        
+
         _controllers.Add(controller);
 
         return controller;
@@ -152,7 +151,7 @@ public class Game : IPauseHandler
     private void SwitchPause()
     {
         _pauseManager.SwitchPauseState();
-        
+
         if (_pauseManager.IsPaused)
         {
             _hintText.UpdateText("Game is paused");
@@ -165,30 +164,30 @@ public class Game : IPauseHandler
 
     private void Update()
     {
-        if(_isPaused)
+        if (_isPaused)
             return;
-        
+
         if (_controllers.Count == 1 && _controllers[0] == _mainController)
         {
             _audioSystem.PlaySoundOnce(_victorySound);
             EndGameWithText("You win!");
             return;
         }
-        
+
         _passedFoodTime += Time.GetElapsedTimeAsSeconds();
         _passedPlayerTime += Time.GetElapsedTimeAsSeconds();
-        
+
         if (_passedFoodTime >= _foodRespawnDelay)
         {
             SpawnFood();
-            
+
             _passedFoodTime = 0;
         }
-        
-        if(_passedPlayerTime >= _playerRespawnDelay)
+
+        if (_passedPlayerTime >= _playerRespawnDelay)
         {
-           SpawnController(false);
-            
+            SpawnController(false);
+
             _passedPlayerTime = 0;
         }
 
@@ -198,22 +197,21 @@ public class Game : IPauseHandler
 
     private void CheckPlayersIntersections()
     {
-        
         foreach (var currentController in _controllers)
         {
             Player currentPlayer = currentController.PlayerPawn;
-            
+
             foreach (var anotherController in _controllers)
             {
                 Player anotherPlayer = anotherController.PlayerPawn;
-                
+
                 if (currentPlayer != anotherPlayer)
                 {
                     currentPlayer.CheckIntersectionWith(anotherPlayer);
                 }
             }
 
-            foreach(var food in _food)
+            foreach (var food in _food)
             {
                 currentPlayer.CheckIntersectionWith(food);
             }
@@ -223,9 +221,9 @@ public class Game : IPauseHandler
     private void Swap()
     {
         Controller closestController = _controllers.FindNearestController(_mainController);
-        
+
         _mainController.SwapWith(closestController);
-        
+
         _camera.FocusOn(_mainController.PlayerPawn);
     }
 
@@ -241,7 +239,7 @@ public class Game : IPauseHandler
             RemoveActor(_currentRemovingActors[i]);
         }
     }
-    
+
     private void RemoveActor(Actor actor)
     {
         if (actor is Player player)
@@ -251,9 +249,9 @@ public class Game : IPauseHandler
                 if (player == controller.PlayerPawn)
                 {
                     _controllers.SwapRemove(controller);
-                    
+
                     _eatableActorFactory.Destroy(controller);
-                    
+
                     if (controller == _mainController)
                     {
                         _audioSystem.PlaySoundOnce(_defeatSound);
@@ -264,9 +262,9 @@ public class Game : IPauseHandler
                 }
             }
         }
-        
+
         _food.SwapRemove(actor as Food);
-        
+
         _eatableActorFactory.Destroy(actor);
     }
 
@@ -275,5 +273,4 @@ public class Game : IPauseHandler
         _endText.UpdateText(message);
         _gameMode.IsGameEnded = true;
     }
-
 }

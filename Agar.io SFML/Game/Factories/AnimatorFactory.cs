@@ -3,22 +3,47 @@ using SFML.Graphics;
 
 namespace Agar.io_SFML.Factory;
 
+public enum HumanSkins
+{
+    Ghost,
+    Monster,
+}
+
 public class AnimatorFactory : ActorFactory
 {
     private TextureLoader _textureLoader;
+
+    private Texture[] _humanIdleFrames;
+    private Texture[] _humanWalkingFrames;
+    
+    private Texture[] _AIIdleFrames;
+    private Texture[] _AIWalkingFrames;
+
+    private string[] humanSkinDirectories;
     
     public AnimatorFactory(GameLoop gameLoop) : base(gameLoop)
     {
         _textureLoader = new TextureLoader();
+        
+        _AIIdleFrames = _textureLoader.LoadTexturesFrom("AI", "Idle");
+        _AIWalkingFrames = _textureLoader.LoadTexturesFrom("AI", "Movement");
     }
+
+    private void SetPlayerSkin(HumanSkins skin)
+    {
+        string skinName = Enum.GetName(skin);
+        
+        _humanIdleFrames = _textureLoader.LoadTexturesFrom("Human", skinName,"Idle");
+        _humanWalkingFrames = _textureLoader.LoadTexturesFrom("Human", skinName, "Walking");
+    }
+
 
     public void CreatePlayerAnimator(Player player, bool isHuman)
     {
         ShapeAnimator animator = CreateActor<ShapeAnimator>();
         
-        string actorTypeDirectory = isHuman ? "Human" : "AI";
-        Texture[] idleFrames = _textureLoader.LoadTexturesFrom(actorTypeDirectory, "Idle");
-        Texture[] walkingFrames = _textureLoader.LoadTexturesFrom(actorTypeDirectory, "Movement");
+        Texture[] idleFrames = isHuman? _humanIdleFrames : _AIIdleFrames;
+        Texture[] walkingFrames = isHuman? _humanWalkingFrames : _AIWalkingFrames;
 
         State idleState = new(idleFrames, 200);
         State walkingState = new(walkingFrames, 100);

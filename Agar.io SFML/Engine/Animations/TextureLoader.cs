@@ -13,7 +13,12 @@ public class TextureLoader
 
     public Texture[] LoadTexturesFrom(string actorTypeDirectory, string animationTypeDirectory)
     {
-        string folder = _animationsDirectory + @"\" + actorTypeDirectory + @"\" + animationTypeDirectory;
+        return LoadTexturesFrom(actorTypeDirectory, "", animationTypeDirectory);
+    }
+
+    public Texture[] LoadTexturesFrom(string actorTypeDirectory, string possibleSkinDirectory, string animationTypeDirectory)
+    {
+        string folder = _animationsDirectory + @"\" + actorTypeDirectory + @"\" + possibleSkinDirectory + @"\" + animationTypeDirectory;
         
         DirectoryInfo directoryInfo = new DirectoryInfo(folder);
         var sprites = directoryInfo.GetFiles("*.png");
