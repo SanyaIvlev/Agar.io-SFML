@@ -38,7 +38,7 @@ public class ActorFactory
             _pauseManager.Register(pauseHandler);
     }
     
-    protected void Destroy(Actor actor)
+    public void Destroy(Actor actor)
     {
         if (actor is IUpdatable updatable)
             _gameLoop.RemoveUpdatable(updatable);

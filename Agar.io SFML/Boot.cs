@@ -1,3 +1,4 @@
+using Agar.io_SFML.Animations;
 using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.Window;
@@ -15,7 +16,13 @@ public class Boot
     public PauseManager pauseManager;
     
     private RenderWindow _window;
+    
     private GameLoop _gameLoop;
+    private GameMode _gameMode;
+    private KeyInputSet _keyInputSet;
+    private Camera _camera;
+    
+    private AnimatorFactory _animatorFactory;
 
     private uint _windowWidth;
     private uint _windowHeight;
@@ -26,30 +33,41 @@ public class Boot
         Instance = this;
     }
 
-    public void Start()
+    public void StartLobby()
     {
         ConfigProcesser.ReadWholeConfig();
-         
-        pauseManager = new ();
 
+        new TextureLoader(); 
+        
         _windowWidth = (uint)WindowConfig.WindowWidth;
         _windowHeight = (uint)WindowConfig.WindowHeight;
         _windowName = WindowConfig.WindowName;
             
         CreateWindow();
+        
+        _keyInputSet = new KeyInputSet();
+        
+        _gameMode = new();
+        
+        _gameLoop = new(_window, _gameMode, _keyInputSet);
+        
+        Lobby lobby = new(_window);
 
-        Camera camera = new(_window, new(_windowWidth / 4f, _windowHeight / 4f, _windowWidth * 3/4f, _windowHeight * 3/4f));
+        lobby.Start(_animatorFactory);
         
-        KeyInputSet keyInputSet = new KeyInputSet();
+        _gameLoop.Start();
+    }
+
+    public void StartGameLoop()
+    {
+        pauseManager = new ();
         
-        GameMode gameMode = new();
+        Game game = new(_gameMode, _keyInputSet, _camera);
         
-        GameLoop gameLoop = new(_window, gameMode, keyInputSet, camera);
+        _camera = new(_window, new(_windowWidth / 4f, _windowHeight / 4f, _windowWidth * 3/4f, _windowHeight * 3/4f));
+        _gameLoop.AddCamera(_camera);
         
-        Game game = new(gameMode, keyInputSet, camera);
-        
-        game.Start(gameLoop, _window);
-        gameLoop.Start(); 
+        game.Start(_gameLoop, _window, _animatorFactory);
     }
     
     private void CreateWindow()

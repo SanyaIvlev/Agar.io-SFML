@@ -59,7 +59,7 @@ public class Game : IPauseHandler
         _camera = camera;
     }
     
-    public void Start(GameLoop gameLoop, RenderWindow window)
+    public void Start(GameLoop gameLoop, RenderWindow window, AnimatorFactory animatorFactory)
     {
         gameLoop.OnGameUpdateNeeded += Update;
 
@@ -69,7 +69,7 @@ public class Game : IPauseHandler
         _audioSystem = new(window);
         _audioSystem.Initialize();
 
-        _eatableActorFactory = new(window, _audioSystem);
+        _eatableActorFactory = new(window, _audioSystem, animatorFactory);
         _textFactory = new(_camera);
         _shapeFactory = new(window);
 

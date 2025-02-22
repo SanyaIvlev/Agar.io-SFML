@@ -23,13 +23,13 @@ public class AnimatorFactory : ActorFactory
     
     public AnimatorFactory()
     {
-        _textureLoader = new TextureLoader();
+        _textureLoader = TextureLoader.Instance;
         
         _AIIdleFrames = _textureLoader.LoadTexturesFrom("AI", "Idle");
         _AIWalkingFrames = _textureLoader.LoadTexturesFrom("AI", "Movement");
     }
 
-    private void SetPlayerSkin(HumanSkins skin)
+    public void SetPlayerSkin(HumanSkins skin)
     {
         string skinName = Enum.GetName(skin);
         
@@ -50,7 +50,7 @@ public class AnimatorFactory : ActorFactory
         
         animator.Initialize(player.shape, idleState);
         
-        animator.AddTransition(idleState, walkingState, () => player.IsMoving());
+        animator.AddTransition(idleState, walkingState, player.IsMoving);
         animator.AddTransition(walkingState, idleState, () => !player.IsMoving());
     }
 

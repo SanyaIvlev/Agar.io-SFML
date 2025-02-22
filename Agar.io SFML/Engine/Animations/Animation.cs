@@ -37,7 +37,7 @@ public class Animation
         
         _currentIndex++;
         
-        if(_currentIndex == _frames.Count)
+        if(_currentIndex >= _frames.Count)
             _currentIndex = 0;
         
         CurrentFrame = _frames[_currentIndex];

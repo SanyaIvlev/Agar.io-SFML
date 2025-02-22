@@ -22,7 +22,7 @@ public class EatableActorFactory : ActorFactory
     
     private AnimatorFactory _animatorFactory;
 
-    public EatableActorFactory(RenderWindow window, AgarioAudioSystem audioSystem)
+    public EatableActorFactory(RenderWindow window, AgarioAudioSystem audioSystem, AnimatorFactory animatorFactory)
     {
         _window = window;
         
@@ -31,7 +31,7 @@ public class EatableActorFactory : ActorFactory
 
         _audioSystem = audioSystem;
 
-        _animatorFactory = new();
+        _animatorFactory = animatorFactory;
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)
@@ -94,10 +94,5 @@ public class EatableActorFactory : ActorFactory
         _animatorFactory.CreateFoodAnimator(newFood.shape);
         
         return newFood;
-    }
-
-    public void Destroy(Actor actor)
-    {
-        base.Destroy(actor);
     }
 }

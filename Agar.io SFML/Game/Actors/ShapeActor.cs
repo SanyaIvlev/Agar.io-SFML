@@ -2,15 +2,16 @@
 
 namespace Agar.io_SFML;
 
-//не дуже подобається iдея робити окремий клас який спадкується вiд актору для фiгур, напевно пiзнiше по iншому зроблю
 public class ShapeActor : Actor, IDrawable
 {
     public Shape shape;
-    private RenderWindow _window;
+    public bool IsVisible = true;
+    
+    protected RenderWindow Window;
 
     public void Initialize(RenderWindow window, Shape shape)
     {
-        _window = window;
+        Window = window;
         this.shape = shape;
     }
 
@@ -22,6 +23,9 @@ public class ShapeActor : Actor, IDrawable
     
     public void Draw(RenderWindow window)
     {
-        _window.Draw(shape);
+        if (!IsVisible)
+            return;
+        
+        Window.Draw(shape);
     }
 }
