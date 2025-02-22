@@ -22,7 +22,7 @@ public class EatableActorFactory : ActorFactory
     
     private AnimatorFactory _animatorFactory;
 
-    public EatableActorFactory(RenderWindow window, GameLoop gameLoop, AgarioAudioSystem audioSystem) : base(gameLoop)
+    public EatableActorFactory(RenderWindow window, AgarioAudioSystem audioSystem)
     {
         _window = window;
         
@@ -31,7 +31,7 @@ public class EatableActorFactory : ActorFactory
 
         _audioSystem = audioSystem;
 
-        _animatorFactory = new(gameLoop);
+        _animatorFactory = new();
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)

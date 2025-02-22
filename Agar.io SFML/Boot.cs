@@ -10,9 +10,12 @@ namespace Agar.io_SFML;
 public class Boot
 {
     public static Boot Instance;
+
+    public GameLoop GameLoopInstance => Instance._gameLoop;
     public PauseManager pauseManager;
     
     private RenderWindow _window;
+    private GameLoop _gameLoop;
 
     private uint _windowWidth;
     private uint _windowHeight;
@@ -26,7 +29,7 @@ public class Boot
     public void Start()
     {
         ConfigProcesser.ReadWholeConfig();
-        
+         
         pauseManager = new ();
 
         _windowWidth = (uint)WindowConfig.WindowWidth;

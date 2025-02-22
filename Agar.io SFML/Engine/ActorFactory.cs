@@ -9,10 +9,9 @@ public class ActorFactory
     
     private PauseManager _pauseManager;
     
-    
-    protected ActorFactory(GameLoop gameLoop)
+    protected ActorFactory()
     {
-        _gameLoop = gameLoop;
+        _gameLoop = Boot.Instance.GameLoopInstance;
         _pauseManager = Boot.Instance.pauseManager;
     }
 

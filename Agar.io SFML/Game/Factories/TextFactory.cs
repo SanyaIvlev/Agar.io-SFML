@@ -14,7 +14,7 @@ public class TextFactory : ActorFactory
     
     private View _cameraView;
 
-    public TextFactory(GameLoop gameLoop, Camera camera) : base (gameLoop)
+    public TextFactory(Camera camera)
     {
         _font = new (PathUtils.FontsDirectory + FontName);
         

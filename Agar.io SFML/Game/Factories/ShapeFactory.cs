@@ -10,7 +10,7 @@ public class ShapeFactory : ActorFactory
     private float _windowWidth;
     private float _windowHeight;
 
-    public ShapeFactory(RenderWindow window, GameLoop _gameLoop) : base(_gameLoop)
+    public ShapeFactory(RenderWindow window)
     {
         _window = window;
 

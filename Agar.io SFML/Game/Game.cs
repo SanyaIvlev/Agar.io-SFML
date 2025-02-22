@@ -69,9 +69,9 @@ public class Game : IPauseHandler
         _audioSystem = new(window);
         _audioSystem.Initialize();
 
-        _eatableActorFactory = new(window, gameLoop, _audioSystem);
-        _textFactory = new(gameLoop, _camera);
-        _shapeFactory = new(window, gameLoop);
+        _eatableActorFactory = new(window, _audioSystem);
+        _textFactory = new(_camera);
+        _shapeFactory = new(window);
 
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
 

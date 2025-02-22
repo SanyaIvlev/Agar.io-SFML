@@ -21,7 +21,7 @@ public class AnimatorFactory : ActorFactory
 
     private string[] humanSkinDirectories;
     
-    public AnimatorFactory(GameLoop gameLoop) : base(gameLoop)
+    public AnimatorFactory()
     {
         _textureLoader = new TextureLoader();
         
