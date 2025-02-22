@@ -28,9 +28,7 @@ public class AudioSystem
             
             SoundBuffer soundBuffer = new SoundBuffer(audioFile.FullName);
             Sound sound = new Sound(soundBuffer);
-                
             _sounds.Add(audioName, sound);
-            soundBuffer.Dispose();
         }
     }
 
@@ -43,6 +41,7 @@ public class AudioSystem
     {
         foreach (var sound in _sounds.Values)
         {
+            sound.SoundBuffer.Dispose();
             sound.Dispose();
         }
     }

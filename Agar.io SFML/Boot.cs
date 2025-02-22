@@ -22,6 +22,8 @@ public class Boot
     private KeyInputSet _keyInputSet;
     private Camera _camera;
     
+    private Lobby _lobby;
+    
     private AnimatorFactory _animatorFactory;
 
     private uint _windowWidth;
@@ -36,7 +38,9 @@ public class Boot
     public void StartLobby()
     {
         ConfigProcesser.ReadWholeConfig();
-
+        
+        pauseManager = new ();
+        
         new TextureLoader(); 
         
         _windowWidth = (uint)WindowConfig.WindowWidth;
@@ -51,23 +55,29 @@ public class Boot
         
         _gameLoop = new(_window, _gameMode, _keyInputSet);
         
-        Lobby lobby = new(_window);
+        _animatorFactory = new AnimatorFactory();
+        
+        _lobby = new(_window);
+        
+        _gameLoop.AddOnGameUpdateCallback(_lobby.Update);
 
-        lobby.Start(_animatorFactory);
+        _lobby.Start(_animatorFactory);
         
         _gameLoop.Start();
     }
 
     public void StartGameLoop()
     {
-        pauseManager = new ();
-        
-        Game game = new(_gameMode, _keyInputSet, _camera);
+        _gameLoop.RemoveOnGameUpdateCallback(_lobby.Update);
         
         _camera = new(_window, new(_windowWidth / 4f, _windowHeight / 4f, _windowWidth * 3/4f, _windowHeight * 3/4f));
         _gameLoop.AddCamera(_camera);
         
-        game.Start(_gameLoop, _window, _animatorFactory);
+        Game game = new(_gameMode, _keyInputSet, _camera);
+        
+        _gameLoop.AddOnGameUpdateCallback(game.Update);
+        
+        game.Start(_window, _animatorFactory);
     }
     
     private void CreateWindow()

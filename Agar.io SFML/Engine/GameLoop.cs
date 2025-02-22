@@ -11,7 +11,7 @@ public class GameLoop
     private const int SecondToMicroseconds = 1000000;
     private const float TimeBeforeNextFrame =  SecondToMicroseconds * 1f / TargetFps;
     
-    public Action OnGameUpdateNeeded;
+    private Action _onGameUpdateNeeded;
     
     private List<IDrawable> _drawables;
     private List<IUpdatable> _updatables;
@@ -38,6 +38,12 @@ public class GameLoop
 
         _keyInputs = keyInputs;
     }
+    
+    public void AddOnGameUpdateCallback(Action callback)
+        => _onGameUpdateNeeded += callback;
+    
+    public void RemoveOnGameUpdateCallback(Action callback)
+        => _onGameUpdateNeeded -= callback;
 
     public void AddCamera(Camera camera)
         => _camera = camera;
@@ -121,7 +127,7 @@ public class GameLoop
             updatable.Update();
         }
         
-        OnGameUpdateNeeded?.Invoke();
+        _onGameUpdateNeeded?.Invoke();
 
         Time.UpdateTimer();
     }

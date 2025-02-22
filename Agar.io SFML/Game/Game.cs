@@ -59,10 +59,8 @@ public class Game : IPauseHandler
         _camera = camera;
     }
     
-    public void Start(GameLoop gameLoop, RenderWindow window, AnimatorFactory animatorFactory)
+    public void Start(RenderWindow window, AnimatorFactory animatorFactory)
     {
-        gameLoop.OnGameUpdateNeeded += Update;
-
         _pauseManager = Boot.Instance.pauseManager;
         _pauseManager.Register(this);
 
@@ -162,7 +160,7 @@ public class Game : IPauseHandler
         }
     }
 
-    private void Update()
+    public void Update()
     {
         if (_isPaused)
             return;

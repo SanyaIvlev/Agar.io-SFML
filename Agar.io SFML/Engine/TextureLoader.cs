@@ -21,7 +21,7 @@ public class TextureLoader
 
     public Texture[] LoadTexturesFrom(string actorTypeDirectory, string possibleSkinDirectory, string animationTypeDirectory)
     {
-        string folder = _animationsDirectory + @"\" + actorTypeDirectory + @"\" + possibleSkinDirectory + @"\" + animationTypeDirectory;
+        string folder = _animationsDirectory + actorTypeDirectory + @"\" + possibleSkinDirectory + @"\" + animationTypeDirectory;
         
         DirectoryInfo directoryInfo = new DirectoryInfo(folder);
         var sprites = directoryInfo.GetFiles("*.png");
@@ -58,7 +58,8 @@ public class TextureLoader
 
         foreach (var file in allFiles)
         {
-            if (Path.GetFileNameWithoutExtension(file).Equals(name))
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+            if (fileNameWithoutExtension.Equals(name))
             {
                 var fileInfo = new FileInfo(file);
         

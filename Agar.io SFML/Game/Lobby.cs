@@ -22,8 +22,12 @@ public class Lobby
     private int _currentSkinIndex;
     private RenderWindow _renderWindow;
 
+    private List<Actor> _actorsToDestroyOnEnd;
+
     public Lobby(RenderWindow window)
     {
+        _actorsToDestroyOnEnd = new List<Actor>();
+        
         _renderWindow = window;
        _shapeFactory = new ShapeFactory(window);
        
@@ -47,6 +51,19 @@ public class Lobby
         _playButton.shape.Position = new Vector2f(_renderWindow.Size.X / 2f, 3f / 4 * _renderWindow.Size.Y);
     }
 
+    public void Update()
+    {
+        if (_actorsToDestroyOnEnd.Count > 0)
+        {
+            foreach (var actorToDestroy in _actorsToDestroyOnEnd)
+            {
+                _shapeFactory.Destroy(actorToDestroy);
+            }
+            
+            Boot.Instance.StartGameLoop();
+        }
+    }
+
     private void StartGamePlay()
     {
         _animatorFactory.SetPlayerSkin(_currentHumanSkin);
@@ -55,12 +72,8 @@ public class Lobby
         _leftArrowButton.RemoveCallback(() => SwitchSkin(-1));
         _rightArrowButton.RemoveCallback(() => SwitchSkin(+1));
         
-        _shapeFactory.DestroyAll(_allDisplayableSkins);
-        _shapeFactory.Destroy(_playButton);
-        _shapeFactory.Destroy(_leftArrowButton);
-        _shapeFactory.Destroy(_rightArrowButton);
-        
-        Boot.Instance.StartGameLoop();
+        _actorsToDestroyOnEnd.AddRange(_allDisplayableSkins);
+        _actorsToDestroyOnEnd.AddRange(new [] {_playButton, _leftArrowButton, _rightArrowButton});
     }
 
     private void LoadSkins()
@@ -69,18 +82,10 @@ public class Lobby
 
         Texture[] _allSkinsTextures = textureLoader.FindAllTexturesInDirectory("HumanSkins");
         _allDisplayableSkins = new ShapeActor[_allSkinsTextures.Length];
-
-        var halfOfScreen = new Vector2f(_renderWindow.Size.X / 2f, _renderWindow.Size.Y / 2f);
         
         for(int i = 0; i < _allSkinsTextures.Length; i++)
         {
-            _allDisplayableSkins[i] = _shapeFactory.CreateShape(_allSkinsTextures[i]);
-            
-            var displayableSkin = _allDisplayableSkins[i];
-            
-            _allDisplayableSkins[i].shape.Origin = new(displayableSkin.shape.TextureRect.Width / 2f, displayableSkin.shape.TextureRect.Height / 2f);
-            _allDisplayableSkins[i].IsVisible = false;
-            _allDisplayableSkins[i].shape.Position = halfOfScreen;
+            _allDisplayableSkins[i] = _shapeFactory.CreateSkinShape(_allSkinsTextures[i]);
         }
         
         _currentDisplayableSkin = _allDisplayableSkins[0];
