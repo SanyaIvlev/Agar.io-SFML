@@ -45,10 +45,10 @@ public class Lobby
         _rightArrowButton.AddCallback(() => SwitchSkin(+1));
         _leftArrowButton.AddCallback(() => SwitchSkin(-1));
         _playButton.AddCallback(StartGamePlay);
-        
-        _rightArrowButton.shape.Position = new Vector2f(_renderWindow.Size.X / 2f + _playButton.shape.TextureRect.Width / 2f + 200, 3f / 4 * _renderWindow.Size.Y);
-        _leftArrowButton.shape.Position = new Vector2f(_renderWindow.Size.X / 2f - _playButton.shape.TextureRect.Width / 2f - 200, 3f / 4 * _renderWindow.Size.Y);
-        _playButton.shape.Position = new Vector2f(_renderWindow.Size.X / 2f, 3f / 4 * _renderWindow.Size.Y);
+
+        _rightArrowButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f + _playButton.GetWidth() / 2f + 200, 3f / 4 * _renderWindow.Size.Y));
+        _leftArrowButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f - _playButton.GetWidth() / 2f - 200, 3f / 4 * _renderWindow.Size.Y));
+        _playButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f, 3f / 4 * _renderWindow.Size.Y));
     }
 
     public void Update()

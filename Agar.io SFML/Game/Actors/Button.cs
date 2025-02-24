@@ -1,5 +1,4 @@
-﻿using SFML.Graphics;
-using SFML.System;
+﻿using SFML.System;
 using SFML.Window;
 
 namespace Agar.io_SFML;
@@ -20,6 +19,20 @@ public class Button : ShapeActor, IUpdatable
     {
         _onClick -= action;
     }
+
+    public void SetPosition(Vector2f position)
+    {
+        shape.Position = position;
+    }
+
+    public Vector2f GetPosition()
+        => shape.Position;
+
+    public float GetWidth()
+        => shape.TextureRect.Width;
+    
+    public float GetHeight() 
+        => shape.TextureRect.Height;
 
     public void Update()
     {
