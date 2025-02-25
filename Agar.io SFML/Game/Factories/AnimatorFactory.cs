@@ -18,6 +18,8 @@ public class AnimatorFactory : ActorFactory
     
     private Texture[] _AIIdleFrames;
     private Texture[] _AIMovementFrames;
+    
+    private Texture[] _foodIdleFrames;
 
     private string[] humanSkinDirectories;
     
@@ -27,6 +29,7 @@ public class AnimatorFactory : ActorFactory
         
         _AIIdleFrames = _textureLoader.LoadTexturesFrom("AI", "Idle");
         _AIMovementFrames = _textureLoader.LoadTexturesFrom("AI", "Movement");
+        _foodIdleFrames = _textureLoader.LoadTexturesFrom("Food", "Idle");
     }
 
     public void SetPlayerSkin(HumanSkins skin)
@@ -47,21 +50,22 @@ public class AnimatorFactory : ActorFactory
 
         State idleState = new(idleFrames, 200);
         State walkingState = new(walkingFrames, 100);
-        
-        animator.Initialize(player.shape, idleState);
-        
-        animator.AddTransition(idleState, walkingState, player.IsMoving);
-        animator.AddTransition(walkingState, idleState, () => !player.IsMoving());
+
+        animator
+            .Initialize(player.shape)
+            .AddInitialState(idleState)
+            .AddTransition(idleState, walkingState, player.IsMoving)
+            .AddTransition(walkingState, idleState, () => !player.IsMoving());
     }
 
     public void CreateFoodAnimator(Shape foodShape)
     {
         ShapeAnimator animator = CreateActor<ShapeAnimator>();
+        
+        State idleState = new(_foodIdleFrames, 50);
 
-        Texture[] idleFrames = _textureLoader.LoadTexturesFrom("Food", "Idle");
-        
-        State idleState = new(idleFrames, 50);
-        
-        animator.Initialize(foodShape, idleState);
+        animator
+            .Initialize(foodShape)
+            .AddInitialState(idleState);
     }
 }

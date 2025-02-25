@@ -185,7 +185,6 @@ public class Game : IPauseHandler
         if (_passedPlayerTime >= _playerRespawnDelay)
         {
             SpawnController(false);
-
             _passedPlayerTime = 0;
         }
 

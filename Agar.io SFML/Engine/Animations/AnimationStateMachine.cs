@@ -34,10 +34,8 @@ public class AnimationStateMachine
         _currentState.Update();
     }
 
-    public void AddTransition(State from, State to, Func<bool> condition)
+    public void AddTransition(State from, Transition newTransition)
     {
-        Transition newTransition = new(to, condition);
-        
         if (_transitionMap.ContainsKey(from))
         {
             _transitionMap[from].Add(newTransition);
@@ -46,6 +44,5 @@ public class AnimationStateMachine
         {
             _transitionMap.Add(from, new List<Transition> { newTransition } );
         }
-        
     }
 }
