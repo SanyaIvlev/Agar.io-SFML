@@ -3,15 +3,12 @@ using Agar.io_SFML.Configs;
 using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
-using Agar.io_SFML.PauseControl;
-using SFML.Graphics;
-using SFML.Window;
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
 namespace Agar.io_SFML;
 
-public class Game : IPauseHandler
+public class Game
 {
     private Text _endText;
     private Text _hintText;
@@ -45,9 +42,9 @@ public class Game : IPauseHandler
 
     private string _victorySound;
     private string _defeatSound;
-
-    private PauseManager _pauseManager;
+        
     private bool _isPaused;
+    private PauseEvent _pauseEvent;
 
     public Game()
     {
@@ -59,12 +56,13 @@ public class Game : IPauseHandler
         _camera.ZoomViewport(4);
         
         _passedFoodTime = _passedPlayerTime = 0;
+        
+        _pauseEvent = new PauseEvent();
     }
     
     public void Start()
     {
-        _pauseManager = Dependency.Get<PauseManager>() ?? new PauseManager();
-        _pauseManager.Register(this);
+        EventBus<PauseEvent>.OnEvent += SetPaused;
 
         _audioSystem = new();
         _audioSystem.Initialize();
@@ -93,9 +91,9 @@ public class Game : IPauseHandler
         SetActors();
     }
 
-    public void SetPaused(bool isPaused)
+    private void SetPaused(PauseEvent @event)
     {
-        _isPaused = isPaused;
+        _isPaused = @event.IsPaused;
     }
 
     private void SetActors()
@@ -150,9 +148,10 @@ public class Game : IPauseHandler
 
     private void SwitchPause()
     {
-        _pauseManager.SwitchPauseState();
+        _pauseEvent.IsPaused = !_pauseEvent.IsPaused;
+        EventBus<PauseEvent>.Raise(_pauseEvent);
 
-        if (_pauseManager.IsPaused)
+        if (_pauseEvent.IsPaused)
         {
             _hintText.UpdateText("Game is paused");
         }

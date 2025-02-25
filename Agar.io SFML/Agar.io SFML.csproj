@@ -13,6 +13,10 @@
       <PackageReference Include="SFML.Net" Version="2.6.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Engine\PauseControl\" />
+    </ItemGroup>
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="XCOPY &quot;$(SolutionDir)Resources\&quot; &quot;$(TargetDir)Resources\&quot; /S /Y /D /E /-Y" />
     </Target>

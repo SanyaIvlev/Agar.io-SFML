@@ -1,10 +1,10 @@
-﻿using Agar.io_SFML.Extensions;
-using Agar.io_SFML.PauseControl;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 
 namespace Agar.io_SFML;
 
-public class AgarioAIController : AgarioController, IPauseHandler
+public class AgarioAIController : AgarioController
 {
     private readonly float _squaredStopDistance = 3f;
 
@@ -16,6 +16,8 @@ public class AgarioAIController : AgarioController, IPauseHandler
         
         GenerateNewPosition();
         base.Update();
+
+        EventBus<PauseEvent>.OnEvent += SetPaused;
     }
     
     public override void Update()
@@ -30,9 +32,9 @@ public class AgarioAIController : AgarioController, IPauseHandler
         base.Update();
     }
 
-    public void SetPaused(bool isPaused)
+    private void SetPaused(PauseEvent @event)
     {
-        _isPaused = isPaused;
+        _isPaused = @event.IsPaused;
     }
 
     private bool NearNewPosition()

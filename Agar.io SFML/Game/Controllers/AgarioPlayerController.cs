@@ -1,12 +1,12 @@
 ﻿using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
-using Agar.io_SFML.PauseControl;
+using Agar.io_SFML.Engine;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class AgarioPlayerController : AgarioController, IPauseHandler
+public class AgarioPlayerController : AgarioController
 { 
     private readonly string _eatingSound;
 
@@ -15,6 +15,8 @@ public class AgarioPlayerController : AgarioController, IPauseHandler
     public AgarioPlayerController()
     {
         _eatingSound = AudioConfig.Eating;
+        
+        EventBus<PauseEvent>.OnEvent += SetPaused;
     }
     
     public override void Initialize(Actor controlledPlayer, RenderWindow window, AgarioAudioSystem audioSystem)
@@ -33,9 +35,9 @@ public class AgarioPlayerController : AgarioController, IPauseHandler
         base.Update();
     }
     
-    public void SetPaused(bool isPaused)
+    private void SetPaused(PauseEvent @event)
     {
-        _isPaused = isPaused;
+        _isPaused = @event.IsPaused;
     }
 
     public override void SwapWith(Controller anotherController)

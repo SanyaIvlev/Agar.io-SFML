@@ -1,6 +1,4 @@
 ﻿using Agar.io_SFML.Engine;
-using Agar.io_SFML.PauseControl;
-using SFML.Graphics;
 
 namespace Agar.io_SFML;
 
@@ -8,12 +6,9 @@ public class ActorFactory
 {
     private GameLoop _gameLoop;
     
-    private PauseManager _pauseManager;
-    
     protected ActorFactory()
     {
         _gameLoop = Dependency.Get<GameLoop>();
-        _pauseManager = Dependency.Get<PauseManager>() ?? new PauseManager();
     }
 
     protected TActor CreateActor<TActor>() where TActor : Actor, new()
@@ -34,9 +29,6 @@ public class ActorFactory
         
         if(actor is Controller controller)
             _gameLoop.AddController(controller);
-        
-        if(actor is IPauseHandler pauseHandler)
-            _pauseManager.Register(pauseHandler);
     }
     
     public void Destroy(Actor actor)
@@ -49,8 +41,5 @@ public class ActorFactory
 
         if (actor is Controller controller)
             _gameLoop.RemoveController(controller);
-        
-        if(actor is IPauseHandler pauseHandler)
-            _pauseManager.Unregister(pauseHandler);
     }
 }

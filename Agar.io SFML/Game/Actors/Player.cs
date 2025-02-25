@@ -1,11 +1,11 @@
+using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
-using Agar.io_SFML.PauseControl;
 using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Player : EatableActor, IPauseHandler
+public class Player : EatableActor
 {
     public Action<uint> OnBountyChanged;
     public Action<int> OnElimination;
@@ -35,6 +35,8 @@ public class Player : EatableActor, IPauseHandler
         };
         
         shape.Origin = new(shape.Radius / 2, shape.Radius / 2);
+
+        EventBus<PauseEvent>.OnEvent += SetPaused;
     }
 
     public void CheckIntersectionWith(EatableActor actor)
@@ -50,9 +52,9 @@ public class Player : EatableActor, IPauseHandler
         }
     }
 
-    public void SetPaused(bool isPaused)
+    private void SetPaused(PauseEvent @event)
     {
-        _isPaused = isPaused;
+        _isPaused = @event.IsPaused;
     }
 
     private void TryEat(EatableActor actor)

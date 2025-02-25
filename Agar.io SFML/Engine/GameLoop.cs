@@ -106,8 +106,8 @@ public class GameLoop
             Update();
             Render();
         }
-
-        WaitBeforeEnd();
+        
+        End();
     }
 
     private bool IsGameLoopEnded()
@@ -152,8 +152,10 @@ public class GameLoop
         _window.Display();
     }
     
-    private void WaitBeforeEnd()
+    private void End()
     {
+        EventBus<GameOverEvent>.Raise(new());
+        
         Thread.Sleep(1500);
     }
     
