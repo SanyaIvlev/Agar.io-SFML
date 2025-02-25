@@ -1,29 +1,29 @@
-﻿using SFML.Graphics;
+﻿using Agar.io_SFML.Engine;
+using SFML.Graphics;
 
 namespace Agar.io_SFML;
 
 public class ShapeActor : Actor, IDrawable
 {
     public Shape shape;
-    public bool IsVisible = true;
     
     protected RenderWindow Window;
 
-    public void Initialize(RenderWindow window, Shape shape)
+    public void Initialize(Shape shape)
     {
-        Window = window;
+        Window = Dependency.Get<RenderWindow>();
         this.shape = shape;
     }
 
-    public void Initialize(RenderWindow window, Shape shape, Texture texture)
+    public void Initialize(Shape shape, Texture texture)
     {
-        Initialize(window, shape);
+        Initialize(shape);
         shape.Texture = texture;
     }
     
     public void Draw(RenderWindow window)
     {
-        if (!IsVisible)
+        if (!IsActive)
             return;
         
         Window.Draw(shape);

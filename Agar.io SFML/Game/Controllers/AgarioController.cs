@@ -6,17 +6,15 @@ namespace Agar.io_SFML;
 public class AgarioController : Controller
 {
     public Player PlayerPawn { get; private set; }
-    protected AgarioAudioSystem audioSystem;
 
     protected AgarioController()
     {
         OnPawnUpdated += Pawn => PlayerPawn = Pawn as Player; 
     }
 
-    public virtual void Initialize(Actor controlledPlayer, RenderWindow window, AgarioAudioSystem audioSystem)
+    public virtual void Initialize(Actor controlledPlayer)
     {
-        base.Initialize(controlledPlayer, window);
-        this.audioSystem = audioSystem;
+        base.Initialize(controlledPlayer);
     }
 
     public virtual void SwapWith(Controller anotherController)

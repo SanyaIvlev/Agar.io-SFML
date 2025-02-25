@@ -9,7 +9,7 @@ public class Actor
 
     public Vector2f Direction;
     
-    public Shape gbf;
+    public bool IsActive = true;
 
     protected void Initialize(Vector2f initialPosition)
     {

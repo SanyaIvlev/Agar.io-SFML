@@ -154,10 +154,9 @@ public class GameLoop
     
     private void End()
     {
-        EventBus<GameOverEvent>.Raise(new());
-        
-        _window.Close();
-        
         Thread.Sleep(1500);
+        
+        EventBus<GameOverEvent>.Raise(new());
+        _window.Close();
     }
 }

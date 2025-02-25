@@ -43,15 +43,11 @@ public class EatableActorFactory : ActorFactory
         Player controlledPlayer = CreatePlayer(isHuman);
 
         if (isHuman)
-        {
             _controller = CreateActor<AgarioPlayerController>();
-            _controller.Initialize(controlledPlayer, _window, _audioSystem);
-        }
         else
-        {
             _controller = CreateActor<AgarioAIController>();
-            _controller.Initialize(controlledPlayer, _window);
-        }
+        
+        _controller.Initialize(controlledPlayer);
         
         return _controller;
     }
