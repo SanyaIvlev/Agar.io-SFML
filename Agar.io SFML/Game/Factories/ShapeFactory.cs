@@ -31,12 +31,12 @@ public class ShapeFactory : ActorFactory
     {
         ShapeActor shapeActor = CreateActor<ShapeActor>();
         
-        shapeActor.Initialize(_window, new RectangleShape((Vector2f)texture.Size));
+        shapeActor.Initialize(new RectangleShape((Vector2f)texture.Size));
         
         shapeActor.shape.Texture = texture;
             
         shapeActor.shape.Origin = new(shapeActor.shape.TextureRect.Width / 2f, shapeActor.shape.TextureRect.Height / 2f);
-        shapeActor.IsVisible = false;
+        shapeActor.IsActive = false;
         shapeActor.shape.Position = _windowCenter;
 
         shapeActor.shape.Scale *= 5;
@@ -50,7 +50,7 @@ public class ShapeFactory : ActorFactory
 
         var texture = TextureLoader.Instance.FindTextureByName(textureName);
         
-        button.Initialize(_window, new RectangleShape((Vector2f)texture.Size));
+        button.Initialize(new RectangleShape((Vector2f)texture.Size));
         
         var shape = button.shape;
         shape.Texture = texture;
@@ -67,7 +67,7 @@ public class ShapeFactory : ActorFactory
         
         Texture backgroundTexture = TextureLoader.Instance.FindTextureByName("Background");
         
-        background.Initialize(_window, new RectangleShape(new Vector2f(_windowWidth, _windowHeight)), backgroundTexture);
+        background.Initialize(new RectangleShape(new Vector2f(_windowWidth, _windowHeight)), backgroundTexture);
         background.shape.FillColor = new Color(180, 180, 180);
     }
 }

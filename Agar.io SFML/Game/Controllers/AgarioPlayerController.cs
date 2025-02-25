@@ -9,6 +9,8 @@ namespace Agar.io_SFML;
 public class AgarioPlayerController : AgarioController
 { 
     private readonly string _eatingSound;
+    
+    private readonly AgarioAudioSystem _agarioAudioSystem;
 
     private bool _isPaused;
     
@@ -17,11 +19,13 @@ public class AgarioPlayerController : AgarioController
         _eatingSound = AudioConfig.Eating;
         
         EventBus<PauseEvent>.OnEvent += SetPaused;
+        
+        _agarioAudioSystem = Dependency.Get<AgarioAudioSystem>();
     }
     
-    public override void Initialize(Actor controlledPlayer, RenderWindow window, AgarioAudioSystem audioSystem)
+    public override void Initialize(Actor controlledPlayer)
     {
-        base.Initialize(controlledPlayer, window, audioSystem);
+        base.Initialize(controlledPlayer);
         
         FollowPawnActions();
     }
@@ -54,13 +58,13 @@ public class AgarioPlayerController : AgarioController
     
     private void FollowPawnActions()
     {
-        PlayerPawn.OnElimination += audioSystem.PlayEliminationSound;
-        PlayerPawn.OnFoodEaten += () => audioSystem.PlaySoundOnce(_eatingSound);
+        PlayerPawn.OnElimination += _agarioAudioSystem.PlayEliminationSound;
+        PlayerPawn.OnFoodEaten += () => _agarioAudioSystem.PlaySoundOnce(_eatingSound);
     }
     
     private void UnfollowPawnActions()
     {
-        PlayerPawn.OnElimination -= audioSystem.PlayEliminationSound;
-        PlayerPawn.OnFoodEaten -= () => audioSystem.PlaySoundOnce(_eatingSound);
+        PlayerPawn.OnElimination -= _agarioAudioSystem.PlayEliminationSound;
+        PlayerPawn.OnFoodEaten -= () => _agarioAudioSystem.PlaySoundOnce(_eatingSound);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Agar.io_SFML.Extensions;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
 
@@ -16,10 +17,10 @@ public class Controller : Actor
 
     private Vector2f _direction;
     
-    public virtual void Initialize(Actor controlledPlayer, RenderWindow window)
+    public virtual void Initialize(Actor controlledPlayer)
     {
         SetPawn(controlledPlayer);
-        _window = window;
+        _window = Dependency.Get<RenderWindow>();
     }
 
     public virtual void Update()

@@ -10,9 +10,9 @@ public class AgarioAIController : AgarioController
 
     private bool _isPaused;
     
-    public override void Initialize(Actor controlledPlayer, RenderWindow window)
+    public override void Initialize(Actor controlledPlayer)
     {
-        base.Initialize(controlledPlayer, window);
+        base.Initialize(controlledPlayer);
         
         GenerateNewPosition();
         base.Update();

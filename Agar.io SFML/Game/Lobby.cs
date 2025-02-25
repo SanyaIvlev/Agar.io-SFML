@@ -94,12 +94,12 @@ public class Lobby
         
         _currentSkinIndex = 0;
         _currentHumanSkin = (HumanSkins)_currentSkinIndex;
-        _currentDisplayableSkin.IsVisible = true;
+        _currentDisplayableSkin.IsActive = true;
     }
 
     private void SwitchSkin(int nextOrPrevious)
     {
-        _currentDisplayableSkin.IsVisible = false;
+        _currentDisplayableSkin.IsActive = false;
         
         _currentSkinIndex += nextOrPrevious;
         
@@ -113,6 +113,6 @@ public class Lobby
         
         _currentHumanSkin = (HumanSkins)_currentSkinIndex;
         
-        _currentDisplayableSkin.IsVisible = true;
+        _currentDisplayableSkin.IsActive = true;
     }
 }
