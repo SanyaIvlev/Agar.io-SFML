@@ -33,7 +33,7 @@ public class GameLoop
         Dependency.Register(this);
         
         _window = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
-        _window.Closed += WindowClosed;
+        _window.Closed += (sender, args) => _window.Close();
         
         Dependency.Register(_window);
         
@@ -156,12 +156,8 @@ public class GameLoop
     {
         EventBus<GameOverEvent>.Raise(new());
         
+        _window.Close();
+        
         Thread.Sleep(1500);
-    }
-    
-    private void WindowClosed(object? sender, EventArgs e)
-    {
-        RenderWindow window = (RenderWindow)sender!;
-        window.Close();
     }
 }

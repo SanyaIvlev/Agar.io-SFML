@@ -1,7 +1,5 @@
-﻿using Agar.io_SFML.Configs;
-using Agar.io_SFML.Engine;
+﻿using Agar.io_SFML.Engine;
 using SFML.Audio;
-using SFML.Graphics;
 
 namespace Agar.io_SFML.Audio;
 
@@ -18,9 +16,7 @@ public class AudioSystem
         DirectoryInfo directoryInfo = new DirectoryInfo(PathUtils.AudioDirectory);
         _audioFilesInfo = directoryInfo.GetFiles("*.mp3");
         
-        RenderWindow window = Dependency.Get<RenderWindow>();
-        
-        window.Closed += OnProgramClosed;
+        EventBus<GameOverEvent>.OnEvent += OnProgramClosed;
     }
 
     public void Initialize()
@@ -40,7 +36,7 @@ public class AudioSystem
         _sounds[audioName].Play();
     }
     
-    private void OnProgramClosed(object? sender, EventArgs e)
+    private void OnProgramClosed(GameOverEvent @event)
     {
         foreach (var sound in _sounds.Values)
         {
@@ -48,5 +44,4 @@ public class AudioSystem
             sound.Dispose();
         }
     }
-
 }

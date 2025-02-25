@@ -21,16 +21,12 @@ public class Lobby
     private HumanSkins _currentHumanSkin;
     
     private int _currentSkinIndex;
-    
-    private RenderWindow _renderWindow;
 
     private List<Actor> _actorsToDestroyOnEnd;
 
     public Lobby()
     {
         _actorsToDestroyOnEnd = new List<Actor>();
-        
-        _renderWindow = Dependency.Get<RenderWindow>();
         
        _shapeFactory = Dependency.Get<ShapeFactory>() ?? new ShapeFactory();
        
@@ -48,10 +44,13 @@ public class Lobby
         _rightArrowButton.AddCallback(() => SwitchSkin(+1));
         _leftArrowButton.AddCallback(() => SwitchSkin(-1));
         _playButton.AddCallback(StartGamePlay);
+        
+        
+        RenderWindow renderWindow = Dependency.Get<RenderWindow>();
 
-        _rightArrowButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f + _playButton.GetWidth() / 2f + 200, 3f / 4 * _renderWindow.Size.Y));
-        _leftArrowButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f - _playButton.GetWidth() / 2f - 200, 3f / 4 * _renderWindow.Size.Y));
-        _playButton.SetPosition(new Vector2f(_renderWindow.Size.X / 2f, 3f / 4 * _renderWindow.Size.Y));
+        _rightArrowButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f + _playButton.GetWidth() / 2f + 200, 3f / 4 * renderWindow.Size.Y));
+        _leftArrowButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f - _playButton.GetWidth() / 2f - 200, 3f / 4 * renderWindow.Size.Y));
+        _playButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f, 3f / 4 * renderWindow.Size.Y));
     }
 
     public void Update()
@@ -116,5 +115,4 @@ public class Lobby
         
         _currentDisplayableSkin.IsVisible = true;
     }
-    
 }
