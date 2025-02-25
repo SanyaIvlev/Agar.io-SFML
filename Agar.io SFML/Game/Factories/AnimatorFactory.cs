@@ -1,4 +1,5 @@
 ﻿using Agar.io_SFML.Animations;
+using Agar.io_SFML.Engine;
 using SFML.Graphics;
 
 namespace Agar.io_SFML.Factory;
@@ -25,6 +26,8 @@ public class AnimatorFactory : ActorFactory
     
     public AnimatorFactory()
     {
+        Dependency.Register(this);
+        
         _textureLoader = TextureLoader.Instance;
         
         _AIIdleFrames = _textureLoader.LoadTexturesFrom("AI", "Idle");

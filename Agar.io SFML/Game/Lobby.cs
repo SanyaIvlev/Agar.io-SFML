@@ -1,4 +1,5 @@
 ﻿using Agar.io_SFML.Animations;
+using Agar.io_SFML.Engine;
 using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.System;
@@ -20,25 +21,27 @@ public class Lobby
     private HumanSkins _currentHumanSkin;
     
     private int _currentSkinIndex;
+    
     private RenderWindow _renderWindow;
 
     private List<Actor> _actorsToDestroyOnEnd;
 
-    public Lobby(RenderWindow window)
+    public Lobby()
     {
         _actorsToDestroyOnEnd = new List<Actor>();
         
-        _renderWindow = window;
-       _shapeFactory = new ShapeFactory(window);
+        _renderWindow = Dependency.Get<RenderWindow>();
+        
+       _shapeFactory = Dependency.Get<ShapeFactory>() ?? new ShapeFactory();
        
        _playButton = _shapeFactory.CreateButton("PlayButton");
        _leftArrowButton = _shapeFactory.CreateButton("LeftArrowButton");
        _rightArrowButton = _shapeFactory.CreateButton("RightArrowButton");
     }
 
-    public void Start(AnimatorFactory animatorFactory)
+    public void Start()
     {
-        _animatorFactory = animatorFactory;
+        _animatorFactory = Dependency.Get<AnimatorFactory>() ?? new AnimatorFactory();
         
         LoadSkins();
         

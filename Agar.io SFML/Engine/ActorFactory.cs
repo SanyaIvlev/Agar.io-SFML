@@ -1,4 +1,5 @@
-﻿using Agar.io_SFML.PauseControl;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.PauseControl;
 using SFML.Graphics;
 
 namespace Agar.io_SFML;
@@ -11,8 +12,8 @@ public class ActorFactory
     
     protected ActorFactory()
     {
-        _gameLoop = Boot.Instance.GameLoopInstance;
-        _pauseManager = Boot.Instance.pauseManager;
+        _gameLoop = Dependency.Get<GameLoop>();
+        _pauseManager = Dependency.Get<PauseManager>() ?? new PauseManager();
     }
 
     protected TActor CreateActor<TActor>() where TActor : Actor, new()

@@ -1,5 +1,6 @@
 ﻿using Agar.io_SFML.Animations;
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
 using SFML.Graphics;
 using SFML.System;
 
@@ -14,9 +15,11 @@ public class ShapeFactory : ActorFactory
     
     private Vector2f _windowCenter;
 
-    public ShapeFactory(RenderWindow window)
+    public ShapeFactory()
     {
-        _window = window;
+        Dependency.Register(this);
+        
+        _window = Dependency.Get<RenderWindow>();
 
         _windowWidth = WindowConfig.WindowWidth;
         _windowHeight = WindowConfig.WindowHeight;
@@ -66,13 +69,5 @@ public class ShapeFactory : ActorFactory
         
         background.Initialize(_window, new RectangleShape(new Vector2f(_windowWidth, _windowHeight)), backgroundTexture);
         background.shape.FillColor = new Color(180, 180, 180);
-    }
-
-    public void DestroyAll(Actor[] actors)
-    {
-        foreach (var actor in actors)
-        {
-            Destroy(actor);
-        }
     }
 }

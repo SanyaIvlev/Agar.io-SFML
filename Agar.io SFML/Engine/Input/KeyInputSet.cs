@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Agar.io_SFML.Engine;
 using SFML.Window;
 
 namespace Agar.io_SFML;
@@ -9,6 +10,7 @@ public class KeyInputSet
 
     public KeyInputSet()
     {
+        Dependency.Register(this);
         _keyBinds = new();
     }
 

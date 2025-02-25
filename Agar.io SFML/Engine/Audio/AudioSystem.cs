@@ -1,4 +1,5 @@
 ﻿using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
 using SFML.Audio;
 using SFML.Graphics;
 
@@ -10,13 +11,15 @@ public class AudioSystem
     
     private Dictionary<string, Sound> _sounds;
 
-    public AudioSystem(RenderWindow window)
+    public AudioSystem()
     {
         _sounds = new Dictionary<string, Sound>();
         
         DirectoryInfo directoryInfo = new DirectoryInfo(PathUtils.AudioDirectory);
         _audioFilesInfo = directoryInfo.GetFiles("*.mp3");
-
+        
+        RenderWindow window = Dependency.Get<RenderWindow>();
+        
         window.Closed += OnProgramClosed;
     }
 

@@ -1,5 +1,6 @@
 ﻿using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
@@ -22,16 +23,14 @@ public class EatableActorFactory : ActorFactory
     
     private AnimatorFactory _animatorFactory;
 
-    public EatableActorFactory(RenderWindow window, AgarioAudioSystem audioSystem, AnimatorFactory animatorFactory)
+    public EatableActorFactory()
     {
-        _window = window;
+        _window = Dependency.Get<RenderWindow>();
+        _audioSystem = Dependency.Get<AgarioAudioSystem>();
+        _animatorFactory = Dependency.Get<AnimatorFactory>();
         
         _windowWidth = WindowConfig.WindowWidth;
         _windowHeight = WindowConfig.WindowHeight;
-
-        _audioSystem = audioSystem;
-
-        _animatorFactory = animatorFactory;
     }
 
     public void SetPlayerDeathResponse(Action<EatableActor> onPlayerDeath)

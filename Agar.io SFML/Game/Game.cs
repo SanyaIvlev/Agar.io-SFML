@@ -1,5 +1,6 @@
 using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 using Agar.io_SFML.PauseControl;
@@ -48,28 +49,29 @@ public class Game : IPauseHandler
     private PauseManager _pauseManager;
     private bool _isPaused;
 
-    public Game(GameMode gameMode, KeyInputSet keyInputSet, Camera camera)
+    public Game()
     {
-        _gameMode = gameMode;
+        _gameMode = Dependency.Get<GameMode>();
 
+        _keyInputs = Dependency.Get<KeyInputSet>();
+
+        _camera = Dependency.Get<Camera>();
+        _camera.ZoomViewport(4);
+        
         _passedFoodTime = _passedPlayerTime = 0;
-
-        _keyInputs = keyInputSet;
-
-        _camera = camera;
     }
     
-    public void Start(RenderWindow window, AnimatorFactory animatorFactory)
+    public void Start()
     {
-        _pauseManager = Boot.Instance.pauseManager;
+        _pauseManager = Dependency.Get<PauseManager>() ?? new PauseManager();
         _pauseManager.Register(this);
 
-        _audioSystem = new(window);
+        _audioSystem = new();
         _audioSystem.Initialize();
 
-        _eatableActorFactory = new(window, _audioSystem, animatorFactory);
+        _eatableActorFactory = new();
         _textFactory = new(_camera);
-        _shapeFactory = new(window);
+        _shapeFactory = Dependency.Get<ShapeFactory>() ?? new();
 
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
 

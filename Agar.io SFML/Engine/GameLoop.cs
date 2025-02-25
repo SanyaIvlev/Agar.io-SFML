@@ -1,7 +1,9 @@
 using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 
 namespace Agar.io_SFML;
 
@@ -26,17 +28,24 @@ public class GameLoop
 
     private Camera _camera;
 
-    public GameLoop(RenderWindow window, GameMode gameMode, KeyInputSet keyInputs)
+    public GameLoop((uint x, uint y) windowScale, string windowName)
     {
-        _window = window;
+        Dependency.Register(this);
         
-        _gameMode = gameMode;
+        _window = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
+        _window.Closed += WindowClosed;
+        
+        Dependency.Register(_window);
+        
+        _camera = new Camera(_window);
+        
+        _gameMode = new();
         
         _updatables = [];
         _drawables = [];
         _controllers = [];
 
-        _keyInputs = keyInputs;
+        _keyInputs = new();
     }
     
     public void AddOnGameUpdateCallback(Action callback)
@@ -44,9 +53,6 @@ public class GameLoop
     
     public void RemoveOnGameUpdateCallback(Action callback)
         => _onGameUpdateNeeded -= callback;
-
-    public void AddCamera(Camera camera)
-        => _camera = camera;
     
     public void AddDrawable(IDrawable drawable)
     {
@@ -149,5 +155,11 @@ public class GameLoop
     private void WaitBeforeEnd()
     {
         Thread.Sleep(1500);
+    }
+    
+    private void WindowClosed(object? sender, EventArgs e)
+    {
+        RenderWindow window = (RenderWindow)sender!;
+        window.Close();
     }
 }

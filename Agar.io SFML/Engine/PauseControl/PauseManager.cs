@@ -1,4 +1,5 @@
-﻿using Agar.io_SFML.Extensions;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.Extensions;
 
 namespace Agar.io_SFML.PauseControl;
 
@@ -9,6 +10,8 @@ public class PauseManager
 
     public PauseManager()
     {
+        Dependency.Register(this);
+        
         _pauseHandlers = new ();
         IsPaused = false;
     }
