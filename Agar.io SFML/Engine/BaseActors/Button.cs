@@ -44,13 +44,13 @@ public class Button : ShapeActor, IUpdatable
         _wasClicked = _isClicked;
         _isClicked = Mouse.IsButtonPressed(Mouse.Button.Left);
         
-        if (_isClicked && !_wasClicked && IsMouseInside())
+        if (_isClicked && !_wasClicked && IsHovered())
         {
             _onClick?.Invoke();
         }
     }
 
-    public bool IsMouseInside()
+    public bool IsHovered()
     {
         Vector2i mousePosition = Mouse.GetPosition(Window);
 
