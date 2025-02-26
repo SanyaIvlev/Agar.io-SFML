@@ -22,12 +22,15 @@ public class KeyInput
     
     public void AddCallBackOnHeldDown(Action action)
         => OnHeldDown += action;
-    
-    public void Update()
+
+    public void ReadInput()
     {
         _wasDown = _isDown;
         _isDown = Keyboard.IsKeyPressed(_key);
-        
+    }
+    
+    public void UpdateCallbacks()
+    {
         if (_isDown && !_wasDown)
         { 
             OnPressed?.Invoke();

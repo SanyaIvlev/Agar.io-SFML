@@ -21,12 +21,20 @@ public class KeyInputSet
         
         return input;
     }
-    
-    public void Update()
+
+    public void ReadInputs()
     {
         foreach (var keyBind in _keyBinds)
         {
-            keyBind.Update();
+            keyBind.ReadInput();
+        }
+    }
+    
+    public void UpdateCallbacks()
+    {
+        foreach (var keyBind in _keyBinds)
+        {
+            keyBind.UpdateCallbacks();
         }
     }
 }

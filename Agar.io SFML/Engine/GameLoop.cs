@@ -117,6 +117,8 @@ public class GameLoop
     private void ProcessInput()
     {
         _window.DispatchEvents();
+        
+        _keyInputs.ReadInputs();
 
         foreach (Controller controller in _controllers)
         {
@@ -126,7 +128,7 @@ public class GameLoop
 
     private void Update()
     {
-        _keyInputs.Update();
+        _keyInputs.UpdateCallbacks();
         
         foreach (var updatable in _updatables)
         {
