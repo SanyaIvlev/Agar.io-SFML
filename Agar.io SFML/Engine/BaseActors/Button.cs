@@ -5,6 +5,8 @@ namespace Agar.io_SFML;
 
 public class Button : ShapeActor, IUpdatable
 {
+    public bool CanClick = true;
+    
     private Action _onClick;
 
     private bool _isClicked;
@@ -36,6 +38,9 @@ public class Button : ShapeActor, IUpdatable
 
     public void Update()
     {
+        if (!CanClick)
+            return;
+        
         _wasClicked = _isClicked;
         _isClicked = Mouse.IsButtonPressed(Mouse.Button.Left);
         
@@ -45,7 +50,7 @@ public class Button : ShapeActor, IUpdatable
         }
     }
 
-    private bool IsMouseInside()
+    public bool IsMouseInside()
     {
         Vector2i mousePosition = Mouse.GetPosition(Window);
 
