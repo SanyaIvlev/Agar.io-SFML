@@ -24,7 +24,7 @@ public class Boot
 
     public void StartLobby()
     {
-        ConfigProcesser.ReadWholeConfig(); 
+        new ConfigProcesser().ReadWholeConfig(); 
         
         new TextureLoader(); 
         

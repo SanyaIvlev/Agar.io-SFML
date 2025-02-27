@@ -1,19 +1,21 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Agar.io_SFML.Engine;
 
 namespace Agar.io_SFML;
 
-public static class ConfigProcesser
+public class ConfigProcesser
 {
-    private static readonly string _configFilePath;
+    private readonly string _configFilePath;
 
-    static ConfigProcesser()
+    public ConfigProcesser()
     {
         _configFilePath = PathUtils.ConfigurationDirectory + @"\config.ini";
+        Dependency.Register(this);
     }
     
-    public static void ReadWholeConfig()
+    public void ReadWholeConfig()
     {
         string line;
         string section;
@@ -50,7 +52,7 @@ public static class ConfigProcesser
         configReader.Close();
     }
 
-    private static object? TryParseValue(FieldInfo fieldInfo, string value)
+    private object? TryParseValue(FieldInfo fieldInfo, string value)
     {
         Type type = fieldInfo.FieldType;
         
@@ -60,7 +62,7 @@ public static class ConfigProcesser
         return newValue;
     }
 
-    public static void UpdateConfig(string name, string newValue)
+    public void UpdateConfig(string name, string newValue)
     {
         string line;
         string section = "";
@@ -98,16 +100,14 @@ public static class ConfigProcesser
         WriteNewValueAt(section, keyName, newValue, _configFilePath);
     }
 
-    private static void WriteNewValueAt(string section, string keyName, string value, string filePath)
+    private void WriteNewValueAt(string section, string keyName, string value, string filePath)
     {
         WriteValueA(section, keyName, " " + value, filePath);
     }
     
     [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileString")]
-    public static extern long WriteValueA(string section, 
+    private static extern long WriteValueA(string section, 
         string keyName, 
         string value, 
         string filePath);
-    
-    
 }

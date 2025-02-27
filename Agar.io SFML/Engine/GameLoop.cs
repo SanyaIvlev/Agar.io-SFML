@@ -33,7 +33,7 @@ public class GameLoop
         Dependency.Register(this);
         
         _window = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
-        _window.Closed += (sender, args) => _window.Close();
+        _window.Closed += (sender, args) => CloseApplicationImmediately();
         
         Dependency.Register(_window);
         
@@ -47,7 +47,7 @@ public class GameLoop
 
         _buttonBindses = new();
     }
-    
+
     public void AddOnGameUpdateCallback(Action callback)
         => _onGameUpdateNeeded += callback;
     
@@ -157,8 +157,14 @@ public class GameLoop
     private void End()
     {
         Thread.Sleep(1500);
-        
+
+        CloseApplicationImmediately();
+    }
+    
+    private void CloseApplicationImmediately()
+    {
         EventBus<GameOverEvent>.Raise(new());
         _window.Close();
     }
+
 }
