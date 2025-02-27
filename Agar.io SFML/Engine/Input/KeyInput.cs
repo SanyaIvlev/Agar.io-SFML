@@ -2,14 +2,8 @@
 
 namespace Agar.io_SFML;
 
-public class KeyInput
+public class KeyInput : BaseInput
 {
-    public Action OnPressed;
-    public Action OnHeldDown; // for future
-
-    private bool _wasDown;
-    private bool _isDown;
-
     private Keyboard.Key _key;
 
     public KeyInput(Keyboard.Key key)
@@ -17,27 +11,6 @@ public class KeyInput
         _key = key;
     }
 
-    public void AddCallBackOnPressed(Action action)
-        => OnPressed += action;
-    
-    public void AddCallBackOnHeldDown(Action action)
-        => OnHeldDown += action;
-
-    public void ReadInput()
-    {
-        _wasDown = _isDown;
-        _isDown = Keyboard.IsKeyPressed(_key);
-    }
-    
-    public void UpdateCallbacks()
-    {
-        if (_isDown && !_wasDown)
-        { 
-            OnPressed?.Invoke();
-        }
-        else if (_isDown && _wasDown)
-        {
-            OnHeldDown?.Invoke();
-        }
-    }
+    protected override bool IsButtonPressed()
+        => Keyboard.IsKeyPressed(_key);
 }

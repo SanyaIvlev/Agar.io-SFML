@@ -9,7 +9,7 @@ public class Boot
     public static Boot Instance;
     
     private GameMode _gameMode;
-    private KeyInputSet _keyInputSet;
+    private ButtonBindsSet _buttonBindsSet;
     
     private Lobby _lobby;
 

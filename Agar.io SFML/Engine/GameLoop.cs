@@ -20,7 +20,7 @@ public class GameLoop
     
     private List<Controller> _controllers;
     
-    private KeyInputSet _keyInputs;
+    private ButtonBindsSet _buttonBindses;
     
     private readonly RenderWindow _window;
     
@@ -45,7 +45,7 @@ public class GameLoop
         _drawables = [];
         _controllers = [];
 
-        _keyInputs = new();
+        _buttonBindses = new();
     }
     
     public void AddOnGameUpdateCallback(Action callback)
@@ -118,7 +118,7 @@ public class GameLoop
     {
         _window.DispatchEvents();
         
-        _keyInputs.ReadInputs();
+        _buttonBindses.ReadInputs();
 
         foreach (Controller controller in _controllers)
         {
@@ -128,11 +128,11 @@ public class GameLoop
 
     private void Update()
     {
-        _keyInputs.UpdateCallbacks();
+        _buttonBindses.UpdateCallbacks();
         
         foreach (var updatable in _updatables)
         {
-            updatable.Update();
+            updatable.OnMouseClick();
         }
         
         _onGameUpdateNeeded?.Invoke();

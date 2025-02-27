@@ -1,22 +1,29 @@
-﻿using System.Data;
-using Agar.io_SFML.Engine;
+﻿using Agar.io_SFML.Engine;
 using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class KeyInputSet
+public class ButtonBindsSet
 {
-    private List<KeyInput> _keyBinds;
+    private List<BaseInput> _keyBinds;
 
-    public KeyInputSet()
+    public ButtonBindsSet()
     {
         Dependency.Register(this);
         _keyBinds = new();
     }
 
-    public KeyInput AddKeyBind(Keyboard.Key keyBind)
+    public KeyInput AddKeyboardBind(Keyboard.Key keyBind)
     {
         KeyInput input = new(keyBind);
+        _keyBinds.Add(input);
+        
+        return input;
+    }
+
+    public MouseInput AddMouseBind(Mouse.Button button)
+    {
+        MouseInput input = new(button);
         _keyBinds.Add(input);
         
         return input;

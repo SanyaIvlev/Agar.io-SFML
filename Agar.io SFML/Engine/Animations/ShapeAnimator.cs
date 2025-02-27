@@ -19,7 +19,7 @@ public class ShapeAnimator : Actor, IUpdatable
         return this;
     }
 
-    public void Update()
+    public void OnMouseClick()
     {
         _animationStateMachine.Update();
         

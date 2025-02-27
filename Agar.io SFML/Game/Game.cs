@@ -29,7 +29,7 @@ public class Game
     private TextFactory _textFactory;
     private ShapeFactory _shapeFactory;
 
-    private KeyInputSet _keyInputs;
+    private ButtonBindsSet _buttonBindses;
 
     private int _playersOnStart;
     private int _foodOnStart;
@@ -50,7 +50,7 @@ public class Game
     {
         _gameMode = Dependency.Get<GameMode>();
 
-        _keyInputs = Dependency.Get<KeyInputSet>();
+        _buttonBindses = Dependency.Get<ButtonBindsSet>();
 
         _camera = Dependency.Get<Camera>();
         _camera.ZoomViewport(4);
@@ -124,8 +124,8 @@ public class Game
 
     private void InitializeKeyInputs()
     {
-        KeyInput swapBind = _keyInputs.AddKeyBind(KeyboardEventConfig.Swap);
-        KeyInput pauseBind = _keyInputs.AddKeyBind(KeyboardEventConfig.Pause);
+        KeyInput swapBind = _buttonBindses.AddKeyboardBind(KeyboardEventConfig.Swap);
+        KeyInput pauseBind = _buttonBindses.AddKeyboardBind(KeyboardEventConfig.Pause);
 
         swapBind.AddCallBackOnPressed(Swap);
         pauseBind.AddCallBackOnPressed(SwitchPause);

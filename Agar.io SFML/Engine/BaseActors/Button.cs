@@ -1,16 +1,25 @@
-﻿using SFML.System;
+﻿using Agar.io_SFML.Engine;
+using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace Agar.io_SFML;
 
-public class Button : ShapeActor, IUpdatable
+public class Button : ShapeActor
 {
     public bool CanClick = true;
     
     private Action _onClick;
 
-    private bool _isClicked;
-    private bool _wasClicked;
+    public void Initialize(Shape buttonShape)
+    {
+        base.Initialize(buttonShape);
+        
+        ButtonBindsSet bindsSet = Dependency.Get<ButtonBindsSet>();
+        
+        MouseInput input = bindsSet.AddMouseBind(Mouse.Button.Left);
+        input.AddCallBackOnPressed(OnMouseClick);
+    }
 
     public void AddCallback(Action action)
     {
@@ -36,15 +45,12 @@ public class Button : ShapeActor, IUpdatable
     public float GetHeight() 
         => shape.TextureRect.Height;
 
-    public void Update()
+    private void OnMouseClick()
     {
         if (!CanClick)
             return;
         
-        _wasClicked = _isClicked;
-        _isClicked = Mouse.IsButtonPressed(Mouse.Button.Left);
-        
-        if (_isClicked && !_wasClicked && IsHovered())
+        if (IsHovered())
         {
             _onClick?.Invoke();
         }
