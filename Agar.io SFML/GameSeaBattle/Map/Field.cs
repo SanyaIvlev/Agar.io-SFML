@@ -3,7 +3,10 @@
 public class Field
 {
     public int DecksLeft;
-    
+
+    public bool NeedsInteractChange;
+    public bool IsInteractable { get; private set; }
+
     private int _width = 10;
     private int _height = 10;
 
@@ -18,10 +21,16 @@ public class Field
         _cellFactory = new CellFactory();
     }
 
+    public void UpdateInteractable()
+    {
+        if (NeedsInteractChange)
+            SetCellsClickable(!IsInteractable);
+    }
+
     public Cell GetCell(int x, int y)
         => _cells[y, x];
     
-    public void Generate()
+    public void Initialize()
     {
         DecksLeft = 0;
         _cells = new Cell[_height, _width];
@@ -30,7 +39,7 @@ public class Field
         {
             for (int x = 0; x < _width; x++)
             {
-                _cells[y,x] = _cellFactory.CreateCell(x, y);
+                _cells[y,x] = _cellFactory.CreateCell(x, y, this);
             }
         }
         
@@ -53,6 +62,21 @@ public class Field
                 i++;
             }
         }
+        
+        SetCellsClickable(false);
+    }
+
+    private void SetCellsClickable(bool isClickable)
+    {
+        for(int y = 0; y < _height; y++)
+        {
+            for (int x = 0; x < _width; x++)
+            {
+                _cells[y,x].IsClickable = isClickable;
+            }
+        }
+        
+        IsInteractable = isClickable;
     }
 
     private void TryPlaceShip(bool isHorizontal, string ship, out bool isPlaced)

@@ -1,4 +1,7 @@
-﻿namespace Agar.io_SFML.GameSeaBattle;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.GameSeaBattle.Events;
+
+namespace Agar.io_SFML.GameSeaBattle;
 
 public class Cell : Button
 {
@@ -10,11 +13,12 @@ public class Cell : Button
         HasShip = false;
         HasShot = false;
         
-        AddCallback(OnShoot);
+        AddCallback(Shoot);
     }
 
-    private void OnShoot()
+    public void Shoot()
     {
         HasShot = true;
+        EventBus<OnShooted>.Raise(new());
     }
 }

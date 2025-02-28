@@ -13,7 +13,7 @@ public class CellFactory : ActorFactory
         _animatorFactory = new AnimatorFactory();
     }
     
-    public Cell CreateCell(int columnX, int rowY)
+    public Cell CreateCell(int columnX, int rowY, Field field)
     {
         Cell cell = CreateActor<Cell>();
         
@@ -30,7 +30,7 @@ public class CellFactory : ActorFactory
         
         cell.Initialize(cellShape);
         
-        _animatorFactory.CreateCellAnimator(cell);
+        _animatorFactory.CreateCellAnimator(field, cell);
 
         return cell;
     }
