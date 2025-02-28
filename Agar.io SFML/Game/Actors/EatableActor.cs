@@ -25,7 +25,7 @@ public class EatableActor : Actor, IDrawable, IUpdatable
         base.Initialize(initialPosition);
     }
 
-    public virtual void OnMouseClick()
+    public virtual void Update()
     {
         shape.Position = Position;
     }

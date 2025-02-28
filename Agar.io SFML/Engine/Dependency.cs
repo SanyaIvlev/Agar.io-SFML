@@ -37,6 +37,7 @@ public class Dependency
     public static void Unregister<T>(T instance) where T : class
     {
         Unregister(typeof(T), instance);
+        ;
     }
 
     public static void Unregister(Type type, object instance)

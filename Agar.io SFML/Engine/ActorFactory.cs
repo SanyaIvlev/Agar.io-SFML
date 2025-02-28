@@ -4,11 +4,12 @@ namespace Agar.io_SFML;
 
 public class ActorFactory
 {
-    private GameLoop _gameLoop;
+    private GameLoop _gameLoop = null!;
     
     protected ActorFactory()
     {
         _gameLoop = Dependency.Get<GameLoop>();
+        EventBus<OnGameLoopReset>.OnEvent += (OnGameLoopReset @event) => _gameLoop = Dependency.Get<GameLoop>();
     }
 
     protected TActor CreateActor<TActor>() where TActor : Actor, new()

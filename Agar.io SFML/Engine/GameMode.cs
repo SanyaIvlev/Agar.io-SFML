@@ -10,4 +10,9 @@ public class GameMode
     {
         Dependency.Register(this);
     }
+
+    public void Reset()
+    {
+        Dependency.Unregister(this);
+    }
 }

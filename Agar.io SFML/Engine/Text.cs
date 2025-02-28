@@ -50,7 +50,7 @@ public class Text : Actor, IDrawable, IUpdatable
         SetPosition(currentPosition);
     }
 
-    public void OnMouseClick()
+    public void Update()
     {
         Vector2f globalViewPosition = _camera.GetGlobalViewPosition();
 

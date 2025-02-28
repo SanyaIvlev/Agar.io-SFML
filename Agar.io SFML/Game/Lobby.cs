@@ -1,12 +1,13 @@
 ﻿using Agar.io_SFML.Animations;
 using Agar.io_SFML.Engine;
+using Agar.io_SFML.Engine.Scene;
 using Agar.io_SFML.Factory;
 using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML;
 
-public class Lobby
+public class Lobby : Scene
 {
     private ShapeFactory _shapeFactory;
     private AnimatorFactory _animatorFactory;
@@ -22,22 +23,18 @@ public class Lobby
     
     private int _currentSkinIndex;
 
-    private List<Actor> _actorsToDestroyOnEnd;
-
     public Lobby()
     {
-        _actorsToDestroyOnEnd = new List<Actor>();
-        
-       _shapeFactory = Dependency.Get<ShapeFactory>() ?? new ShapeFactory();
+       _shapeFactory = new ShapeFactory();
        
        _playButton = _shapeFactory.CreateButton("PlayButton");
        _leftArrowButton = _shapeFactory.CreateButton("LeftArrowButton");
        _rightArrowButton = _shapeFactory.CreateButton("RightArrowButton");
     }
 
-    public void Start()
+    public override void Start()
     {
-        _animatorFactory = Dependency.Get<AnimatorFactory>() ?? new AnimatorFactory();
+        _animatorFactory = new AnimatorFactory();
         
         LoadSkins();
         
@@ -53,29 +50,12 @@ public class Lobby
         _playButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f, 3f / 4 * renderWindow.Size.Y));
     }
 
-    public void Update()
-    {
-        if (_actorsToDestroyOnEnd.Count > 0)
-        {
-            foreach (var actorToDestroy in _actorsToDestroyOnEnd)
-            {
-                _shapeFactory.Destroy(actorToDestroy);
-            }
-            
-            Boot.Instance.StartGameLoop();
-        }
-    }
-
     private void StartGamePlay()
     {
         _animatorFactory.SetPlayerSkin(_currentHumanSkin);
         
-        _playButton.RemoveCallback(StartGamePlay);
-        _leftArrowButton.RemoveCallback(() => SwitchSkin(-1));
-        _rightArrowButton.RemoveCallback(() => SwitchSkin(+1));
-        
-        _actorsToDestroyOnEnd.AddRange(_allDisplayableSkins);
-        _actorsToDestroyOnEnd.AddRange(new [] {_playButton, _leftArrowButton, _rightArrowButton});
+        SceneHandler sceneHandler = Dependency.Get<SceneHandler>();
+        sceneHandler.SelectScene<AgarioGame>();
     }
 
     private void LoadSkins()

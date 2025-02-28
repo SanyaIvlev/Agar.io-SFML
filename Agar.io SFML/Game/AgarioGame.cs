@@ -1,6 +1,7 @@
 using Agar.io_SFML.Audio;
 using Agar.io_SFML.Configs;
 using Agar.io_SFML.Engine;
+using Agar.io_SFML.Engine.Scene;
 using Agar.io_SFML.Extensions;
 using Agar.io_SFML.Factory;
 
@@ -8,7 +9,7 @@ using Agar.io_SFML.Factory;
 
 namespace Agar.io_SFML;
 
-public class Game
+public class AgarioGame : Scene
 {
     private Text _endText;
     private Text _hintText;
@@ -46,7 +47,7 @@ public class Game
     private bool _isPaused;
     private PauseEvent _pauseEvent;
 
-    public Game()
+    public AgarioGame()
     {
         _gameMode = Dependency.Get<GameMode>();
 
@@ -60,7 +61,7 @@ public class Game
         _pauseEvent = new PauseEvent();
     }
     
-    public void Start()
+    public override void Start()
     {
         EventBus<PauseEvent>.OnEvent += SetPaused;
 
@@ -161,7 +162,7 @@ public class Game
         }
     }
 
-    public void Update()
+    public override void Update()
     {
         if (_isPaused)
             return;

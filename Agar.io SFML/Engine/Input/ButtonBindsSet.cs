@@ -44,4 +44,15 @@ public class ButtonBindsSet
             keyBind.UpdateCallbacks();
         }
     }
+
+    public void ResetBinds()
+    {
+        foreach (var keyBind in _keyBinds)
+        {
+            keyBind.RemoveCallBacks();
+        }
+    }
+
+    public void Unregister()
+        => Dependency.Unregister(this);
 }

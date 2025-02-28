@@ -1,2 +1,2 @@
 ﻿using Agar.io_SFML;
-new Boot().StartLobby();
+new Boot().Start();

@@ -105,13 +105,13 @@ public class Player : EatableActor
         return !_isPaused;
     }
 
-    public override void OnMouseClick()
+    public override void Update()
     {
         if (_isPaused)
             return;
 
         Move();
-        base.OnMouseClick();
+        base.Update();
     }
 
     private void Move()

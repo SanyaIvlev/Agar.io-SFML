@@ -36,4 +36,10 @@ public class BaseInput
             _onHeldDown?.Invoke();
         }
     }
+
+    public void RemoveCallBacks()
+    {
+        _onPressed = null;
+        _onHeldDown = null;
+    }
 }

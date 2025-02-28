@@ -1,9 +1,6 @@
-using Agar.io_SFML.Configs;
 using Agar.io_SFML.Engine;
 using Agar.io_SFML.Extensions;
 using SFML.Graphics;
-using SFML.System;
-using SFML.Window;
 
 namespace Agar.io_SFML;
 
@@ -20,22 +17,19 @@ public class GameLoop
     
     private List<Controller> _controllers;
     
-    private ButtonBindsSet _buttonBindses;
+    private ButtonBindsSet _buttonBinds; 
+    private readonly RenderWindow _window; 
     
-    private readonly RenderWindow _window;
-    
-    private readonly GameMode _gameMode;
+    private readonly GameMode _gameMode; 
 
-    private Camera _camera;
+    private Camera _camera; 
 
-    public GameLoop((uint x, uint y) windowScale, string windowName)
+    public GameLoop(RenderWindow renderWindow)
     {
         Dependency.Register(this);
         
-        _window = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
+        _window = renderWindow;
         _window.Closed += (sender, args) => CloseApplicationImmediately();
-        
-        Dependency.Register(_window);
         
         _camera = new Camera(_window);
         
@@ -45,7 +39,7 @@ public class GameLoop
         _drawables = [];
         _controllers = [];
 
-        _buttonBindses = new();
+        _buttonBinds = new();
     }
 
     public void AddOnGameUpdateCallback(Action callback)
@@ -86,6 +80,22 @@ public class GameLoop
     {
         _controllers.SwapRemove(controller);
     }
+
+    public void StopGameLoop()
+    {
+        Dependency.Unregister(this);
+
+        _updatables.Clear();
+        _drawables.Clear();
+        _controllers.Clear();
+        
+        _buttonBinds.ResetBinds();
+        _buttonBinds.Unregister();
+        
+        _camera.Destroy();
+        _gameMode.Reset();
+        _onGameUpdateNeeded = null;
+    }
     
     public void Start()
     {
@@ -118,7 +128,7 @@ public class GameLoop
     {
         _window.DispatchEvents();
         
-        _buttonBindses.ReadInputs();
+        _buttonBinds.ReadInputs();
 
         foreach (Controller controller in _controllers)
         {
@@ -128,11 +138,11 @@ public class GameLoop
 
     private void Update()
     {
-        _buttonBindses.UpdateCallbacks();
+        _buttonBinds.UpdateCallbacks();
         
         foreach (var updatable in _updatables)
         {
-            updatable.OnMouseClick();
+            updatable.Update();
         }
         
         _onGameUpdateNeeded?.Invoke();
@@ -166,5 +176,4 @@ public class GameLoop
         EventBus<GameOverEvent>.Raise(new());
         _window.Close();
     }
-
 }

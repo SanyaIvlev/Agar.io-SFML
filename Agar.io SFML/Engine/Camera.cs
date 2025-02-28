@@ -48,4 +48,9 @@ public class Camera
         var position = new Vector2f(_focusedActor.Position.X - view.Size.X / 2f, _focusedActor.Position.Y - view.Size.Y / 2f);
         return position;
     }
+
+    public void Destroy()
+    {
+        Dependency.Unregister(this);
+    }
 }
