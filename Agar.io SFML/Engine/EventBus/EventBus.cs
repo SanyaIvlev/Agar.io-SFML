@@ -1,5 +1,10 @@
 ﻿namespace Agar.io_SFML.Engine;
 
+public interface IEvent
+{
+    
+}
+
 public static class EventBus<T> where T : IEvent
 {
     public delegate void Event(T evt);

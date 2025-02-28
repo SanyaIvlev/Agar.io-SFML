@@ -36,7 +36,7 @@ public class AudioSystem
         _sounds[audioName].Play();
     }
     
-    private void OnProgramClosed(GameOverEvent @event)
+    private void OnProgramClosed(GameOverEvent gameOverEvent)
     {
         foreach (var sound in _sounds.Values)
         {

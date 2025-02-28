@@ -39,9 +39,9 @@ public class AgarioPlayerController : AgarioController
         base.Update();
     }
     
-    private void SetPaused(PauseEvent @event)
+    private void SetPaused(PauseEvent pauseEvent)
     {
-        _isPaused = @event.IsPaused;
+        _isPaused = pauseEvent.IsPaused;
     }
 
     public override void SwapWith(Controller anotherController)

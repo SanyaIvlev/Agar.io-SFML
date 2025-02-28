@@ -92,9 +92,9 @@ public class AgarioGame : Scene
         SetActors();
     }
 
-    private void SetPaused(PauseEvent @event)
+    private void SetPaused(PauseEvent pauseEvent)
     {
-        _isPaused = @event.IsPaused;
+        _isPaused = pauseEvent.IsPaused;
     }
 
     private void SetActors()

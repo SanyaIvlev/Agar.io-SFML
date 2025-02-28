@@ -52,9 +52,9 @@ public class Player : EatableActor
         }
     }
 
-    private void SetPaused(PauseEvent @event)
+    private void SetPaused(PauseEvent pauseEvent)
     {
-        _isPaused = @event.IsPaused;
+        _isPaused = pauseEvent.IsPaused;
     }
 
     private void TryEat(EatableActor actor)
