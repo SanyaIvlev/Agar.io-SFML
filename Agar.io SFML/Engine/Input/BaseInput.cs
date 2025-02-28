@@ -14,12 +14,6 @@ public class BaseInput
     public void AddCallBackOnHeldDown(Action action)
         => _onHeldDown += action;
 
-    public void ReadInput()
-    {
-        _wasDown = _isDown;
-        _isDown = IsButtonPressed();
-    }
-
     protected virtual bool IsButtonPressed()
     {
         return false;
@@ -27,6 +21,9 @@ public class BaseInput
 
     public void UpdateCallbacks()
     {
+        _wasDown = _isDown;
+        _isDown = IsButtonPressed();
+        
         if (_isDown && !_wasDown)
         { 
             _onPressed?.Invoke();

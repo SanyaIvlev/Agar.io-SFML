@@ -127,8 +127,6 @@ public class GameLoop
     private void ProcessInput()
     {
         _window.DispatchEvents();
-        
-        _buttonBinds.ReadInputs();
 
         foreach (Controller controller in _controllers)
         {

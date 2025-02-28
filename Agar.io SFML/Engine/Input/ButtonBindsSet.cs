@@ -28,14 +28,6 @@ public class ButtonBindsSet
         
         return input;
     }
-
-    public void ReadInputs()
-    {
-        foreach (var keyBind in _keyBinds)
-        {
-            keyBind.ReadInput();
-        }
-    }
     
     public void UpdateCallbacks()
     {
