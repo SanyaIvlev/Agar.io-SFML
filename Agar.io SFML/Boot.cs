@@ -12,12 +12,13 @@ public class Boot
 
     public void Start()
     {
-        // _windowWidth = (uint)WindowConfig.WindowWidth;
-        // _windowHeight = (uint)WindowConfig.WindowHeight;
-        // _windowName = WindowConfig.WindowName;
-        //
-        // SceneHandler sceneHandler = new((_windowWidth, _windowHeight), _windowName);
-        // sceneHandler.InitializeScene<Lobby>();
-        new Field().Generate();
+        new ConfigProcesser().ReadWholeConfig("SeaBattleConfig.ini"); 
+        
+        _windowWidth = (uint)SeaBattleWindowConfig.WindowWidth;
+        _windowHeight = (uint)SeaBattleWindowConfig.WindowHeight;
+        _windowName = SeaBattleWindowConfig.WindowName;
+        
+        SceneHandler sceneHandler = new((_windowWidth, _windowHeight), _windowName);
+        sceneHandler.InitializeScene<SeaBattleGame>();
     }
 }

@@ -11,6 +11,16 @@ public class Field
     
     private List<string> _ships = new(10) { "####", "###", "###", "##", "##", "##", "#", "#", "#", "#" };
     
+    private CellFactory _cellFactory;
+
+    public Field()
+    {
+        _cellFactory = new CellFactory();
+    }
+
+    public Cell GetCell(int x, int y)
+        => _cells[y, x];
+    
     public void Generate()
     {
         DecksLeft = 0;
@@ -20,7 +30,7 @@ public class Field
         {
             for (int x = 0; x < _width; x++)
             {
-                _cells[y,x] = new();
+                _cells[y,x] = _cellFactory.CreateCell(x, y);
             }
         }
         

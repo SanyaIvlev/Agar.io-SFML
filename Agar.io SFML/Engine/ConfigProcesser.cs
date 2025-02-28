@@ -7,19 +7,21 @@ namespace Agar.io_SFML;
 
 public class ConfigProcesser
 {
-    private readonly string _configFilePath;
+    private string _configFilePath;
 
     public ConfigProcesser()
     {
-        _configFilePath = PathUtils.ConfigurationDirectory + @"\config.ini";
+        _configFilePath = PathUtils.ConfigurationDirectory;
         Service<ConfigProcesser>.Set(this);
     }
     
-    public void ReadWholeConfig()
+    public void ReadWholeConfig(string configNameWithExtension)
     {
         string line;
         string section;
         Type currentTypeOfConfig = null;
+        
+        _configFilePath = _configFilePath + "\\" + configNameWithExtension;
         
         using StreamReader configReader = new(_configFilePath);
         

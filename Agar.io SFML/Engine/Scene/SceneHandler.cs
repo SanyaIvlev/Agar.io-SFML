@@ -18,8 +18,6 @@ public class SceneHandler
         Service<SceneHandler>.Set(this);
         Service<RenderWindow>.Set(_renderWindow);
         
-        new ConfigProcesser().ReadWholeConfig(); 
-        
         new TextureLoader(); 
     }
 
