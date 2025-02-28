@@ -7,6 +7,13 @@ using SFML.System;
 
 namespace Agar.io_SFML.GameSeaBattle;
 
+public enum GameType
+{
+    PVP,
+    PVE,
+    EVE,
+}
+
 public class SeaBattleGame : Scene
 {
     private SeaBattleController _controller1;
@@ -19,30 +26,17 @@ public class SeaBattleGame : Scene
     
     public override void Start()
     {
+        Service<GameType>.Set(GameType.PVP);
         _controllerFactory = new ControllerFactory();
         
         _currentController = _controller1 = _controllerFactory.CreateController(true);
-        _opponent = _controller2 = _controllerFactory.CreateController(true);;
+        _opponent = _controller2 = _controllerFactory.CreateController(true);
         
-        CreateFields();
-        
-        _controller1.PlayerPawn.Initialize(true);
-        _controller2.PlayerPawn.Initialize(true);
-        
-        _opponent.PlayerPawn.field.UpdateInteractable();
+        _opponent.PlayerPawn.field.TryUpdateInteractable();
 
         AdjustRightFieldPosition();
 
         EventBus<OnShooted>.OnEvent += ChangeTurn;
-    }
-
-    private void CreateFields()
-    {
-        _controller1.PlayerPawn.field = new Field();
-        _controller1.PlayerPawn.field.Initialize();
-        
-        _controller2.PlayerPawn.field = new Field();
-        _controller2.PlayerPawn.field.Initialize();
     }
     
     private void AdjustRightFieldPosition()

@@ -6,20 +6,17 @@ public class Player : Actor, IUpdatable
     
     public (int x, int y) ShootingPosition;
     public int OpponentShipsDestroyed = 0;
+    
+    private bool _needsUpdate;
 
-    public void Initialize(bool needsInteractChange)
+    public void SetUpdateNeed(bool needsUpdate)
     {
-        field.NeedsInteractChange = needsInteractChange;
-    }
-
-    public void InitalizeShootingPosition((int x, int y) position)
-    {
-        ShootingPosition = position;
+        _needsUpdate = needsUpdate;
     }
 
     public void Update()
     {
-        if (ShootingPosition == (-1, -1))
+        if (!_needsUpdate)
             return;
 
         Cell shootingCell = field.GetCell(ShootingPosition.x, ShootingPosition.y);

@@ -1,9 +1,17 @@
-﻿using Agar.io_SFML.GameSeaBattle.Players;
+﻿using Agar.io_SFML.Engine;
+using Agar.io_SFML.GameSeaBattle.Players;
 
 namespace Agar.io_SFML.GameSeaBattle;
 
 public class ControllerFactory : ActorFactory
 {
+    private MapFactory _mapFactory;
+
+    public ControllerFactory()
+    {
+        _mapFactory = new MapFactory();
+        
+    }
     public SeaBattleController CreateController(bool isHuman)
     {
         SeaBattleController controller;
@@ -24,8 +32,8 @@ public class ControllerFactory : ActorFactory
     {
         Players.Player player = CreateActor<Players.Player>();
         
-        if(isHuman)
-            player.InitalizeShootingPosition((-1,-1));
+        player.SetUpdateNeed(!isHuman);
+        player.field = _mapFactory.CreateField(isHuman);
         
         return player;
     }

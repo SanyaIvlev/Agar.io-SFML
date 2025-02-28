@@ -1,47 +1,41 @@
-﻿namespace Agar.io_SFML.GameSeaBattle;
+﻿using Agar.io_SFML.Configs;
+
+namespace Agar.io_SFML.GameSeaBattle;
 
 public class Field
 {
     public int DecksLeft;
 
-    public bool NeedsInteractChange;
+    public bool NeedsUpdateInteract;
     public bool IsInteractable { get; private set; }
 
-    private int _width = 10;
-    private int _height = 10;
+    private int _width;
+    private int _height;
 
     private Cell[,] _cells;
     
     private List<string> _ships = new(10) { "####", "###", "###", "##", "##", "##", "#", "#", "#", "#" };
-    
-    private CellFactory _cellFactory;
 
     public Field()
     {
-        _cellFactory = new CellFactory();
+        _width = SeaBattleFieldConfig.Width;
+        _height = SeaBattleFieldConfig.Height;
     }
 
-    public void UpdateInteractable()
+    public void TryUpdateInteractable()
     {
-        if (NeedsInteractChange)
+        if (NeedsUpdateInteract)
             SetCellsClickable(!IsInteractable);
     }
 
     public Cell GetCell(int x, int y)
         => _cells[y, x];
     
-    public void Initialize()
+    public void Initialize(Cell[,] cells)
     {
         DecksLeft = 0;
-        _cells = new Cell[_height, _width];
 
-        for(int y = 0; y < _height; y++)
-        {
-            for (int x = 0; x < _width; x++)
-            {
-                _cells[y,x] = _cellFactory.CreateCell(x, y, this);
-            }
-        }
+        _cells = cells;
         
         foreach (string ship in _ships)
         {
