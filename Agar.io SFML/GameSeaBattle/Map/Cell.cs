@@ -9,5 +9,12 @@ public class Cell : Button
     {
         HasShip = false;
         HasShot = false;
+        
+        AddCallback(OnShoot);
+    }
+
+    private void OnShoot()
+    {
+        HasShot = true;
     }
 }

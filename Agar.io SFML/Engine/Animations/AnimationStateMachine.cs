@@ -21,8 +21,16 @@ public class AnimationStateMachine
 
     public void Update()
     {
-        List<Transition> currentTransitions = _transitionMap[_currentState];
-
+        List<Transition> currentTransitions;
+        
+        if (!_transitionMap.TryGetValue(_currentState, out currentTransitions))
+        {
+            _currentState.Update();
+            return;
+        }
+        
+        currentTransitions = _transitionMap[_currentState];
+        
         foreach (var transition in currentTransitions)
         {
             if (transition.IsConditionComplied())

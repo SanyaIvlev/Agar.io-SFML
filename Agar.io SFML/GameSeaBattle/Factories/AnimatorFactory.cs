@@ -32,11 +32,11 @@ public class AnimatorFactory : ActorFactory
     {
         ShapeAnimator animator = CreateActor<ShapeAnimator>();
         
-        State emptyState = new(_emptyCell, 100);
-        State shipCellState = new(_shipCell, 100);
-        State missedShotCellState = new(_missedShotCell, 100);
-        State destroyedShipCellState = new(_destroyedShipCell, 100);
-        State hoveredCellState = new(_hoveredCell, 100);
+        State emptyState = new(_emptyCell, 200);
+        State shipCellState = new(_shipCell, 200);
+        State missedShotCellState = new(_missedShotCell, 200);
+        State destroyedShipCellState = new(_destroyedShipCell, 200);
+        State hoveredCellState = new(_hoveredCell, 200);
 
         animator
             .Initialize(cell.shape)
@@ -47,6 +47,10 @@ public class AnimatorFactory : ActorFactory
             .AddTransition(shipCellState, destroyedShipCellState, () => cell.HasShip && !cell.IsClickable && cell.HasShot)
             .AddTransition(emptyState, hoveredCellState, () => cell.IsClickable && cell.IsHovered() && !cell.HasShot)
             .AddTransition(hoveredCellState, emptyState, () => cell.IsClickable && !cell.IsHovered())
+            .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && !cell.HasShip)
+            .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && !cell.HasShip)
+            .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && cell.HasShip)
+            .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(emptyState, missedShotCellState, () => !cell.HasShip && cell.HasShot);
     }
 }
