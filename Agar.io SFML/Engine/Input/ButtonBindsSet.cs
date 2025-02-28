@@ -9,7 +9,7 @@ public class ButtonBindsSet
 
     public ButtonBindsSet()
     {
-        Dependency.Register(this);
+        Service<ButtonBindsSet>.Set(this);
         _keyBinds = new();
     }
 
@@ -44,7 +44,4 @@ public class ButtonBindsSet
             keyBind.RemoveCallBacks();
         }
     }
-
-    public void Unregister()
-        => Dependency.Unregister(this);
 }

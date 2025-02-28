@@ -17,9 +17,9 @@ public class ShapeFactory : ActorFactory
 
     public ShapeFactory()
     {
-        Dependency.Register(this);
+        Service<ShapeFactory>.Set(this);
         
-        _window = Dependency.Get<RenderWindow>();
+        _window = Service<RenderWindow>.Get;
 
         _windowWidth = WindowConfig.WindowWidth;
         _windowHeight = WindowConfig.WindowHeight;

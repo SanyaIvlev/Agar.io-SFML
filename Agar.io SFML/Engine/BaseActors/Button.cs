@@ -14,8 +14,8 @@ public class Button : ShapeActor
     public void Initialize(Shape buttonShape)
     {
         base.Initialize(buttonShape);
-        
-        ButtonBindsSet bindsSet = Dependency.Get<ButtonBindsSet>();
+
+        ButtonBindsSet bindsSet = Service<ButtonBindsSet>.Get;
         
         MouseInput input = bindsSet.AddMouseBind(Mouse.Button.Left);
         input.AddCallBackOnPressed(OnMouseClick);

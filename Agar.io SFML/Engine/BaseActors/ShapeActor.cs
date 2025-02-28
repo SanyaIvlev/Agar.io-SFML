@@ -11,7 +11,7 @@ public class ShapeActor : Actor, IDrawable
 
     public void Initialize(Shape shape)
     {
-        Window = Dependency.Get<RenderWindow>();
+        Window = Service<RenderWindow>.Get;
         this.shape = shape;
     }
 

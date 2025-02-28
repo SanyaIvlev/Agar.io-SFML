@@ -15,7 +15,7 @@ public class AgarioAudioSystem : AudioSystem
 
     public AgarioAudioSystem()
     {
-        Dependency.Register(this);
+        Service<AgarioAudioSystem>.Set(this);
         
         _firstKill = AudioConfig.FirstBlood;
         _secondKill = AudioConfig.DoubleKill;

@@ -8,11 +8,6 @@ public class GameMode
 
     public GameMode()
     {
-        Dependency.Register(this);
-    }
-
-    public void Reset()
-    {
-        Dependency.Unregister(this);
+        Service<GameMode>.Set(this);
     }
 }

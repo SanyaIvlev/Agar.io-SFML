@@ -12,22 +12,17 @@ public class EatableActorFactory : ActorFactory
     private Vector2f _startPosition;
     private AgarioController _controller;
     private Color _color;
-    
-    private readonly RenderWindow _window;
 
     private Action<EatableActor> _onPlayerDeath;
     
     private readonly int _windowWidth;
     private readonly int _windowHeight;
-    private readonly AgarioAudioSystem _audioSystem;
     
     private AnimatorFactory _animatorFactory;
 
     public EatableActorFactory()
     {
-        _window = Dependency.Get<RenderWindow>();
-        _audioSystem = Dependency.Get<AgarioAudioSystem>();
-        _animatorFactory = Dependency.Get<AnimatorFactory>();
+        _animatorFactory = Service<AnimatorFactory>.Get;
         
         _windowWidth = WindowConfig.WindowWidth;
         _windowHeight = WindowConfig.WindowHeight;

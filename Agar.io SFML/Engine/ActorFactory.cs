@@ -8,8 +8,8 @@ public class ActorFactory
     
     protected ActorFactory()
     {
-        _gameLoop = Dependency.Get<GameLoop>();
-        EventBus<OnGameLoopReset>.OnEvent += (OnGameLoopReset @event) => _gameLoop = Dependency.Get<GameLoop>();
+        _gameLoop = Service<GameLoop>.Get;
+        EventBus<OnGameLoopReset>.OnEvent += (OnGameLoopReset @event) => _gameLoop = Service<GameLoop>.Get;
     }
 
     protected TActor CreateActor<TActor>() where TActor : Actor, new()

@@ -12,7 +12,7 @@ public class ConfigProcesser
     public ConfigProcesser()
     {
         _configFilePath = PathUtils.ConfigurationDirectory + @"\config.ini";
-        Dependency.Register(this);
+        Service<ConfigProcesser>.Set(this);
     }
     
     public void ReadWholeConfig()

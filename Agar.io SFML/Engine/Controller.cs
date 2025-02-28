@@ -17,10 +17,10 @@ public class Controller : Actor
 
     private Vector2f _direction;
     
-    public virtual void Initialize(Actor controlledPlayer)
+    public void Initialize(Actor controlledPlayer)
     {
         SetPawn(controlledPlayer);
-        _window = Dependency.Get<RenderWindow>();
+        _window = Service<RenderWindow>.Get;
     }
 
     public virtual void Update()

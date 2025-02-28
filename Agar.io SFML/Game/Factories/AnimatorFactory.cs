@@ -26,7 +26,7 @@ public class AnimatorFactory : ActorFactory
     
     public AnimatorFactory()
     {
-        Dependency.Register(this);
+        Service<AnimatorFactory>.Set(this);
         
         _textureLoader = TextureLoader.Instance;
         

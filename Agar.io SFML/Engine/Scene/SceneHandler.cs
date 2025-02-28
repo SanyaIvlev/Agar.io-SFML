@@ -15,8 +15,8 @@ public class SceneHandler
     {
         _renderWindow = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
         
-        Dependency.Register(_renderWindow);
-        Dependency.Register(this);
+        Service<SceneHandler>.Set(this);
+        Service<RenderWindow>.Set(_renderWindow);
         
         new ConfigProcesser().ReadWholeConfig(); 
         
@@ -39,7 +39,6 @@ public class SceneHandler
 
     public void SelectScene<T>() where T : Scene, new()
     {
-        _currentScene.CloseScene();
         _gameLoop.StopGameLoop();
         _gameLoop = null;
 

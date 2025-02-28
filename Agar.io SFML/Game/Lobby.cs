@@ -43,7 +43,7 @@ public class Lobby : Scene
         _playButton.AddCallback(StartGamePlay);
         
         
-        RenderWindow renderWindow = Dependency.Get<RenderWindow>();
+        RenderWindow renderWindow = Service<RenderWindow>.Get;
 
         _rightArrowButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f + _playButton.GetWidth() / 2f + 200, 3f / 4 * renderWindow.Size.Y));
         _leftArrowButton.SetPosition(new Vector2f(renderWindow.Size.X / 2f - _playButton.GetWidth() / 2f - 200, 3f / 4 * renderWindow.Size.Y));
@@ -54,8 +54,7 @@ public class Lobby : Scene
     {
         _animatorFactory.SetPlayerSkin(_currentHumanSkin);
         
-        SceneHandler sceneHandler = Dependency.Get<SceneHandler>();
-        sceneHandler.SelectScene<AgarioGame>();
+        SceneHandler sceneHandler = Service<SceneHandler>.Get; sceneHandler.SelectScene<AgarioGame>();
     }
 
     private void LoadSkins()

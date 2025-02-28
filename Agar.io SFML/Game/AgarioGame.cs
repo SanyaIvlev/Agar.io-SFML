@@ -30,7 +30,7 @@ public class AgarioGame : Scene
     private TextFactory _textFactory;
     private ShapeFactory _shapeFactory;
 
-    private ButtonBindsSet _buttonBindses;
+    private ButtonBindsSet _buttonBinds;
 
     private int _playersOnStart;
     private int _foodOnStart;
@@ -49,11 +49,11 @@ public class AgarioGame : Scene
 
     public AgarioGame()
     {
-        _gameMode = Dependency.Get<GameMode>();
+        _gameMode = Service<GameMode>.Get;
 
-        _buttonBindses = Dependency.Get<ButtonBindsSet>();
+        _buttonBinds = Service<ButtonBindsSet>.Get;
 
-        _camera = Dependency.Get<Camera>();
+        _camera = Service<Camera>.Get;
         _camera.ZoomViewport(4);
         
         _passedFoodTime = _passedPlayerTime = 0;
@@ -70,7 +70,7 @@ public class AgarioGame : Scene
 
         _eatableActorFactory = new();
         _textFactory = new(_camera);
-        _shapeFactory = Dependency.Get<ShapeFactory>() ?? new();
+        _shapeFactory = Service<ShapeFactory>.Get ?? new();
 
         _eatableActorFactory.SetPlayerDeathResponse(UpdateRemovingList);
 
@@ -125,8 +125,8 @@ public class AgarioGame : Scene
 
     private void InitializeKeyInputs()
     {
-        KeyInput swapBind = _buttonBindses.AddKeyboardBind(KeyboardEventConfig.Swap);
-        KeyInput pauseBind = _buttonBindses.AddKeyboardBind(KeyboardEventConfig.Pause);
+        KeyInput swapBind = _buttonBinds.AddKeyboardBind(KeyboardEventConfig.Swap);
+        KeyInput pauseBind = _buttonBinds.AddKeyboardBind(KeyboardEventConfig.Pause);
 
         swapBind.AddCallBackOnPressed(Swap);
         pauseBind.AddCallBackOnPressed(SwitchPause);

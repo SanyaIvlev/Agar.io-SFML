@@ -20,7 +20,7 @@ public class AgarioPlayerController : AgarioController
         
         EventBus<PauseEvent>.OnEvent += SetPaused;
         
-        _agarioAudioSystem = Dependency.Get<AgarioAudioSystem>();
+        _agarioAudioSystem =Service<AgarioAudioSystem>.Get;
     }
     
     public override void Initialize(Actor controlledPlayer)

@@ -26,7 +26,7 @@ public class GameLoop
 
     public GameLoop(RenderWindow renderWindow)
     {
-        Dependency.Register(this);
+        Service<GameLoop>.Set(this);
         
         _window = renderWindow;
         _window.Closed += (sender, args) => CloseApplicationImmediately();
@@ -83,17 +83,11 @@ public class GameLoop
 
     public void StopGameLoop()
     {
-        Dependency.Unregister(this);
-
         _updatables.Clear();
         _drawables.Clear();
         _controllers.Clear();
         
         _buttonBinds.ResetBinds();
-        _buttonBinds.Unregister();
-        
-        _camera.Destroy();
-        _gameMode.Reset();
         _onGameUpdateNeeded = null;
     }
     

@@ -4,15 +4,10 @@ public class Scene
 {
     public Scene()
     {
-        Dependency.Register(this);
+        Service<Scene>.Set(this);
     }
 
     public virtual void Start() { }
 
     public virtual void Update() { }
-
-    public void CloseScene()
-    {
-        Dependency.Unregister(this);
-    }
 }
