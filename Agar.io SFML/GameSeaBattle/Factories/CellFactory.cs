@@ -6,6 +6,13 @@ namespace Agar.io_SFML.GameSeaBattle;
 
 public class CellFactory : ActorFactory
 {
+    private AnimatorFactory _animatorFactory;
+
+    public CellFactory()
+    {
+        _animatorFactory = new AnimatorFactory();
+    }
+    
     public Cell CreateCell(int columnX, int rowY)
     {
         Cell cell = CreateActor<Cell>();
@@ -15,8 +22,6 @@ public class CellFactory : ActorFactory
             Size = new(50, 50),
         };
         
-        
-        
         cell.shape = cellShape;
 
         cellShape.Position = new(cellShape.Size.X * columnX + columnX * 10, cellShape.Size.Y * rowY + rowY * 10);
@@ -24,6 +29,8 @@ public class CellFactory : ActorFactory
         cellShape.Position += new Vector2f(SeaBattleWindowConfig.WindowWidth / 16f, SeaBattleWindowConfig.WindowHeight / 8f);
         
         cell.Initialize(cellShape);
+        
+        _animatorFactory.CreateCellAnimator(cell);
 
         return cell;
     }

@@ -7,7 +7,7 @@ namespace Agar.io_SFML;
 
 public class Button : ShapeActor
 {
-    public bool CanClick = true;
+    public bool IsClickable = true;
     
     private Action _onClick;
 
@@ -47,7 +47,7 @@ public class Button : ShapeActor
 
     private void OnMouseClick()
     {
-        if (!CanClick)
+        if (!IsClickable)
             return;
         
         if (IsHovered())
@@ -62,8 +62,8 @@ public class Button : ShapeActor
 
         var buttonShape = shape;
 
-        var buttonLeft = buttonShape.Position.X - shape.TextureRect.Size.X / 2f;
-        var buttonTop = buttonShape.Position.Y - shape.TextureRect.Size.Y / 2f;
+        var buttonLeft = buttonShape.Position.X;
+        var buttonTop = buttonShape.Position.Y;
         var buttonRight = buttonLeft + buttonShape.TextureRect.Size.X;
         var buttonBottom = buttonTop + buttonShape.TextureRect.Size.Y;
 
