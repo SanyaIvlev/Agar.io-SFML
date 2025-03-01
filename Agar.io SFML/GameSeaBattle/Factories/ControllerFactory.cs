@@ -1,5 +1,5 @@
 ﻿using Agar.io_SFML.Engine;
-using Agar.io_SFML.GameSeaBattle.Players;
+using Agar.io_SFML.GameSeaBattle.Actors;
 
 namespace Agar.io_SFML.GameSeaBattle;
 
@@ -10,7 +10,6 @@ public class ControllerFactory : ActorFactory
     public ControllerFactory()
     {
         _mapFactory = new MapFactory();
-        
     }
     
     public (SeaBattleController, SeaBattleController) CreateControllersByGameRules()
@@ -33,16 +32,16 @@ public class ControllerFactory : ActorFactory
         else
             controller = CreateActor<SeaBattleAIController>();
 
-        Players.Player player = CreatePlayer(isHuman);
+        Actors.Player player = CreatePlayer(isHuman);
         
         controller.Initialize(player);
 
         return controller;
     }
 
-    private Players.Player CreatePlayer(bool isHuman)
+    private Actors.Player CreatePlayer(bool isHuman)
     {
-        Players.Player player = CreateActor<Players.Player>();
+        Actors.Player player = CreateActor<Actors.Player>();
         
         player.NeedsUpdate = !isHuman;
         player.field = _mapFactory.CreateField(isHuman);

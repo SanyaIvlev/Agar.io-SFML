@@ -5,9 +5,9 @@ namespace Agar.io_SFML;
 
 public class Score : Text
 {
-    public void Initialize(Font font,uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f offset, Player mainPlayer, Camera camera)
+    public void Initialize(Font font,uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness, Vector2f offset, Player mainPlayer)
     {
-        base.Initialize(font, characterSize, fillColor, outlineColor, outlineThickness, offset, camera);
+        base.Initialize(font, characterSize, fillColor, outlineColor, outlineThickness, offset);
         
         UpdateScore(mainPlayer.Bounty);
         mainPlayer.OnBountyChanged += UpdateScore;

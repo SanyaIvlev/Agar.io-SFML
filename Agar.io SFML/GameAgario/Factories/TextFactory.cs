@@ -26,7 +26,7 @@ public class TextFactory : ActorFactory
     {
         Text endText = CreateActor<Text>();
         
-        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, _cameraView.Size.Y / 2f), _camera);
+        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, _cameraView.Size.Y / 2f));
 
         return endText;
     }
@@ -35,7 +35,7 @@ public class TextFactory : ActorFactory
     {
         Text endText = CreateActor<Text>();
         
-        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(width, height), _camera);
+        endText.Initialize(_font, 50, Color.Black, Color.White, 3, new(width, height));
 
         return endText;
     }
@@ -44,6 +44,6 @@ public class TextFactory : ActorFactory
     {
         Score newScore = CreateActor<Score>();
         
-        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, 20), mainPlayer, _camera);
+        newScore.Initialize(_font, 25, Color.Black, Color.White, 3, new(_cameraView.Size.X / 2f, 20), mainPlayer);
     }
 }

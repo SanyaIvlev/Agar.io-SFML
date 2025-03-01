@@ -1,3 +1,4 @@
+using Agar.io_SFML.Engine;
 using SFML.Graphics;
 using SFML.System;
 
@@ -10,7 +11,7 @@ public class Text : Actor, IDrawable, IUpdatable
     private Vector2f _offset;
 
     public void Initialize(Font font, uint characterSize, Color fillColor, Color outlineColor, uint outlineThickness,
-        Vector2f offset, Camera camera)
+        Vector2f offset)
     {
         _message = new("", font)
         {
@@ -20,10 +21,9 @@ public class Text : Actor, IDrawable, IUpdatable
             OutlineThickness = outlineThickness,
         };
         
-        _camera = camera;
+        _camera = Service<Camera>.Get;
         
         _offset = offset;
-        
         
         base.Initialize(offset + _camera.GetGlobalViewPosition());
         

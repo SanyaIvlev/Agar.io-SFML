@@ -1,6 +1,6 @@
 ﻿using Agar.io_SFML.Configs;
 
-namespace Agar.io_SFML.GameSeaBattle.Players;
+namespace Agar.io_SFML.GameSeaBattle.Actors;
 
 public class SeaBattleAIController : SeaBattleController
 {

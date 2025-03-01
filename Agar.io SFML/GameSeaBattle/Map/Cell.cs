@@ -8,10 +8,15 @@ public class Cell : Button
     public bool HasShip;
     public bool HasShot;
 
+    private OnShooted _onShootedEvent; 
+
     public Cell()
     {
         HasShip = false;
         HasShot = false;
+        
+        _onShootedEvent = new OnShooted();
+        _onShootedEvent.ShootedCell = this;
         
         AddCallback(Shoot);
     }
@@ -19,6 +24,6 @@ public class Cell : Button
     public void Shoot()
     {
         HasShot = true;
-        EventBus<OnShooted>.Raise(new());
+        EventBus<OnShooted>.Raise(_onShootedEvent);
     }
 }

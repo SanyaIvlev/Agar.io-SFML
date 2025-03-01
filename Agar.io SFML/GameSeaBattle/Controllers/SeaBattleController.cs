@@ -1,4 +1,4 @@
-﻿namespace Agar.io_SFML.GameSeaBattle.Players;
+﻿namespace Agar.io_SFML.GameSeaBattle.Actors;
 
 public class SeaBattleController : Controller
 {

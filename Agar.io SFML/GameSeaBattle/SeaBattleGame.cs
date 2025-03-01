@@ -2,7 +2,7 @@
 using Agar.io_SFML.Engine;
 using Agar.io_SFML.Engine.Scene;
 using Agar.io_SFML.GameSeaBattle.Events;
-using Agar.io_SFML.GameSeaBattle.Players;
+using Agar.io_SFML.GameSeaBattle.Actors;
 using SFML.System;
 
 namespace Agar.io_SFML.GameSeaBattle;
@@ -39,9 +39,13 @@ public class SeaBattleGame : Scene
         _currentController = _controller1;
         _opponent = _controller2;
         
-        _currentController.PlayerPawn.field.TryUpdate();
-
         AdjustRightFieldPosition();
+        
+        TextFactory textFactory = new TextFactory();
+        textFactory.CreateScore(_controller1.PlayerPawn);
+        textFactory.CreateScore(_controller2.PlayerPawn);
+        
+        _currentController.PlayerPawn.field.TryUpdate();
 
         EventBus<OnShooted>.OnEvent += ChangeTurn;
     }
@@ -85,10 +89,17 @@ public class SeaBattleGame : Scene
 
     private void ChangeTurn(OnShooted onShootedEvent)
     {
-        _currentController.PlayerPawn.OpponentShipsDestroyed++;
         
-        _currentController.PlayerPawn.field.TryUpdate();
-        _opponent.PlayerPawn.field.TryUpdate();
+        var currentPawn = _currentController.PlayerPawn;
+        var opponentPawn = _opponent.PlayerPawn;
+        
+        if (onShootedEvent.ShootedCell.HasShip)
+        {
+            currentPawn.OnShipDestroyed();
+        }
+        
+        currentPawn.field.TryUpdate();
+        opponentPawn.field.TryUpdate();
         
         (_currentController, _opponent) = (_opponent, _currentController);
     }
