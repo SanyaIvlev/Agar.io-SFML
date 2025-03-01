@@ -41,7 +41,7 @@ public class SeaBattleGame : Scene
         
         AdjustRightFieldPosition();
         
-        TextFactory textFactory = new TextFactory();
+        TextFactory textFactory = Service<TextFactory>.Get;
         textFactory.CreateScore(_controller1.PlayerPawn);
         textFactory.CreateScore(_controller2.PlayerPawn);
 

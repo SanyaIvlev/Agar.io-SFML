@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using Agar.io_SFML.Engine;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Agar.io_SFML.GameSeaBattle;
@@ -9,6 +10,8 @@ public class TextFactory : ActorFactory
 
     public TextFactory()
     {
+        Service<TextFactory>.Set(this);
+        
         string fontPath = PathUtils.FontsDirectory + "Obelix Pro.ttf";
         _font = new Font(fontPath);
     }

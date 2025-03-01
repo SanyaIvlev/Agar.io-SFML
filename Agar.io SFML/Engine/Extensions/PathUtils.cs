@@ -7,4 +7,5 @@ public static class PathUtils
     public static string ConfigurationDirectory => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Configuration\";
     public static string AnimationsDirectory => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Animations\";
     public static string TexturesDirectory => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Textures\";
+    public static string SavesDirectory => Path.GetFullPath(Directory.GetCurrentDirectory()) + @"\Resources\Saves\";
 }
