@@ -44,8 +44,15 @@ public class SeaBattleGame : Scene
         TextFactory textFactory = new TextFactory();
         textFactory.CreateScore(_controller1.PlayerPawn);
         textFactory.CreateScore(_controller2.PlayerPawn);
+
+        var currentPawnField = _currentController.PlayerPawn.field;
+        var opponentField = _opponent.PlayerPawn.field;
         
-        _currentController.PlayerPawn.field.TryUpdate();
+        currentPawnField.TryUpdate();
+        opponentField.TryUpdate();
+        
+        currentPawnField.SetCellsClickable(false);
+        opponentField.SetCellsClickable(true);
 
         EventBus<OnShooted>.OnEvent += ChangeTurn;
     }
@@ -84,12 +91,13 @@ public class SeaBattleGame : Scene
         
         _delayAfterShot = 0;
 
-        currentPawn.Update();
+        var opponentPawn = _opponent.PlayerPawn;
+        
+        currentPawn.Update(opponentPawn.field);
     }
 
     private void ChangeTurn(OnShooted onShootedEvent)
     {
-        
         var currentPawn = _currentController.PlayerPawn;
         var opponentPawn = _opponent.PlayerPawn;
         

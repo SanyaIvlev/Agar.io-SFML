@@ -8,9 +8,10 @@ public class Field
 
     public bool NeedsUpdateVisibility;
     public bool NeedsUpdateInteract;
+    
     public bool AreShipsVisible;
+    public bool IsInteractable;
 
-    private bool _isInteractable;
 
     private int _width;
     private int _height;
@@ -28,7 +29,7 @@ public class Field
     public void TryUpdate()
     {
         if (NeedsUpdateInteract)
-            SetCellsClickable(!_isInteractable);
+            SetCellsClickable(!IsInteractable);
         
         if(NeedsUpdateVisibility)
             AreShipsVisible = !AreShipsVisible;
@@ -67,7 +68,7 @@ public class Field
         SetCellsClickable(false);
     }
 
-    private void SetCellsClickable(bool isClickable)
+    public void SetCellsClickable(bool isClickable)
     {
         for(int y = 0; y < _height; y++)
         {
@@ -77,7 +78,7 @@ public class Field
             }
         }
         
-        _isInteractable = isClickable;
+        IsInteractable = isClickable;
     }
 
     private void TryPlaceShip(bool isHorizontal, string ship, out bool isPlaced)

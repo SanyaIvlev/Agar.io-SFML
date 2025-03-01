@@ -24,22 +24,24 @@ public class MapFactory : ActorFactory
         _gameType = Service<GameType>.Get;
     }
 
-    public Field CreateField(bool isHumanField)
+    public Field CreateField(bool isHumanField, bool isFieldOfStartingPlayer)
     {
         Field field = new Field();
 
         field.NeedsUpdateInteract = _gameType switch
         {
             GameType.PVP => true,
-            GameType.PVE when isHumanField => true,
-            GameType.PVE => false,
+            GameType.PVE when isHumanField => false,
+            GameType.PVE => true,
             GameType.EVE => false,
         };
+        
+        field.IsInteractable = !isFieldOfStartingPlayer;
 
         (field.NeedsUpdateVisibility, field.AreShipsVisible) = _gameType switch
         {
-            GameType.PVP => (true, true),
-            GameType.PVE => (false, !isHumanField),
+            GameType.PVP => (true, !isFieldOfStartingPlayer),
+            GameType.PVE => (false, isHumanField),
             GameType.EVE => (false, true),
         };
 

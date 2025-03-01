@@ -12,18 +12,23 @@ public class ControllerFactory : ActorFactory
         _mapFactory = new MapFactory();
     }
     
-    public (SeaBattleController, SeaBattleController) CreateControllersByGameRules()
+    public (SeaBattleController startingController, SeaBattleController opponent) CreateControllersByGameRules()
     {
         GameType typeOfGame = Service<GameType>.Get;
         return typeOfGame switch
         {
-            GameType.PVP => (CreateController(true), CreateController(true)),
-            GameType.PVE => (CreateController(false), CreateController(true)),
-            GameType.EVE => (CreateController(false), CreateController(false)),
+            GameType.PVP => (CreateController(true, true),
+                CreateController(true, false)),
+            
+            GameType.PVE => (CreateController(true, true),
+                CreateController(false, false)),
+            
+            GameType.EVE => (CreateController(false, true),
+                CreateController(false, false)),
         };
     }
     
-    private SeaBattleController CreateController(bool isHuman)
+    private SeaBattleController CreateController(bool isHuman, bool isStartingController)
     {
         SeaBattleController controller;
         
@@ -32,19 +37,19 @@ public class ControllerFactory : ActorFactory
         else
             controller = CreateActor<SeaBattleAIController>();
 
-        Actors.Player player = CreatePlayer(isHuman);
+        Actors.Player player = CreatePlayer(isHuman, isStartingController);
         
         controller.Initialize(player);
 
         return controller;
     }
 
-    private Actors.Player CreatePlayer(bool isHuman)
+    private Actors.Player CreatePlayer(bool isHuman, bool isStartingPlayer)
     {
         Actors.Player player = CreateActor<Actors.Player>();
         
         player.NeedsUpdate = !isHuman;
-        player.field = _mapFactory.CreateField(isHuman);
+        player.field = _mapFactory.CreateField(isHuman, isStartingPlayer);
         
         return player;
     }

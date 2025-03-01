@@ -10,9 +10,9 @@ public class Player : Actor
     
     public bool NeedsUpdate;
 
-    public void Update()
+    public void Update(Field enemyField)
     {
-        Cell shootingCell = field.GetCell(ShootingPosition.x, ShootingPosition.y);
+        Cell shootingCell = enemyField.GetCell(ShootingPosition.x, ShootingPosition.y);
 
         if (shootingCell.HasShot)
         {
