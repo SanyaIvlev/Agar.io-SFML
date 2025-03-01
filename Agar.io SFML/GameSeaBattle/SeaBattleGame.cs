@@ -21,21 +21,25 @@ public class SeaBattleGame : Scene
 
     private SeaBattleController _currentController;
     private SeaBattleController _opponent;
-    
-    private ControllerFactory _controllerFactory;
+
+    private long _timeAfterShot;
+    private long _delayAfterShot;
     
     public override void Start()
     {
-        Service<GameType>.Set(GameType.PVE);
+        Service<GameType>.Set(GameType.PVP);
         
-        _controllerFactory = new ControllerFactory();
+        _timeAfterShot = SeaBattleGameConfig.TimeAfterShot;
+        _delayAfterShot = 0;
+        
+        ControllerFactory controllerFactory = new ControllerFactory();
 
-        (_controller1, _controller2) = _controllerFactory.CreateControllersByGameRules();
+        (_controller1, _controller2) = controllerFactory.CreateControllersByGameRules();
         
         _currentController = _controller1;
         _opponent = _controller2;
         
-        _currentController.PlayerPawn.field.TryUpdateInteractable();
+        _currentController.PlayerPawn.field.TryUpdate();
 
         AdjustRightFieldPosition();
 
@@ -69,6 +73,13 @@ public class SeaBattleGame : Scene
         if (!currentPawn.NeedsUpdate)
             return;
 
+        _delayAfterShot += Time.ElapsedTime;
+
+        if (_delayAfterShot < _timeAfterShot)
+            return;
+        
+        _delayAfterShot = 0;
+
         currentPawn.Update();
     }
 
@@ -76,8 +87,8 @@ public class SeaBattleGame : Scene
     {
         _currentController.PlayerPawn.OpponentShipsDestroyed++;
         
-        _currentController.PlayerPawn.field.TryUpdateInteractable();
-        _opponent.PlayerPawn.field.TryUpdateInteractable();
+        _currentController.PlayerPawn.field.TryUpdate();
+        _opponent.PlayerPawn.field.TryUpdate();
         
         (_currentController, _opponent) = (_opponent, _currentController);
     }

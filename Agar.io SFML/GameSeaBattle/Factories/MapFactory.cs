@@ -35,14 +35,21 @@ public class MapFactory : ActorFactory
             GameType.PVE => false,
             GameType.EVE => false,
         };
-        
+
+        (field.NeedsUpdateVisibility, field.AreShipsVisible) = _gameType switch
+        {
+            GameType.PVP => (true, true),
+            GameType.PVE => (false, !isHumanField),
+            GameType.EVE => (false, true),
+        };
+
         Cell[,] initialCells = new Cell[_fieldHeight, _fieldWidth];
         
         for(int y = 0; y < _fieldHeight; y++)
         {
             for (int x = 0; x < _fieldWidth; x++)
             {
-                initialCells[y,x] = CreateCell(x, y);
+                initialCells[y,x] = CreateCell(field, x, y);
             }
         }
         
@@ -50,8 +57,8 @@ public class MapFactory : ActorFactory
 
         return field;
     }
-    
-    private Cell CreateCell(int columnX, int rowY)
+
+    private Cell CreateCell(Field field, int columnX, int rowY)
     {
         Cell cell = CreateActor<Cell>();
         
@@ -68,7 +75,7 @@ public class MapFactory : ActorFactory
         
         cell.Initialize(cellShape);
         
-        _animatorFactory.CreateCellAnimator(cell);
+        _animatorFactory.CreateCellAnimator(cell, field);
 
         return cell;
     }

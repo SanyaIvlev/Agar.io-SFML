@@ -19,7 +19,7 @@ public class ControllerFactory : ActorFactory
         return typeOfGame switch
         {
             GameType.PVP => (CreateController(true), CreateController(true)),
-            GameType.PVE => (CreateController(true), CreateController(false)),
+            GameType.PVE => (CreateController(false), CreateController(true)),
             GameType.EVE => (CreateController(false), CreateController(false)),
         };
     }

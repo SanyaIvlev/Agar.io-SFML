@@ -6,8 +6,11 @@ public class Field
 {
     public int DecksLeft;
 
+    public bool NeedsUpdateVisibility;
     public bool NeedsUpdateInteract;
-    public bool IsInteractable { get; private set; }
+    public bool AreShipsVisible;
+
+    private bool _isInteractable;
 
     private int _width;
     private int _height;
@@ -22,10 +25,14 @@ public class Field
         _height = SeaBattleFieldConfig.Height;
     }
 
-    public void TryUpdateInteractable()
+    public void TryUpdate()
     {
         if (NeedsUpdateInteract)
-            SetCellsClickable(!IsInteractable);
+            SetCellsClickable(!_isInteractable);
+        
+        if(NeedsUpdateVisibility)
+            AreShipsVisible = !AreShipsVisible;
+            
     }
 
     public Cell GetCell(int x, int y)
@@ -70,7 +77,7 @@ public class Field
             }
         }
         
-        IsInteractable = isClickable;
+        _isInteractable = isClickable;
     }
 
     private void TryPlaceShip(bool isHorizontal, string ship, out bool isPlaced)

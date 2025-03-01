@@ -26,7 +26,7 @@ public class AnimatorFactory : ActorFactory
         _hoveredCell = _textureLoader.LoadTexturesFrom("Cell", "Hovered");
     }
 
-    public void CreateCellAnimator(Cell cell)
+    public void CreateCellAnimator(Cell cell, Field field)
     {
         ShapeAnimator animator = CreateActor<ShapeAnimator>();
         
@@ -39,18 +39,20 @@ public class AnimatorFactory : ActorFactory
         animator
             .Initialize(cell.shape)
             .AddInitialState(emptyState)
-            .AddTransition(emptyState, shipCellState, () => cell.HasShip && !cell.IsClickable)
-            .AddTransition(shipCellState, emptyState, () => cell.HasShip && cell.IsClickable)
-            .AddTransition(emptyState, destroyedShipCellState, () => cell.HasShip && cell.IsClickable && cell.HasShot)
-            .AddTransition(shipCellState, destroyedShipCellState, () => cell.HasShip && !cell.IsClickable && cell.HasShot)
+            .AddTransition(emptyState, shipCellState, () => cell.HasShip && field.AreShipsVisible)
+            .AddTransition(shipCellState, emptyState, () => cell.HasShip && !field.AreShipsVisible)
+            .AddTransition(emptyState, destroyedShipCellState, () => cell.HasShip && !field.AreShipsVisible && cell.HasShot)
+            .AddTransition(shipCellState, destroyedShipCellState, () => cell.HasShip && field.AreShipsVisible && cell.HasShot)
             .AddTransition(emptyState, hoveredCellState, () => cell.IsClickable && cell.IsHovered() && !cell.HasShot)
             .AddTransition(hoveredCellState, emptyState, () => cell.IsClickable && !cell.IsHovered())
             .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && !cell.HasShip)
             .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && !cell.HasShip)
             .AddTransition(hoveredCellState, missedShotCellState, () => !cell.IsClickable && !cell.IsHovered() && cell.HasShot && !cell.HasShip)
+            .AddTransition(hoveredCellState, missedShotCellState, () => !cell.IsClickable && cell.IsHovered() && cell.HasShot && !cell.HasShip)
             .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(hoveredCellState, destroyedShipCellState, () => !cell.IsClickable && !cell.IsHovered() && cell.HasShot && cell.HasShip)
+            .AddTransition(hoveredCellState, destroyedShipCellState, () => !cell.IsClickable && cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(emptyState, missedShotCellState, () => !cell.HasShip && cell.HasShot);
     }
 }
