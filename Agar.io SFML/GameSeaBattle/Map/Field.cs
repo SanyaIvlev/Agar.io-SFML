@@ -4,8 +4,6 @@ namespace Agar.io_SFML.GameSeaBattle;
 
 public class Field
 {
-    public int DecksLeft;
-
     public bool NeedsUpdateVisibility;
     public bool NeedsUpdateInteract;
     
@@ -33,7 +31,7 @@ public class Field
         
         if(NeedsUpdateVisibility)
             AreShipsVisible = !AreShipsVisible;
-            
+        
     }
 
     public Cell GetCell(int x, int y)
@@ -41,8 +39,6 @@ public class Field
     
     public void Initialize(Cell[,] cells)
     {
-        DecksLeft = 0;
-
         _cells = cells;
         
         foreach (string ship in _ships)
@@ -88,16 +84,13 @@ public class Field
         if (isHorizontal && CanPlaceHorizontal(ship.Length, randomCell))
         {
             PlaceHorizontal(ship.Length, randomCell);
-            
-            DecksLeft += ship.Length;
             isPlaced = true;
             return;
         }
+        
         if(!isHorizontal && CanPlaceVerticalShip(ship.Length, randomCell))
         {
             PlaceVertical(ship.Length, randomCell);
-            
-            DecksLeft += ship.Length;
             isPlaced = true;
             return;
         }

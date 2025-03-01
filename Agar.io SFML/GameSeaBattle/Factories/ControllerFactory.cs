@@ -50,6 +50,11 @@ public class ControllerFactory : ActorFactory
         
         player.NeedsUpdate = !isHuman;
         player.field = _mapFactory.CreateField(isHuman, isStartingPlayer);
+
+        if (isStartingPlayer)
+            player.Name = "Player 1";
+        else
+            player.Name = "Player 2";
         
         return player;
     }

@@ -1,4 +1,6 @@
-﻿using Agar.io_SFML.Engine;
+﻿using Agar.io_SFML.Configs;
+using Agar.io_SFML.Engine;
+using Agar.io_SFML.GameSeaBattle.Actors;
 using SFML.Graphics;
 using SFML.System;
 
@@ -8,12 +10,27 @@ public class TextFactory : ActorFactory
 {
     private Font _font;
 
+    private int _windowWidth;
+    private int _windowHeight;
+
     public TextFactory()
     {
         Service<TextFactory>.Set(this);
         
         string fontPath = PathUtils.FontsDirectory + "Obelix Pro.ttf";
         _font = new Font(fontPath);
+
+        _windowWidth = SeaBattleWindowConfig.WindowWidth;
+        _windowHeight = SeaBattleWindowConfig.WindowHeight;
+    }
+
+    public Text CreateText()
+    {
+        Text text = CreateActor<Text>();
+        
+        text.Initialize(_font, 25, Color.White, Color.Black, 3, new Vector2f(_windowWidth / 2f, _windowHeight / 2f));
+        
+        return text;
     }
     
     public void CreateScore(Actors.Player player)

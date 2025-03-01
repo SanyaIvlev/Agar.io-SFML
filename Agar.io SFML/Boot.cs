@@ -19,6 +19,6 @@ public class Boot
         _windowName = SeaBattleWindowConfig.WindowName;
         
         SceneHandler sceneHandler = new((_windowWidth, _windowHeight), _windowName);
-        sceneHandler.InitializeScene<MainMenu>();
+        sceneHandler.InitializeScene<SeaBattleGame>();
     }
 }

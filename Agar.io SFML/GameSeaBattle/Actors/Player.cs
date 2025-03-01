@@ -2,6 +2,8 @@
 
 public class Player : Actor
 {
+    public string Name;
+    
     public Field field;
     public Action<uint> OnDestroyedShipsChanged;
     

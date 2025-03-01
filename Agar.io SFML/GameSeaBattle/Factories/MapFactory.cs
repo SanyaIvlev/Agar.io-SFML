@@ -56,6 +56,10 @@ public class MapFactory : ActorFactory
         }
         
         field.Initialize(initialCells);
+        
+        field.TryUpdate();
+        
+        field.SetCellsClickable(!isFieldOfStartingPlayer && (isHumanField || (!isHumanField && _gameType == GameType.PVE)));
 
         return field;
     }

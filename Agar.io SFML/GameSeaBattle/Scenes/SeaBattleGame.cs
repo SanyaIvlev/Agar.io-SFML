@@ -16,6 +16,8 @@ public enum GameType
 
 public class SeaBattleGame : Scene
 {
+    private GameMode _gameMode;
+    
     private SeaBattleController _controller1;
     private SeaBattleController _controller2;
 
@@ -24,39 +26,44 @@ public class SeaBattleGame : Scene
 
     private long _timeAfterShot;
     private long _delayAfterShot;
+
+    private Text _finalText;
+
+    private int _shipsToDestroyForWin;
     
     public override void Start()
     {
-        Service<GameType>.Set(GameType.PVP);
+        Service<GameType>.Set(GameType.PVE);
+        
+        _shipsToDestroyForWin = SeaBattleGameConfig.ShipCellsAmount;
+
+        _gameMode = Service<GameMode>.Get;
         
         _timeAfterShot = SeaBattleGameConfig.TimeAfterShot;
         _delayAfterShot = 0;
         
+        CreateControllers();
+
+        AdjustRightFieldPosition();
+        
+        TextFactory textFactory = new();
+        textFactory.CreateScore(_controller1.PlayerPawn);
+        textFactory.CreateScore(_controller2.PlayerPawn);
+        _finalText = textFactory.CreateText();
+
+        EventBus<OnShooted>.OnEvent += ChangeTurn;
+    }
+
+    private void CreateControllers()
+    {
         ControllerFactory controllerFactory = new ControllerFactory();
 
         (_controller1, _controller2) = controllerFactory.CreateControllersByGameRules();
         
         _currentController = _controller1;
         _opponent = _controller2;
-        
-        AdjustRightFieldPosition();
-        
-        TextFactory textFactory = Service<TextFactory>.Get;
-        textFactory.CreateScore(_controller1.PlayerPawn);
-        textFactory.CreateScore(_controller2.PlayerPawn);
-
-        var currentPawnField = _currentController.PlayerPawn.field;
-        var opponentField = _opponent.PlayerPawn.field;
-        
-        currentPawnField.TryUpdate();
-        opponentField.TryUpdate();
-        
-        currentPawnField.SetCellsClickable(false);
-        opponentField.SetCellsClickable(true);
-
-        EventBus<OnShooted>.OnEvent += ChangeTurn;
     }
-    
+
     private void AdjustRightFieldPosition()
     {
         int windowWidth = SeaBattleWindowConfig.WindowWidth;
@@ -80,6 +87,7 @@ public class SeaBattleGame : Scene
     public override void Update()
     {
         var currentPawn = _currentController.PlayerPawn;
+        var opponentPawn = _opponent.PlayerPawn;
         
         if (!currentPawn.NeedsUpdate)
             return;
@@ -90,8 +98,6 @@ public class SeaBattleGame : Scene
             return;
         
         _delayAfterShot = 0;
-
-        var opponentPawn = _opponent.PlayerPawn;
         
         currentPawn.Update(opponentPawn.field);
     }
@@ -104,6 +110,13 @@ public class SeaBattleGame : Scene
         if (onShootedEvent.ShootedCell.HasShip)
         {
             currentPawn.OnShipDestroyed();
+        }
+
+        if (currentPawn.OpponentShipsDestroyed == _shipsToDestroyForWin)
+        {
+            _gameMode.IsGameEnded = true;
+            _finalText.UpdateText(currentPawn.Name + " wins!");
+            return;
         }
         
         currentPawn.field.TryUpdate();
