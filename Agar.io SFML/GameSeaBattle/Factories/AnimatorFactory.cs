@@ -47,8 +47,10 @@ public class AnimatorFactory : ActorFactory
             .AddTransition(hoveredCellState, emptyState, () => cell.IsClickable && !cell.IsHovered())
             .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && !cell.HasShip)
             .AddTransition(hoveredCellState, missedShotCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && !cell.HasShip)
+            .AddTransition(hoveredCellState, missedShotCellState, () => !cell.IsClickable && !cell.IsHovered() && cell.HasShot && !cell.HasShip)
             .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(hoveredCellState, destroyedShipCellState, () => cell.IsClickable && !cell.IsHovered() && cell.HasShot && cell.HasShip)
+            .AddTransition(hoveredCellState, destroyedShipCellState, () => !cell.IsClickable && !cell.IsHovered() && cell.HasShot && cell.HasShip)
             .AddTransition(emptyState, missedShotCellState, () => !cell.HasShip && cell.HasShot);
     }
 }

@@ -12,7 +12,19 @@ public class ControllerFactory : ActorFactory
         _mapFactory = new MapFactory();
         
     }
-    public SeaBattleController CreateController(bool isHuman)
+    
+    public (SeaBattleController, SeaBattleController) CreateControllersByGameRules()
+    {
+        GameType typeOfGame = Service<GameType>.Get;
+        return typeOfGame switch
+        {
+            GameType.PVP => (CreateController(true), CreateController(true)),
+            GameType.PVE => (CreateController(true), CreateController(false)),
+            GameType.EVE => (CreateController(false), CreateController(false)),
+        };
+    }
+    
+    private SeaBattleController CreateController(bool isHuman)
     {
         SeaBattleController controller;
         
@@ -32,7 +44,7 @@ public class ControllerFactory : ActorFactory
     {
         Players.Player player = CreateActor<Players.Player>();
         
-        player.SetUpdateNeed(!isHuman);
+        player.NeedsUpdate = !isHuman;
         player.field = _mapFactory.CreateField(isHuman);
         
         return player;

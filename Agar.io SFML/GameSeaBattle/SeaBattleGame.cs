@@ -26,13 +26,16 @@ public class SeaBattleGame : Scene
     
     public override void Start()
     {
-        Service<GameType>.Set(GameType.PVP);
+        Service<GameType>.Set(GameType.PVE);
+        
         _controllerFactory = new ControllerFactory();
+
+        (_controller1, _controller2) = _controllerFactory.CreateControllersByGameRules();
         
-        _currentController = _controller1 = _controllerFactory.CreateController(true);
-        _opponent = _controller2 = _controllerFactory.CreateController(true);
+        _currentController = _controller1;
+        _opponent = _controller2;
         
-        _opponent.PlayerPawn.field.TryUpdateInteractable();
+        _currentController.PlayerPawn.field.TryUpdateInteractable();
 
         AdjustRightFieldPosition();
 
@@ -61,12 +64,21 @@ public class SeaBattleGame : Scene
 
     public override void Update()
     {
+        var currentPawn = _currentController.PlayerPawn;
         
+        if (!currentPawn.NeedsUpdate)
+            return;
+
+        currentPawn.Update();
     }
 
     private void ChangeTurn(OnShooted onShootedEvent)
     {
         _currentController.PlayerPawn.OpponentShipsDestroyed++;
+        
+        _currentController.PlayerPawn.field.TryUpdateInteractable();
+        _opponent.PlayerPawn.field.TryUpdateInteractable();
+        
         (_currentController, _opponent) = (_opponent, _currentController);
     }
 }
