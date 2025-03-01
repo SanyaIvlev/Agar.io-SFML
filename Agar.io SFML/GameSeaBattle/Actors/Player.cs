@@ -20,6 +20,7 @@ public class Player : Actor
         {
             return;
         }
+        
         shootingCell.Shoot();
     }
 

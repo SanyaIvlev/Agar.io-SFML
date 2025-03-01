@@ -49,9 +49,13 @@ public class SeaBattleGame : Scene
         TextFactory textFactory = new();
         textFactory.CreateScore(_controller1.PlayerPawn);
         textFactory.CreateScore(_controller2.PlayerPawn);
+        
+        textFactory.CreateFieldName(_controller1.PlayerPawn);
+        textFactory.CreateFieldName(_controller2.PlayerPawn);
+        
         _finalText = textFactory.CreateText();
 
-        EventBus<OnShooted>.OnEvent += ChangeTurn;
+        EventBus<OnShooted>.OnEvent += TryChangeTurn;
     }
 
     private void CreateControllers()
@@ -102,7 +106,7 @@ public class SeaBattleGame : Scene
         currentPawn.Update(opponentPawn.field);
     }
 
-    private void ChangeTurn(OnShooted onShootedEvent)
+    private void TryChangeTurn(OnShooted onShootedEvent)
     {
         var currentPawn = _currentController.PlayerPawn;
         var opponentPawn = _opponent.PlayerPawn;
@@ -110,12 +114,14 @@ public class SeaBattleGame : Scene
         if (onShootedEvent.ShootedCell.HasShip)
         {
             currentPawn.OnShipDestroyed();
-        }
+            
+            if (currentPawn.OpponentShipsDestroyed == _shipsToDestroyForWin)
+            {
+                _gameMode.IsGameEnded = true;
+                _finalText.UpdateText(currentPawn.Name + " wins!");
+                return;
+            }
 
-        if (currentPawn.OpponentShipsDestroyed == _shipsToDestroyForWin)
-        {
-            _gameMode.IsGameEnded = true;
-            _finalText.UpdateText(currentPawn.Name + " wins!");
             return;
         }
         

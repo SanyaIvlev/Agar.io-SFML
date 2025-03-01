@@ -13,6 +13,8 @@ public class TextFactory : ActorFactory
     private int _windowWidth;
     private int _windowHeight;
 
+    private int _fieldWidth;
+
     public TextFactory()
     {
         Service<TextFactory>.Set(this);
@@ -22,6 +24,8 @@ public class TextFactory : ActorFactory
 
         _windowWidth = SeaBattleWindowConfig.WindowWidth;
         _windowHeight = SeaBattleWindowConfig.WindowHeight;
+
+        _fieldWidth = SeaBattleFieldConfig.Width;
     }
 
     public Text CreateText()
@@ -39,10 +43,25 @@ public class TextFactory : ActorFactory
         
         var playerField = player.field;
 
-        var leftTopCell = playerField.GetCell(5,0);
+        var leftTopCell = playerField.GetCell(_fieldWidth / 2,0);
 
         var vector2F = leftTopCell.GetPosition();
-        Vector2f position = vector2F - new Vector2f(0, 50);
+        Vector2f position = vector2F - new Vector2f(0, 30);
         score.Initialize(_font, 25, Color.White, Color.Black, 3, position, player);
+    }
+
+    public void CreateFieldName(Actors.Player player)
+    {
+        Text text = CreateActor<Text>();
+        
+        var playerField = player.field;
+
+        var leftTopCell = playerField.GetCell(_fieldWidth / 2,0);
+
+        var vector2F = leftTopCell.GetPosition();
+        Vector2f position = vector2F - new Vector2f(0, 60);
+        text.Initialize(_font, 25, Color.White, Color.Black, 3, position);
+        
+        text.UpdateText(player.Name);
     }
 }
