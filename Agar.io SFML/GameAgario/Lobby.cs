@@ -26,15 +26,15 @@ public class Lobby : Scene
     public Lobby()
     {
        _shapeFactory = new ShapeFactory();
-       
-       _playButton = _shapeFactory.CreateButton("PlayButton");
-       _leftArrowButton = _shapeFactory.CreateButton("LeftArrowButton");
-       _rightArrowButton = _shapeFactory.CreateButton("RightArrowButton");
     }
 
     public override void Start()
     {
         _animatorFactory = new AnimatorFactory();
+        
+        _playButton = _shapeFactory.CreateButton("PlayButton");
+        _leftArrowButton = _shapeFactory.CreateButton("LeftArrowButton");
+        _rightArrowButton = _shapeFactory.CreateButton("RightArrowButton");
         
         LoadSkins();
         
@@ -93,5 +93,9 @@ public class Lobby : Scene
         _currentHumanSkin = (HumanSkins)_currentSkinIndex;
         
         _currentDisplayableSkin.IsActive = true;
+        
+        _animatorFactory.SetPlayerSkin(_currentHumanSkin);
+        
+        SceneHandler sceneHandler = Service<SceneHandler>.Get; sceneHandler.SelectScene<AgarioGame>();
     }
 }

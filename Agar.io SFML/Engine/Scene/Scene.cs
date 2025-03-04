@@ -10,23 +10,22 @@ public class Scene
     {
         Service<Scene>.Set(this);
         
+        _gameLoop = new GameLoop();
         
+        EventBus<OnGameLoopReset>.Raise(new()); 
     }
     
     public void InitializeAndStart()
     {
-        _gameLoop = new GameLoop();
-        
-        EventBus<OnGameLoopReset>.Raise(new()); 
-        
         _gameLoop.AddOnGameUpdateCallback(Update);
 
         Start();
         
         _gameLoop.Start();
-        
-        _gameLoop.StopGameLoop();
     }
+    
+    public void Stop()
+        => _gameLoop.StopGameLoop();
 
     public virtual void Start() { }
 

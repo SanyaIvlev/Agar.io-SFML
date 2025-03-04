@@ -33,7 +33,7 @@ public class GameLoop
         Service<GameLoop>.Set(this);
         
         _window = Service<RenderWindow>.Get;
-        _window.Closed += (sender, args) => End();
+        _window.Closed += (sender, args) => _isRunning = false;
         
         _camera = new Camera(_window);
         
@@ -170,6 +170,5 @@ public class GameLoop
         }
         
         EventBus<GameOverEvent>.Raise(new());
-        _window.Close();
     }
 }

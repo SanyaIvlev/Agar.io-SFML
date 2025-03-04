@@ -6,6 +6,8 @@ namespace Agar.io_SFML.Engine.Scene;
 
 public class SceneHandler
 {
+    private Scene _currentScene;
+    
     private Queue<Scene> _sceneQueue;
     private RenderWindow _renderWindow;
 
@@ -23,13 +25,13 @@ public class SceneHandler
 
     public void StartWithScene<T>() where T : Scene, new()
     {
-        SelectScene<T>();
+        _sceneQueue.Enqueue(new T());
         
         while (_renderWindow.IsOpen && _sceneQueue.Count > 0)
         {
-            Scene currentScene = _sceneQueue.Dequeue();
+            _currentScene = _sceneQueue.Dequeue();
             
-            currentScene.InitializeAndStart();
+            _currentScene.InitializeAndStart();
         }
 
         _renderWindow.Close();
@@ -38,5 +40,6 @@ public class SceneHandler
     public void SelectScene<T>() where T : Scene, new()
     {
         _sceneQueue.Enqueue(new T());
+        _currentScene.Stop();
     }
 }
