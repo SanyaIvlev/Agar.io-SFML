@@ -8,7 +8,7 @@ public class Player : Actor
     public Action<uint> OnDestroyedShipsChanged;
     
     public (int x, int y) ShootingPosition;
-    public uint OpponentShipsDestroyed = 0;
+    public uint OpponentShipsDestroyed = 19;
     
     public bool NeedsUpdate;
 

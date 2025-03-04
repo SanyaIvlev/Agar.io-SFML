@@ -6,13 +6,13 @@ namespace Agar.io_SFML.Engine.Scene;
 
 public class SceneHandler
 {
-    private Scene _currentScene;
-    
-    private GameLoop _gameLoop;
+    private Queue<Scene> _sceneQueue;
     private RenderWindow _renderWindow;
 
     public SceneHandler((uint x, uint y) windowScale, string windowName)
     {
+        _sceneQueue = new Queue<Scene>();
+        
         _renderWindow = new RenderWindow(new VideoMode(windowScale.x, windowScale.y), windowName);
         
         Service<SceneHandler>.Set(this);
@@ -21,25 +21,22 @@ public class SceneHandler
         new TextureLoader(); 
     }
 
-    public void InitializeScene<T>() where T : Scene, new()
+    public void StartWithScene<T>() where T : Scene, new()
     {
-        _gameLoop = new GameLoop(_renderWindow);
+        SelectScene<T>();
         
-        EventBus<OnGameLoopReset>.Raise(new()); 
-        
-        _currentScene = new T();
-        _currentScene.Start();
+        while (_renderWindow.IsOpen && _sceneQueue.Count > 0)
+        {
+            Scene currentScene = _sceneQueue.Dequeue();
+            
+            currentScene.InitializeAndStart();
+        }
 
-        _gameLoop.AddOnGameUpdateCallback(_currentScene.Update);
-        
-        _gameLoop.Start();
+        _renderWindow.Close();
     }
 
     public void SelectScene<T>() where T : Scene, new()
     {
-        _gameLoop.StopGameLoop();
-        _gameLoop = null;
-
-        InitializeScene<T>();
+        _sceneQueue.Enqueue(new T());
     }
 }

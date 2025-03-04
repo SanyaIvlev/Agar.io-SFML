@@ -9,6 +9,8 @@ public class GameLoop
     private const int TargetFps = 1200;
     private const int SecondToMicroseconds = 1000000;
     private const float TimeBeforeNextFrame =  SecondToMicroseconds * 1f / TargetFps;
+
+    private bool _isRunning = true;
     
     private Action _onGameUpdateNeeded;
     
@@ -23,13 +25,15 @@ public class GameLoop
     private readonly GameMode _gameMode; 
 
     private Camera _camera; 
+    
+    
 
-    public GameLoop(RenderWindow renderWindow)
+    public GameLoop()
     {
         Service<GameLoop>.Set(this);
         
-        _window = renderWindow;
-        _window.Closed += (sender, args) => CloseApplicationImmediately();
+        _window = Service<RenderWindow>.Get;
+        _window.Closed += (sender, args) => End();
         
         _camera = new Camera(_window);
         
@@ -89,6 +93,8 @@ public class GameLoop
         
         _buttonBinds.ResetBinds();
         _onGameUpdateNeeded = null;
+        
+        _isRunning = false;
     }
     
     public void Start()
@@ -115,7 +121,7 @@ public class GameLoop
     }
 
     private bool IsGameLoopEnded()
-        => _gameMode.IsGameEnded || !_window.IsOpen;
+        => _gameMode.IsGameEnded || !_window.IsOpen || !_isRunning;
     
     
     private void ProcessInput()
@@ -158,13 +164,11 @@ public class GameLoop
     
     private void End()
     {
-        Thread.Sleep(1500);
-
-        CloseApplicationImmediately();
-    }
-    
-    private void CloseApplicationImmediately()
-    {
+        if (_isRunning)
+        {
+            Thread.Sleep(1500);
+        }
+        
         EventBus<GameOverEvent>.Raise(new());
         _window.Close();
     }

@@ -117,8 +117,9 @@ public class SeaBattleGame : Scene
             
             if (currentPawn.OpponentShipsDestroyed == _shipsToDestroyForWin)
             {
-                _gameMode.IsGameEnded = true;
                 _finalText.UpdateText(currentPawn.Name + " wins!");
+                
+                _gameMode.IsGameEnded = true;
                 return;
             }
 
